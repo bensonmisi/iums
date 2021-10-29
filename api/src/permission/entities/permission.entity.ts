@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Submodule } from "src/submodule/entities/submodule.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Permission {
@@ -12,4 +13,7 @@ export class Permission {
     created_at:Date
     @UpdateDateColumn()
     updated_at:Date
+
+    @ManyToOne(()=>Submodule,submodule=>submodule.permission)
+    submodule:Submodule
 }

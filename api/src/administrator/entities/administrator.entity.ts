@@ -1,5 +1,6 @@
-import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
  import * as bcrypt from 'bcrypt'
+import { Role } from "src/role/entities/role.entity";
 @Entity()
 export class Administrator extends BaseEntity {
  @PrimaryGeneratedColumn()
@@ -27,6 +28,7 @@ export class Administrator extends BaseEntity {
  this.password = await bcrypt.hash(this.password,10)
  }
 
- 
+ @ManyToOne(()=>Role,role=>role.administrator)
+ role:Role 
 
 }

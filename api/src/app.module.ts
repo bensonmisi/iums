@@ -7,6 +7,7 @@ import { AdministratorModule } from './administrator/administrator.module';
 import { ModuleModule } from './module/module.module';
 import { SubmoduleModule } from './submodule/submodule.module';
 import { PermissionModule } from './permission/permission.module';
+import { SystemModulesModule } from './system-modules/system-modules.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PermissionModule } from './permission/permission.module';
     ModuleModule,
     SubmoduleModule,
     PermissionModule,
+    SystemModulesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
