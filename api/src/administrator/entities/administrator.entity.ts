@@ -19,6 +19,9 @@ export class Administrator extends BaseEntity {
  @Column()
  password:string
 
+ @Column({default:'ACTIVE'})
+ status:string
+
  @CreateDateColumn()
  created_at:Date
 

@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AdministratorService } from './administrator.service';
+import { ChangeAdministratorStatusDto } from './dto/change-administrator-status.dto';
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 
@@ -27,8 +28,14 @@ export class AdministratorController {
     return this.administratorService.update(+id, updateAdministratorDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.administratorService.remove(+id);
+  @Post('ChangeStatus')
+  async changeStatus(@Body() statusDto:ChangeAdministratorStatusDto):Promise<any> {
+    const {id,status} = statusDto
+    return await this.administratorService.changestatus(id,status)
+  }
+
+  @Get('/resetPassword/:id')
+  async resetPassword(@Param() id:number){
+    return await this.administratorService.resetPassword(id)
   }
 }
