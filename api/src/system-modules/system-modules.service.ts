@@ -1,26 +1,48 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateSystemModuleDto } from './dto/create-system-module.dto';
 import { UpdateSystemModuleDto } from './dto/update-system-module.dto';
+import { SystemModule } from './entities/system-module.entity';
 
 @Injectable()
 export class SystemModulesService {
-  create(createSystemModuleDto: CreateSystemModuleDto) {
-    return 'This action adds a new systemModule';
+  constructor(@InjectRepository(SystemModule) private systemmoduleRepository:Repository<SystemModule>){}
+  async create(createSystemModuleDto: CreateSystemModuleDto):Promise<any> {
+     try {
+       const systemmodule = await this.systemmoduleRepository.create(createSystemModuleDto)
+       await this.systemmoduleRepository.save(systemmodule)
+       return {"status":"success","message":"System Module Successfully Saved"}
+     } catch (error) {
+       throw new Error(error.sqlMessage);        
+     }
   }
 
-  findAll() {
-    return `This action returns all systemModules`;
+  async findAll():Promise<SystemModule[]> {
+    return await this.systemmoduleRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} systemModule`;
+  async findOne(id: number):Promise<SystemModule> {
+    return await this.systemmoduleRepository.findOne(id);
   }
 
-  update(id: number, updateSystemModuleDto: UpdateSystemModuleDto) {
-    return `This action updates a #${id} systemModule`;
+  async update(id: number, updateSystemModuleDto: UpdateSystemModuleDto):Promise<any> {
+    try {
+      await this.systemmoduleRepository.update(id,updateSystemModuleDto);
+      return {"status":"success","message":"System Module Successfully Updated"}
+    } catch (error) {
+      throw new Error(error.sqlMessage); 
+    }
+     
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} systemModule`;
+  async remove(id: number):Promise<any> {
+    try {
+      await this.systemmoduleRepository.delete(id);
+      return {"status":"success","message":"System Module Successfully Deleted"}
+    } catch (error) {
+      throw new Error(error.sqlMessage); 
+    }
+   
   }
 }

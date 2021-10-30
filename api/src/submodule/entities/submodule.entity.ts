@@ -22,7 +22,7 @@ export class Submodule extends BaseEntity {
     @ManyToOne(()=>SystemModule,systemmodule=>systemmodule.submodules)
     systemmodule:SystemModule
 
-    @OneToMany(()=>Permission,permission=>permission.submodule)
+    @OneToMany(()=>Permission,permission=>permission.submodule,{onDelete:'CASCADE'})
     permission:Permission[]
 
 

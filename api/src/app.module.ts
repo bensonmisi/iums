@@ -4,14 +4,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RoleModule } from './role/role.module';
 import { AdministratorModule } from './administrator/administrator.module';
-import { ModuleModule } from './module/module.module';
 import { SubmoduleModule } from './submodule/submodule.module';
 import { PermissionModule } from './permission/permission.module';
 import { SystemModulesModule } from './system-modules/system-modules.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
+    TypeOrmModule.forRoot({ 
       type: 'mysql',
       host: process.env.HOST,
       port: parseInt(process.env.PORT),
@@ -23,7 +22,6 @@ import { SystemModulesModule } from './system-modules/system-modules.module';
     }),
     RoleModule,
     AdministratorModule,
-    ModuleModule,
     SubmoduleModule,
     PermissionModule,
     SystemModulesModule,

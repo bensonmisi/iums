@@ -2,33 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SubmoduleService } from './submodule.service';
 import { CreateSubmoduleDto } from './dto/create-submodule.dto';
 import { UpdateSubmoduleDto } from './dto/update-submodule.dto';
+import { Submodule } from './entities/submodule.entity';
 
 @Controller('submodule')
 export class SubmoduleController {
   constructor(private readonly submoduleService: SubmoduleService) {}
 
   @Post()
-  create(@Body() createSubmoduleDto: CreateSubmoduleDto) {
-    return this.submoduleService.create(createSubmoduleDto);
+ async create(@Body() createSubmoduleDto: CreateSubmoduleDto):Promise<any> {
+    return await this.submoduleService.create(createSubmoduleDto);
   }
 
   @Get()
-  findAll() {
-    return this.submoduleService.findAll();
+  async findAll():Promise<Submodule[]> {
+    return await this.submoduleService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.submoduleService.findOne(+id);
+  async findOne(@Param('id') id: string):Promise<Submodule> {
+    return await this.submoduleService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSubmoduleDto: UpdateSubmoduleDto) {
+  update(@Param('id') id: string, @Body() updateSubmoduleDto: UpdateSubmoduleDto):Promise<any> {
     return this.submoduleService.update(+id, updateSubmoduleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string) :Promise<any>{
     return this.submoduleService.remove(+id);
   }
 }

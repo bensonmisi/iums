@@ -21,6 +21,6 @@ export class SystemModule extends BaseEntity {
     @UpdateDateColumn()
     updated_at:Date
 
-    @OneToMany(()=>Submodule,submodule=>submodule.systemmodule)
+    @OneToMany(()=>Submodule,submodule=>submodule.systemmodule,{onDelete:"CASCADE"})
     submodules:Submodule[]
 }

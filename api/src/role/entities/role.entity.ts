@@ -20,22 +20,22 @@ export class Role {
      * A role has many Administrators
      */
 
-    @OneToMany(()=>Administrator,administrator=>administrator.role)
+    @OneToMany(()=>Administrator,administrator=>administrator.role,{onDelete:'SET NULL'})
      administrator:Administrator[]
 
      /**
       * Roles  can have many modules hence they have a many to many relationship
       */
 
-     @ManyToMany(()=>SystemModule)
+     @ManyToMany(()=>SystemModule,{onDelete:"CASCADE"})
      @JoinTable()
      systemmodules:SystemModule[]
 
-     @ManyToMany(()=>Submodule)
+     @ManyToMany(()=>Submodule,{onDelete:"CASCADE"})
      @JoinTable()
      submodules:Submodule[]
 
-     @ManyToMany(()=>Permission)
+     @ManyToMany(()=>Permission,{onDelete:"CASCADE"})
      @JoinTable()
      premissions:Permission[]
 }

@@ -8,11 +8,13 @@ export class Administrator extends BaseEntity {
  @Column()
  name:string
 
- @Column()
+ @Column() 
  surname:string
 
  @Column({unique:true})
  username:string
+ @Column({unique:true})
+ email:string
 
  @Column()
  password:string

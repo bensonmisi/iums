@@ -2,33 +2,34 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SystemModulesService } from './system-modules.service';
 import { CreateSystemModuleDto } from './dto/create-system-module.dto';
 import { UpdateSystemModuleDto } from './dto/update-system-module.dto';
+import { SystemModule } from './entities/system-module.entity';
 
 @Controller('system-modules')
 export class SystemModulesController {
   constructor(private readonly systemModulesService: SystemModulesService) {}
 
   @Post()
-  create(@Body() createSystemModuleDto: CreateSystemModuleDto) {
-    return this.systemModulesService.create(createSystemModuleDto);
+ async create(@Body() createSystemModuleDto: CreateSystemModuleDto) {
+    return await this.systemModulesService.create(createSystemModuleDto);
   }
 
   @Get()
-  findAll() {
-    return this.systemModulesService.findAll();
+  async findAll():Promise<SystemModule[]> {
+    return await this.systemModulesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.systemModulesService.findOne(+id);
+  async findOne(@Param('id') id: string):Promise<SystemModule> {
+    return await this.systemModulesService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSystemModuleDto: UpdateSystemModuleDto) {
-    return this.systemModulesService.update(+id, updateSystemModuleDto);
+  async update(@Param('id') id: string, @Body() updateSystemModuleDto: UpdateSystemModuleDto):Promise<any> {
+    return await this.systemModulesService.update(+id, updateSystemModuleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.systemModulesService.remove(+id);
+  async remove(@Param('id') id: string):Promise<any> {
+    return await this.systemModulesService.remove(+id);
   }
 }
