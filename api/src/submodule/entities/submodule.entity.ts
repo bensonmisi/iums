@@ -1,6 +1,7 @@
 import { Permission } from "src/permission/entities/permission.entity";
+import { Role } from "src/role/entities/role.entity";
 import { SystemModule } from "src/system-modules/entities/system-module.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Submodule extends BaseEntity {
@@ -19,6 +20,15 @@ export class Submodule extends BaseEntity {
     @UpdateDateColumn()
     updated_at:Date
 
+    @ManyToMany(()=>Role,role=>role.submodules,{cascade:true})
+    @JoinTable(
+        {    
+           name: "submodules_roles",
+           joinColumn: { name: "submoduleId", referencedColumnName: "id" },
+           inverseJoinColumn: { name: "roleId" }}
+           ) 
+    role:Role[]
+    
     @ManyToOne(()=>SystemModule,systemmodule=>systemmodule.submodules)
     systemmodule:SystemModule
 

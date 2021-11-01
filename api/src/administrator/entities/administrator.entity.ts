@@ -1,6 +1,7 @@
-import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
  import * as bcrypt from 'bcrypt'
 import { Role } from "src/role/entities/role.entity";
+import { administratorResetToken } from "./administratorResetToken.entity";
 @Entity()
 export class Administrator extends BaseEntity {
  @PrimaryGeneratedColumn()
@@ -37,5 +38,8 @@ export class Administrator extends BaseEntity {
 
  @ManyToOne(()=>Role,role=>role.administrator)
  role:Role 
+
+ @OneToMany(()=>administratorResetToken,token=>token.administrator)
+ token:administratorResetToken[] 
 
 }

@@ -1,4 +1,5 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Administrator } from "./administrator.entity";
 
 @Entity()
 export class administratorResetToken extends BaseEntity{
@@ -14,4 +15,6 @@ export class administratorResetToken extends BaseEntity{
  created_at:Date
  @UpdateDateColumn()
  updated_at:Date
+ @ManyToOne(()=>Administrator,user=>user.token)
+ administrator:Administrator
 }

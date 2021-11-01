@@ -49,58 +49,94 @@ export class RoleService {
   }
 
   async assignsystemmodule(assignmoduleDto:AssignModuleDto):Promise<any>{
+    try
+    {
     const {roleId,systemmoduleId} = assignmoduleDto
     const role = await this.roleRepository.findOne({id:roleId})
     const module = await SystemModule.findOne({id:systemmoduleId})
-    role.systemmodules=[module]
-    await this.roleRepository.save(role)
+    module.role=[role]
+    await module.save()
     return {"status":"success","message":"Role Successfully Assigned Module "+module.name}
+  }catch(error){
+    console.log(error)
+    throw new HttpException("Failed To assign Submodule",HttpStatus.BAD_REQUEST)
+  }
   }
 
   async unassignsystemmodule(assignmoduleDto:AssignModuleDto):Promise<any>{
+    try
+    {
     const {roleId,systemmoduleId} = assignmoduleDto
     const systemmodule = await SystemModule.findOne({id:systemmoduleId})
     const role = await this.roleRepository.findOne({id:roleId},{relations:['systemmodules']})
     role.systemmodules = role.systemmodules.filter(module=>{return module.id !== systemmodule.id})
     await this.roleRepository.save(role)
     return {"status":"success","message":"Module  Successfully Unassigned Module "}
+  }catch(error){
+    console.log(error)
+    throw new HttpException("Failed To unassign Submodule",HttpStatus.BAD_REQUEST)
+  }
 
   }
   async assignsubmodule(assignsubmoduleDto:AssignSubmoduleDto):Promise<any>{
     const {roleId,submoduleId} = assignsubmoduleDto
+    try
+    {
     const role = await this.roleRepository.findOne({id:roleId})
     const module = await Submodule.findOne({id:submoduleId})
-    role.submodules=[module]
-    await this.roleRepository.save(role)
+    module.role=[role]
+    await module.save()
     return {"status":"success","message":"Role Successfully Assigned SubModule "+module.name}
+    }catch(error){
+      console.log(error)
+      throw new HttpException("Failed To assign Submodule",HttpStatus.BAD_REQUEST)
+    }
   }
 
   async unassignsubmodule(assignsubmoduleDto:AssignSubmoduleDto):Promise<any>{
     const {roleId,submoduleId} = assignsubmoduleDto
+    try
+    {
     const submodule = await Submodule.findOne({id:submoduleId})
     const role = await this.roleRepository.findOne({id:roleId},{relations:['submodules']})
     role.submodules = role.submodules.filter(module=>{return module.id !== submodule.id})
     await this.roleRepository.save(role)
     return {"status":"success","message":"Module  Successfully Unassigned Submodule "}
+  }catch(error){
+    console.log(error)
+    throw new HttpException("Failed To assign Unsubmodule",HttpStatus.BAD_REQUEST)
+  }
 
 
   }
   async assignpermission(assignPermissionDto:AssignPermissionDto):Promise<any>{
     const {roleId,permissionId} = assignPermissionDto
+    try
+    {
     const role = await this.roleRepository.findOne({id:roleId})
     const permission = await Permission.findOne({id:permissionId})
-    role.premissions=[permission]
-    await this.roleRepository.save(role)
+    permission.role=[role]
+    await permission.save()
     return {"status":"success","message":"Role Successfully Assigned Permission"+permission.name}
+  }catch(error){
+    console.log(error)
+    throw new HttpException("Failed To assign Permission",HttpStatus.BAD_REQUEST)
+  }
   }
 
   async unassignpermission(assignPermissionDto:AssignPermissionDto):Promise<any>{
     const {roleId,permissionId} = assignPermissionDto
+    try
+    {
     const permissiondt = await Permission.findOne({id:permissionId})
     const role = await this.roleRepository.findOne({id:roleId},{relations:['permissions']})
     role.premissions = role.premissions.filter(permission=>{return permission.id !== permissiondt.id})
     await this.roleRepository.save(role)
     return {"status":"success","message":"Module  Successfully Unassigned Permission "}
+  }catch(error){
+    console.log(error)
+    throw new HttpException("Failed To unassign Permission",HttpStatus.BAD_REQUEST)
+  }
 
   }
 }
