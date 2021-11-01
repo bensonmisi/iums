@@ -27,12 +27,12 @@ export class Role {
       * Roles  can have many modules hence they have a many to many relationship
       */
 
-     @ManyToMany(()=>SystemModule,systemmodule=>systemmodule.role)     
+     @ManyToMany(()=>SystemModule,systemmodule=>systemmodule.role,{eager:true})     
      systemmodules:SystemModule[]
 
-     @ManyToMany(()=>Submodule,submodule=>submodule.role)
+     @ManyToMany(()=>Submodule,submodule=>submodule.role,{eager:true})
      submodules:Submodule[]
 
-     @ManyToMany(()=>Permission,permission=>permission.role)     
+     @ManyToMany(()=>Permission,permission=>permission.role,{eager:true})     
      premissions:Permission[]
 }

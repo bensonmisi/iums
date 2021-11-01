@@ -28,11 +28,11 @@ export class Submodule extends BaseEntity {
            inverseJoinColumn: { name: "roleId" }}
            ) 
     role:Role[]
-    
+
     @ManyToOne(()=>SystemModule,systemmodule=>systemmodule.submodules)
     systemmodule:SystemModule
 
-    @OneToMany(()=>Permission,permission=>permission.submodule,{onDelete:'CASCADE'})
+    @OneToMany(()=>Permission,permission=>permission.submodule,{onDelete:'CASCADE',eager:true})
     permission:Permission[]
 
 

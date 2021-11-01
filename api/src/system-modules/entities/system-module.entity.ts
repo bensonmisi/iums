@@ -22,9 +22,9 @@ export class SystemModule extends BaseEntity {
     @UpdateDateColumn()
     updated_at:Date
 
-    @OneToMany(()=>Submodule,submodule=>submodule.systemmodule,{onDelete:"CASCADE"})
+    @OneToMany(()=>Submodule,submodule=>submodule.systemmodule,{onDelete:"CASCADE",eager:true})
     submodules:Submodule[]
-    
+
     @ManyToMany(()=>Role,role=>role.systemmodules,{cascade:true}) 
     @JoinTable(
         {    
