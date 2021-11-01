@@ -4,7 +4,7 @@ import { ChangeAdministratorStatusDto } from './dto/change-administrator-status.
 import { CreateAdministratorDto } from './dto/create-administrator.dto';
 import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 
-@Controller('administrator')
+@Controller('api/admin/users')
 export class AdministratorController {
   constructor(private readonly administratorService: AdministratorService) {}
 

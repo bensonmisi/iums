@@ -12,7 +12,7 @@ export class Submodule extends BaseEntity {
     name:string
     @Column()
     icon:string
-    @Column()
+    @Column({unique:true}) 
     url:string
     @CreateDateColumn()
     created_at:Date

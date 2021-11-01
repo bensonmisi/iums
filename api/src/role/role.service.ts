@@ -1,6 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Permission } from 'src/permission/entities/permission.entity';
+import { Submodule } from 'src/submodule/entities/submodule.entity';
+import { SystemModule } from 'src/system-modules/entities/system-module.entity';
 import { Repository } from 'typeorm';
+import { AssignModuleDto } from './dto/assign-module.dto';
+import { AssignPermissionDto } from './dto/assign-permission.dto';
+import { AssignSubmoduleDto } from './dto/assign-submodule.dto';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
@@ -40,5 +46,61 @@ export class RoleService {
  async remove(id: number):Promise<any> {
     return await this.roleRepository.delete(id);
     return {"status":"success","message":"Role Successfully Deleted"}
+  }
+
+  async assignsystemmodule(assignmoduleDto:AssignModuleDto):Promise<any>{
+    const {roleId,systemmoduleId} = assignmoduleDto
+    const role = await this.roleRepository.findOne({id:roleId})
+    const module = await SystemModule.findOne({id:systemmoduleId})
+    role.systemmodules=[module]
+    await this.roleRepository.save(role)
+    return {"status":"success","message":"Role Successfully Assigned Module "+module.name}
+  }
+
+  async unassignsystemmodule(assignmoduleDto:AssignModuleDto):Promise<any>{
+    const {roleId,systemmoduleId} = assignmoduleDto
+    const systemmodule = await SystemModule.findOne({id:systemmoduleId})
+    const role = await this.roleRepository.findOne({id:roleId},{relations:['systemmodules']})
+    role.systemmodules = role.systemmodules.filter(module=>{return module.id !== systemmodule.id})
+    await this.roleRepository.save(role)
+    return {"status":"success","message":"Module  Successfully Unassigned Module "}
+
+  }
+  async assignsubmodule(assignsubmoduleDto:AssignSubmoduleDto):Promise<any>{
+    const {roleId,submoduleId} = assignsubmoduleDto
+    const role = await this.roleRepository.findOne({id:roleId})
+    const module = await Submodule.findOne({id:submoduleId})
+    role.submodules=[module]
+    await this.roleRepository.save(role)
+    return {"status":"success","message":"Role Successfully Assigned SubModule "+module.name}
+  }
+
+  async unassignsubmodule(assignsubmoduleDto:AssignSubmoduleDto):Promise<any>{
+    const {roleId,submoduleId} = assignsubmoduleDto
+    const submodule = await Submodule.findOne({id:submoduleId})
+    const role = await this.roleRepository.findOne({id:roleId},{relations:['submodules']})
+    role.submodules = role.submodules.filter(module=>{return module.id !== submodule.id})
+    await this.roleRepository.save(role)
+    return {"status":"success","message":"Module  Successfully Unassigned Submodule "}
+
+
+  }
+  async assignpermission(assignPermissionDto:AssignPermissionDto):Promise<any>{
+    const {roleId,permissionId} = assignPermissionDto
+    const role = await this.roleRepository.findOne({id:roleId})
+    const permission = await Permission.findOne({id:permissionId})
+    role.premissions=[permission]
+    await this.roleRepository.save(role)
+    return {"status":"success","message":"Role Successfully Assigned Permission"+permission.name}
+  }
+
+  async unassignpermission(assignPermissionDto:AssignPermissionDto):Promise<any>{
+    const {roleId,permissionId} = assignPermissionDto
+    const permissiondt = await Permission.findOne({id:permissionId})
+    const role = await this.roleRepository.findOne({id:roleId},{relations:['permissions']})
+    role.premissions = role.premissions.filter(permission=>{return permission.id !== permissiondt.id})
+    await this.roleRepository.save(role)
+    return {"status":"success","message":"Module  Successfully Unassigned Permission "}
+
   }
 }

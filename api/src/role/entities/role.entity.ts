@@ -27,15 +27,15 @@ export class Role {
       * Roles  can have many modules hence they have a many to many relationship
       */
 
-     @ManyToMany(()=>SystemModule,{onDelete:"CASCADE"})
+     @ManyToMany(()=>SystemModule)
      @JoinTable()
      systemmodules:SystemModule[]
 
-     @ManyToMany(()=>Submodule,{onDelete:"CASCADE"})
+     @ManyToMany(()=>Submodule)
      @JoinTable()
      submodules:Submodule[]
 
-     @ManyToMany(()=>Permission,{onDelete:"CASCADE"})
+     @ManyToMany(()=>Permission)
      @JoinTable()
      premissions:Permission[]
 }

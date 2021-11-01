@@ -1,8 +1,8 @@
 import { Submodule } from "src/submodule/entities/submodule.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Permission {
+export class Permission extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
     @Column()

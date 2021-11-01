@@ -4,7 +4,7 @@ import { CreateSubmoduleDto } from './dto/create-submodule.dto';
 import { UpdateSubmoduleDto } from './dto/update-submodule.dto';
 import { Submodule } from './entities/submodule.entity';
 
-@Controller('submodule')
+@Controller('api/admin/submodules')
 export class SubmoduleController {
   constructor(private readonly submoduleService: SubmoduleService) {}
 

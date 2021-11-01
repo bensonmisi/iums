@@ -6,16 +6,17 @@ import { UpdateAdministratorDto } from './dto/update-administrator.dto';
 import { Administrator } from './entities/administrator.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { administratorResetToken } from './entities/administratorResetToken.entity';
+import { MailService } from 'src/mail/mail.service';
 @Injectable()
 export class AdministratorService {
-  constructor(@InjectRepository(Administrator) private administratorRepository:Repository<Administrator>,){}
+  constructor(@InjectRepository(Administrator) private administratorRepository:Repository<Administrator>,private mailService:MailService){}
   async create(createAdministratorDto: CreateAdministratorDto):Promise<any> {
     try {
      const user =  await this.administratorRepository.create(createAdministratorDto) 
      await this.administratorRepository.save(user)
      return {"status":"success","message":"Administrator Successfully Created"}
     } catch (error) {
-      throw new HttpException(error.error.sqlMessage,HttpStatus.FORBIDDEN)
+      throw new HttpException(error.sqlMessage,HttpStatus.FORBIDDEN)
     }
   }
 
@@ -50,20 +51,25 @@ export class AdministratorService {
 
   async resetPassword(id:number):Promise<any>{
     try {
+        const user = await this.administratorRepository.findOne(id)
+        const token =  await uuidv4()
        const resetToken = new administratorResetToken()
-       resetToken.administratorId = id
-       resetToken.token = await uuidv4()
-       resetToken.expire_date = new Date(this.getCurrentDate())
+       const date =  await this.getCurrentDate()
+       console.log(date)
+       resetToken.administratorId = user.id
+       resetToken.token = token
+       resetToken.expire_date = new Date(date)
        await resetToken.save()
        /**
         * send reset token  to user email
         */
+         await this.mailService.SendAdministratorPasswordReset(user,token)
         return {"status":"success","message":"Administrator Account Successfully Sent to User email"}
     } catch (error) {
-      throw new HttpException(error.error.sqlMessage,HttpStatus.FORBIDDEN)
+      throw new HttpException(error.sqlMessage,HttpStatus.FORBIDDEN)
     }
   }
-  getCurrentDate(){
+  async getCurrentDate(){
     let date_ob = new Date();
 
 // current date
@@ -86,7 +92,7 @@ let minutes = date_ob.getMinutes();
 let seconds = date_ob.getSeconds();
 
 // prints date in YYYY-MM-DD format
- const finaldate = year + "-" + month + "-" + date+1;
+ const finaldate = year + "-" + month + "-" + date;
  return finaldate
   }
 }

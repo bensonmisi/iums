@@ -15,7 +15,9 @@ export class Administrator extends BaseEntity {
  username:string
  @Column({unique:true})
  email:string
-
+ @Column()
+ roleId:number
+ 
  @Column()
  password:string
 

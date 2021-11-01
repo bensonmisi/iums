@@ -4,7 +4,7 @@ import { CreateSystemModuleDto } from './dto/create-system-module.dto';
 import { UpdateSystemModuleDto } from './dto/update-system-module.dto';
 import { SystemModule } from './entities/system-module.entity';
 
-@Controller('system-modules')
+@Controller('api/admin/system-modules')
 export class SystemModulesController {
   constructor(private readonly systemModulesService: SystemModulesService) {}
 
