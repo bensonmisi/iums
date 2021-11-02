@@ -54,13 +54,13 @@ export class SystemModulesService {
      let array = []
 
      modules.forEach(module=>{
-       role.systemmodules.forEach(systemmodule=>{
-          let assinged = false
+      let assinged = false
+       role.systemmodules.forEach(systemmodule=>{         
          if(systemmodule.id === module.id){
           assinged = true
-         }
-         array.push({id:module.id,name:module.name,icon:module.icon,assinged:assinged})
+         }        
        })
+       array.push({id:module.id,name:module.name,icon:module.icon,assinged:assinged})
      })
      return array
   }

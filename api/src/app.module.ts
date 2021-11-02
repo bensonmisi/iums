@@ -11,6 +11,7 @@ import { MailModule } from './mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
 import { AdminmenusModule } from './adminmenus/adminmenus.module';
 import { AdminAuthModule } from './admin-auth/admin-auth.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AdminAuthModule } from './admin-auth/admin-auth.module';
     MailModule,
     AdminmenusModule,
     AdminAuthModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
