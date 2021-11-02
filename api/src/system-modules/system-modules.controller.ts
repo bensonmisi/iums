@@ -32,4 +32,9 @@ export class SystemModulesController {
   async remove(@Param('id') id: string):Promise<any> {
     return await this.systemModulesService.remove(+id);
   }
+
+  @Get('assignByRole/:id')
+  async getAssignedByRole(@Param() id:number):Promise<any>{
+    return await this.systemModulesService.getModulesByRole(id)
+  }
 }

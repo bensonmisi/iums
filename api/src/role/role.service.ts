@@ -44,9 +44,11 @@ export class RoleService {
   }
 
  async remove(id: number):Promise<any> {
-    return await this.roleRepository.delete(id);
+     await this.roleRepository.delete(id);
     return {"status":"success","message":"Role Successfully Deleted"}
   }
+
+  
 
   async assignsystemmodule(assignmoduleDto:AssignModuleDto):Promise<any>{
     try

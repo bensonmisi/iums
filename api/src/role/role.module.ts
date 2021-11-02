@@ -8,6 +8,7 @@ import { AdminmenusService } from 'src/adminmenus/adminmenus.service';
 @Module({
   imports:[TypeOrmModule.forFeature([Role])],
   controllers: [RoleController],
-  providers: [RoleService,AdminmenusService]
+  providers: [RoleService,AdminmenusService],
+  exports:[RoleService]
 })
 export class RoleModule {}

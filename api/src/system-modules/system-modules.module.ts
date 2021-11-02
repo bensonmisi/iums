@@ -3,9 +3,11 @@ import { SystemModulesService } from './system-modules.service';
 import { SystemModulesController } from './system-modules.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SystemModule } from './entities/system-module.entity';
+import { RoleService } from 'src/role/role.service';
+import { RoleModule } from 'src/role/role.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([SystemModule])],
+  imports:[TypeOrmModule.forFeature([SystemModule]),RoleModule],
   controllers: [SystemModulesController],
   providers: [SystemModulesService]
 })
