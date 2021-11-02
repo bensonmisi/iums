@@ -13,12 +13,13 @@ export class AdminmenusService {
 
     async checkPermission(id:number,name:string){
         const role = await this.roleRepository.findOne({id:id}) 
+        let bool = false
         role.premissions.forEach(permission=>{
             if(permission.name === name){
-                return true
+                bool = true
             }
         })
-        return false
+        return bool
     }
 
      generateMenus(role:Role){

@@ -36,10 +36,16 @@ export class Administrator extends BaseEntity {
  this.password = await bcrypt.hash(this.password,10)
  }
 
+ async validatepassword(password:string):Promise<boolean>{
+     return bcrypt.compare(password,this.password);
+ }
+
  @ManyToOne(()=>Role,role=>role.administrator)
  role:Role 
 
  @OneToMany(()=>administratorResetToken,token=>token.administrator)
  token:administratorResetToken[] 
+
+
 
 }

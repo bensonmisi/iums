@@ -10,6 +10,7 @@ import { SystemModulesModule } from './system-modules/system-modules.module';
 import { MailModule } from './mail/mail.module';
 import { ConfigModule } from '@nestjs/config';
 import { AdminmenusModule } from './adminmenus/adminmenus.module';
+import { AdminAuthModule } from './admin-auth/admin-auth.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { AdminmenusModule } from './adminmenus/adminmenus.module';
     SystemModulesModule,
     MailModule,
     AdminmenusModule,
+    AdminAuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

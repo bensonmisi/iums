@@ -7,7 +7,8 @@ import { Role } from 'src/role/entities/role.entity';
 @Module({
   imports:[TypeOrmModule.forFeature([Role])],
   controllers: [AdminmenusController],
-  providers: [AdminmenusService]
+  providers: [AdminmenusService],
+  exports:[AdminmenusService]
 })
 export class AdminmenusModule {
   

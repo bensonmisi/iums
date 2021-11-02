@@ -10,6 +10,7 @@ import { MailService } from 'src/mail/mail.service';
 @Module({
   imports:[TypeOrmModule.forFeature([Administrator,administratorResetToken]),MailModule],
   controllers: [AdministratorController],
-  providers: [AdministratorService,MailService]
+  providers: [AdministratorService,MailService],
+  exports:[AdministratorService]
 })
 export class AdministratorModule {}

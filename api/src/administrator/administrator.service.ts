@@ -69,6 +69,18 @@ export class AdministratorService {
       throw new HttpException(error.sqlMessage,HttpStatus.FORBIDDEN)
     }
   }
+  async getUserById(id:number):Promise<Administrator>{
+    return await this.administratorRepository.findOne({id:id})
+  }
+  async showUserById(id:number):Promise<Administrator>{
+      const user = await this.administratorRepository.findOne({id:id})
+      delete user.password
+      return user
+  }
+
+  async findByUsername(username:string):Promise<Administrator>{
+    return await this.administratorRepository.findOne({username:username})
+  }
   async getCurrentDate(){
     let date_ob = new Date();
 
