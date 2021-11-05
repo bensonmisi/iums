@@ -18,4 +18,20 @@ export class MailService {
           },
         });
     }
+
+    async SendAdministratorPassword(user:Administrator,password:string,username:string){
+      const url = process.env.ADMIN_CLIENT_API;
+
+      await this.mailerService.sendMail({
+        to: user.email,
+        subject: 'New Account Creation',
+        template: './AdminAccount', 
+        context: { 
+          name: user.name,
+          url,
+          username,
+          password,
+        },
+      });
+  }
 }

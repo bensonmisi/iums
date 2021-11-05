@@ -25,12 +25,12 @@ export class SystemModule extends BaseEntity {
     @OneToMany(()=>Submodule,submodule=>submodule.systemmodule,{onDelete:"CASCADE",eager:true})
     submodules:Submodule[]
 
-    @ManyToMany(()=>Role,role=>role.systemmodules,{cascade:true}) 
+    @ManyToMany(()=>Role,role=>role.systemmodules) 
     @JoinTable(
         {    
            name: "systemmodules_roles",
            joinColumn: { name: "systemmoduleId", referencedColumnName: "id" },
-           inverseJoinColumn: { name: "roleId" }}
+           inverseJoinColumn: { name: "roleId",referencedColumnName: 'id' }}
            ) 
     role:Role[]
 }

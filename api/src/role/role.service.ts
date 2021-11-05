@@ -55,9 +55,9 @@ export class RoleService {
     {
     const {roleId,systemmoduleId} = assignmoduleDto
     const role = await this.roleRepository.findOne({id:roleId})
-    const module = await SystemModule.findOne({id:systemmoduleId})
-    module.role=[role]
-    await module.save()
+    const module = await SystemModule.findOne({id:systemmoduleId})   
+    role.systemmodules.push(module)
+   await this.roleRepository.save(role)
     return {"status":"success","message":"Role Successfully Assigned Module "+module.name}
   }catch(error){
     console.log(error)
@@ -86,8 +86,8 @@ export class RoleService {
     {
     const role = await this.roleRepository.findOne({id:roleId})
     const module = await Submodule.findOne({id:submoduleId})
-    module.role=[role]
-    await module.save()
+    role.submodules.push(module)
+    await role.save()
     return {"status":"success","message":"Role Successfully Assigned SubModule "+module.name}
     }catch(error){
       console.log(error)
@@ -117,8 +117,8 @@ export class RoleService {
     {
     const role = await this.roleRepository.findOne({id:roleId})
     const permission = await Permission.findOne({id:permissionId})
-    permission.role=[role]
-    await permission.save()
+    role.premissions.push(permission)
+    await role.save()
     return {"status":"success","message":"Role Successfully Assigned Permission"+permission.name}
   }catch(error){
     console.log(error)

@@ -3,10 +3,10 @@ import { Administrator } from "src/administrator/entities/administrator.entity";
 import { Permission } from "src/permission/entities/permission.entity";
 import { Submodule } from "src/submodule/entities/submodule.entity";
 import { SystemModule } from "src/system-modules/entities/system-module.entity";
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Role {
+export class Role extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
     @Column({unique:true})
@@ -27,7 +27,7 @@ export class Role {
       * Roles  can have many modules hence they have a many to many relationship
       */
 
-     @ManyToMany(()=>SystemModule,systemmodule=>systemmodule.role,{eager:true})     
+     @ManyToMany(()=>SystemModule,systemmodule=>systemmodule.role,{eager:true,cascade:true})     
      systemmodules:SystemModule[]
 
      @ManyToMany(()=>Submodule,submodule=>submodule.role,{eager:true})

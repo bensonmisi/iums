@@ -12,8 +12,11 @@ export class AdministratorService {
   constructor(@InjectRepository(Administrator) private administratorRepository:Repository<Administrator>,private mailService:MailService){}
   async create(createAdministratorDto: CreateAdministratorDto):Promise<any> {
     try {
-     const user =  await this.administratorRepository.create(createAdministratorDto) 
+      const {name,surname,email,username,roleId} = createAdministratorDto
+      const password = await this.getRandomPassword(999999999)
+     const user =  await this.administratorRepository.create({name:name,surname:surname,email:email,username:username,roleId:roleId,password:password.toString()}) 
      await this.administratorRepository.save(user)
+     await this.mailService.SendAdministratorPassword(user,password.toString(),username)
      return {"status":"success","message":"Administrator Successfully Created"}
     } catch (error) {
       throw new HttpException(error.sqlMessage,HttpStatus.FORBIDDEN)
@@ -80,6 +83,10 @@ export class AdministratorService {
 
   async findByUsername(username:string):Promise<Administrator>{
     return await this.administratorRepository.findOne({username:username})
+  }
+
+async getRandomPassword(max) {
+    return await Math.floor(Math.random() * Math.floor(max));
   }
   async getCurrentDate(){
     let date_ob = new Date();

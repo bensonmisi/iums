@@ -15,5 +15,5 @@ export class CreateAdministratorDto {
     email:string
 
     @IsNotEmpty()
-    password:string
+    roleId:number
 }
