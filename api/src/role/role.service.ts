@@ -131,10 +131,10 @@ export class RoleService {
     try
     {
     const permissiondt = await Permission.findOne({id:permissionId})
-    const role = await this.roleRepository.findOne({id:roleId},{relations:['permissions']})
+    const role = await this.roleRepository.findOne({id:roleId},{relations:['premissions']})
     role.premissions = role.premissions.filter(permission=>{return permission.id !== permissiondt.id})
     await this.roleRepository.save(role)
-    return {"status":"success","message":"Module  Successfully Unassigned Permission "}
+    return {"status":"success","message":"Role  Successfully Unassigned Permission "}
   }catch(error){
     console.log(error)
     throw new HttpException("Failed To unassign Permission",HttpStatus.BAD_REQUEST)

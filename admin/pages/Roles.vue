@@ -16,10 +16,7 @@
                 <v-card-title>
                    Roles
                     <v-spacer/>
-                    <div class="d-flex">
-                       
-                        <v-btn fab depressed color="primary" @click="showModel=false"><v-icon>mdi-plus</v-icon></v-btn>
-                    </div>
+                    <RoleAdd/>
                 </v-card-title>
                 <v-card-text>
                  <v-simple-table>
@@ -41,6 +38,9 @@
                         >
                         <td>{{ per.name }}</td>
                         <td class="d-flex justify-end pt-2 pb-2">
+                            <RoleEdit :role="per"/>
+                            <RoleDelete :role="per"/>
+                            <RolemodulesView :role="per"/>
                         </td>
                         </tr>
                     </tbody>
