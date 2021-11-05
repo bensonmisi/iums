@@ -12,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AdminmenusModule } from './adminmenus/adminmenus.module';
 import { AdminAuthModule } from './admin-auth/admin-auth.module';
 import { ProfileModule } from './profile/profile.module';
+import { AdminpasswordrestModule } from './adminpasswordrest/adminpasswordrest.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { ProfileModule } from './profile/profile.module';
     AdminmenusModule,
     AdminAuthModule,
     ProfileModule,
+    AdminpasswordrestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

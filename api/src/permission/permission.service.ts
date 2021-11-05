@@ -20,8 +20,8 @@ export class PermissionService {
   
   }
 
-  async findAll():Promise<Permission[]> {
-    return await this.permissionResitory.find();
+  async findAll(id:string):Promise<Permission[]> {
+    return await this.permissionResitory.find({where:{submoduleId:id}});
   }
 
   async findOne(id: number):Promise<Permission> {

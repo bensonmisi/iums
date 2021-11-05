@@ -20,10 +20,10 @@ export class PermissionController {
     return this.permissionService.create(createPermissionDto);
   }
 
-  @Get()
+  @Get('all/:id')
   @HasPermission('GET_PERMISSIONS')
-  findAll() {
-    return this.permissionService.findAll();
+  findAll(@Param('id') id:string) {
+    return this.permissionService.findAll(id);
   }
 
   @Get(':id')

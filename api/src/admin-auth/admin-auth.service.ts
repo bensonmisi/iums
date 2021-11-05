@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AdministratorService } from 'src/administrator/administrator.service';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
@@ -30,9 +30,12 @@ export class AdminAuthService {
         if(!user){
             throw new UnauthorizedException()
         }
+        if(user.status !=='ACTIVE'){
+            throw new  HttpException('Account Not Active',HttpStatus.UNAUTHORIZED)
+        }
         if(!(await user?.validatepassword(password)))
         {
-            throw new UnauthorizedException() 
+            throw new UnauthorizedException('Invalid Login Details') 
         }
         return user
     }

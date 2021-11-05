@@ -6,7 +6,7 @@ import { Administrator } from 'src/administrator/entities/administrator.entity';
 export class MailService {
     constructor(private mailerService:MailerService){}
     async SendAdministratorPasswordReset(user:Administrator,token:string){
-        const url = process.env.ADMIN_CLIENT_API+ `/admini-auth/resetpassword/${token}`;
+        const url = process.env.ADMIN_CLIENT_API+ `/resetPassword/${token}`;
 
         await this.mailerService.sendMail({
           to: user.email,

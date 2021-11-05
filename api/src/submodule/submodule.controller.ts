@@ -21,13 +21,13 @@ export class SubmoduleController {
     return await this.submoduleService.create(createSubmoduleDto);
   }
 
-  @Get()
+  @Get('all/:id')
   @HasPermission('GET_SUBMODULES')
-  async findAll():Promise<Submodule[]> {
-    return await this.submoduleService.findAll();
+  async findAll(@Param('id') id:string):Promise<Submodule[]> {
+    return await this.submoduleService.findAll(id);
   }
 
-  @Get(':id')
+  @Get('each/:id')
   @HasPermission('GET_SUBMODULE')
   async findOne(@Param('id') id: string):Promise<Submodule> {
     return await this.submoduleService.findOne(+id);

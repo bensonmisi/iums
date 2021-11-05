@@ -21,6 +21,8 @@ export class Administrator extends BaseEntity {
  
  @Column()
  password:string
+ @Column({default:'N'})
+ passwordChange:string
 
  @Column({default:'ACTIVE'})
  status:string
@@ -37,7 +39,13 @@ export class Administrator extends BaseEntity {
  }
 
  async validatepassword(password:string):Promise<boolean>{
+      if(this.passwordChange=='N')
+       {
+       this.password = this.password.replace(/^\$2y(.+)$/i, '$2a$1')
+       } 
+       console.log(this.password)     
      return bcrypt.compare(password,this.password);
+       
  }
 
  @ManyToOne(()=>Role,role=>role.administrator)

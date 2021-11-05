@@ -20,8 +20,8 @@ export class SubmoduleService {
     }
   }
 
-  async findAll():Promise<Submodule[]> {
-    return await this.submoduleRepository.find()
+  async findAll(id:string):Promise<Submodule[]> {
+    return await this.submoduleRepository.find({where:{systemmoduleId:id}})
   }
 
   async findOne(id: number):Promise<Submodule> {
