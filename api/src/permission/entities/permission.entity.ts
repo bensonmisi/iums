@@ -23,6 +23,6 @@ export class Permission extends BaseEntity {
     })
     role:Role[]
     
-    @ManyToOne(()=>Submodule,submodule=>submodule.permission)
+    @ManyToOne(()=>Submodule,submodule=>submodule.permission,{onDelete:'CASCADE'})
     submodule:Submodule
 }

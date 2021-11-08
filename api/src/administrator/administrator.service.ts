@@ -16,6 +16,11 @@ export class AdministratorService {
       const password = await this.getRandomPassword(999999999)
      const user =  await this.administratorRepository.create({name:name,surname:surname,email:email,username:username,roleId:roleId,password:password.toString()}) 
      await this.administratorRepository.save(user)
+     /**
+      * save to audit
+      */
+    // const data = {name:name,surname:surname,email:email,username:username,roleId:roleId}
+      //await this.auditService.create(id,JSON.parse(""),data,"administrator","CREATE")
      await this.mailService.SendAdministratorPassword(user,password.toString(),username)
      return {"status":"success","message":"Administrator Successfully Created"}
     } catch (error) {

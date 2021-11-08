@@ -13,6 +13,14 @@ import { AdminmenusModule } from './adminmenus/adminmenus.module';
 import { AdminAuthModule } from './admin-auth/admin-auth.module';
 import { ProfileModule } from './profile/profile.module';
 import { AdminpasswordrestModule } from './adminpasswordrest/adminpasswordrest.module';
+import { SuppliertypeModule } from './suppliertype/suppliertype.module';
+import { AuditModule } from './audit/audit.module';
+import { CategoriesModule } from './categories/categories.module';
+import { SectionsModule } from './sections/sections.module';
+import { DocumentsModule } from './documents/documents.module';
+import { RegistrationperiodModule } from './registrationperiod/registrationperiod.module';
+import { CurrencyModule } from './currency/currency.module';
+import { ExchangerateModule } from './exchangerate/exchangerate.module';
 
 @Module({
   imports: [
@@ -39,6 +47,14 @@ import { AdminpasswordrestModule } from './adminpasswordrest/adminpasswordrest.m
     AdminAuthModule,
     ProfileModule,
     AdminpasswordrestModule,
+    SuppliertypeModule,
+    AuditModule,
+    CategoriesModule,
+    SectionsModule,
+    DocumentsModule,
+    RegistrationperiodModule,
+    CurrencyModule,
+    ExchangerateModule,
   ],
   controllers: [AppController],
   providers: [AppService],

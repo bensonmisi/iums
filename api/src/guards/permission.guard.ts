@@ -14,10 +14,10 @@ export class PermissionGuard implements CanActivate {
     }
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-     /*
-   const value = await this.adminmenuService.checkPermission(user.roleId,permission[0])
-      return value
-     */ 
+    
+  // const value = await this.adminmenuService.checkPermission(user.roleId,permission[0])
+    //  return value
+    
     return true
   }
 }

@@ -29,10 +29,9 @@
            </v-form>
       </v-dialog>
        <v-snackbar
-      absolute
-      :color="color"
       right
-      top
+      :color="color"
+       top
       v-model="snackbar"
     >{{text}}</v-snackbar>
   </div>

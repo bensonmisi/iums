@@ -23,7 +23,7 @@
            </v-form>
       </v-dialog>
        <v-snackbar
-      absolute
+     
       :color="color"
       right
       top

@@ -2,6 +2,7 @@ import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn,
  import * as bcrypt from 'bcrypt'
 import { Role } from "src/role/entities/role.entity";
 import { administratorResetToken } from "./administratorResetToken.entity";
+import { audit } from "src/audit/entities/audit.entity";
 @Entity()
 export class Administrator extends BaseEntity {
  @PrimaryGeneratedColumn()
@@ -54,6 +55,8 @@ export class Administrator extends BaseEntity {
  @OneToMany(()=>administratorResetToken,token=>token.administrator)
  token:administratorResetToken[] 
 
+ @OneToMany(()=>audit,trail=>trail.administrator)
+ trail:audit[]
 
 
 }

@@ -77,7 +77,12 @@
       </v-container>
     </v-main>
    
-    
+       <v-overlay :value="overlay">
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
   </v-app>
 </template>
 
@@ -90,11 +95,14 @@ export default {
       offset:true,
       fixed:true,
       items: [],
-      title: 'Vuetify.js'
+      title: 'Vuetify.js',
+      overlay:false
     }
   },
   async fetch(){
+       this.overlay = true
         this.$store.dispatch('sidebar/getMenus')
+        this.overlay = false
   },methods:{
   async logout(){
     await this.$auth.logout()

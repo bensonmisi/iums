@@ -22,8 +22,7 @@
        </v-card>
            </v-form>
       </v-dialog>
-       <v-snackbar
-      absolute
+       <v-snackbar      
       :color="color"
       right
       top

@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AdminmenusService } from './adminmenus.service';
 import { AdminmenusController } from './adminmenus.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Role } from 'src/role/entities/role.entity';
 
+@Global()
 @Module({
   imports:[TypeOrmModule.forFeature([Role])],
   controllers: [AdminmenusController],
