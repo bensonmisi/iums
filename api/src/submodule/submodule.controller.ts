@@ -9,7 +9,7 @@ import { PermissionGuard } from 'src/guards/permission.guard';
 import { HasAccesslevel } from 'src/decorators/hasaccesslevel.decorator';
 import { HasPermission } from 'src/decorators/hasPermission.decorator';
 
-@Controller('api/admin/submodules')
+@Controller('admin/submodules')
 @UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
 @HasAccesslevel('ADMIN')
 export class SubmoduleController {

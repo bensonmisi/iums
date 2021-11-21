@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { from, Observable } from 'rxjs';
 import { Role } from 'src/role/entities/role.entity';
+import { SystemModule } from 'src/system-modules/entities/system-module.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class AdminmenusService {
     constructor(@InjectRepository(Role) private roleRepository:Repository<Role>){}
-    async getMenus(id:number){
-        const role = await this.roleRepository.findOne({id:id})
-        return  this.generateMenus(role)
+    async getMenus(id:number):Promise<any>{
+        //const role = await this.roleRepository.findOne({id:id})
+                                              
+        //return  await this.generateMenus(role)
+         const role =  await this.roleRepository.findOne(id,{relations:['systemmodules','submodules']})
+         return  await this.generateMenus(role)
     }
 
     async checkPermission(id:number,name:string){
@@ -22,7 +27,7 @@ export class AdminmenusService {
         return bool
     }
 
-     generateMenus(role:Role){
+     async generateMenus(role:Role){
         let menus =[]
         
         role.systemmodules.forEach(module => {

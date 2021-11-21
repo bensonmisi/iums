@@ -1,5 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
-
+const fs = require('fs')
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -28,7 +28,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/axios'
+    '~/plugins/axios',
+    '~/plugins/filterdate'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -44,7 +45,8 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/auth-next'
+    '@nuxtjs/auth-next',
+    'vue-sweetalert2/nuxt',
   ],
   router: {
     middleware: ['auth']
@@ -59,7 +61,7 @@ export default {
           type: 'Bearer'
         },
         user: {
-          property: false,
+          property: 'user',
           // autoFetch: true
         },
         endpoints: {
@@ -74,7 +76,12 @@ export default {
   axios: {
     baseURL: 'http://localhost:4000'
   },
-
+  services: {
+    messaging:  {
+      createServiceWorker: true,
+      inject: fs.readFileSync('./serviceWorker.js')
+    }
+  },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

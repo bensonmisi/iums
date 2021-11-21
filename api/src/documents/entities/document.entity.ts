@@ -1,5 +1,6 @@
+import { Accountdocument } from "src/accountdocuments/entities/accountdocument.entity";
 import { Suppliertype } from "src/suppliertype/entities/suppliertype.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 @Entity()
 export class Document extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -30,6 +31,9 @@ export class Document extends BaseEntity {
      
      @ManyToOne(()=>Suppliertype,suppliertype=>suppliertype.documents)
      suppliertype:Suppliertype
+
+     @OneToMany(()=>Accountdocument,accountdocument=>accountdocument.account)
+     account:Accountdocument[]
 
 
 }

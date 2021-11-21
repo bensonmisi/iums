@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Role } from 'src/role/entities/role.entity';
 import { RoleService } from 'src/role/role.service';
 import { Repository } from 'typeorm';
 import { CreatePermissionDto } from './dto/create-permission.dto';
@@ -45,7 +46,7 @@ export class PermissionService {
 
   async assignedByRole(id:number,submoduleId:number):Promise<any>{
     const permissions = await this.permissionResitory.find({where:{submoduleId:submoduleId}})
-    const role = await this.roleService.findOne(id)
+    const role = await Role.findOne(id,{relations:['premissions']})
     let array =[]
     permissions.forEach(permission=>{
       let assigned = false

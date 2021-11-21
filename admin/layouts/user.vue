@@ -11,7 +11,7 @@
                <img src="v.png" width="90px"/>
                </div>
                
-     <SideBar/>
+     <SideBar :menus="getMenus"/>
        <template v-slot:append>
         <div class="pa-2">
           <v-btn block color="error" @click="logout">
@@ -39,7 +39,7 @@
           v-on="on"
           
         >
-         Welcome: {{loggedInUser.name}} {{loggedInUser.surname}}
+         Welcome: {{loggedInUser.profile.name}} {{loggedInUser.profile.surname}}
         </v-btn>
       </template>
       <v-list>
@@ -88,6 +88,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import Pusher from 'pusher-js'
 export default {
   data () {
     return {
@@ -98,18 +99,24 @@ export default {
       title: 'Vuetify.js',
       overlay:false
     }
-  },
-  async fetch(){
-       this.overlay = true
-        this.$store.dispatch('sidebar/getMenus')
-        this.overlay = false
+  },fetch(){
+    this.$store.dispatch('sidebar/getMenus')
+     this.getNotitications()
   },methods:{
   async logout(){
     await this.$auth.logout()
+  },
+  getNotitications(){
+      
+       let pusher = new Pusher('4f2ecae30d5d8824089a', { cluster: 'ap2' })
+      pusher.subscribe('manualbanktranactions')
+      pusher.bind('DECISION_MANUAL_TRANSACTION_REQUEST', data => {
+        this.$swal(data.message)
+      })
   }
   },
   computed:{
-  ...mapGetters(['isAuthenticated', 'loggedInUser']),
+  ...mapGetters(['isAuthenticated', 'loggedInUser','getMenus']),
    }
 }
 </script>

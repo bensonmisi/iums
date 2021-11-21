@@ -30,7 +30,7 @@ export class RoleService {
   }
 
   async findOne(id: number):Promise<Role> {
-    return await this.roleRepository.findOne(id)
+    return await this.roleRepository.findOne(id,{relations:['systemmodules','submodules']})
   }
 
   async update(id: number, updateRoleDto: UpdateRoleDto):Promise<any> {
@@ -84,7 +84,7 @@ export class RoleService {
     const {roleId,submoduleId} = assignsubmoduleDto
     try
     {
-    const role = await this.roleRepository.findOne({id:roleId})
+    const role = await this.roleRepository.findOne({id:roleId},{relations:['submodules']})
     const module = await Submodule.findOne({id:submoduleId})
     role.submodules.push(module)
     await role.save()
@@ -115,7 +115,7 @@ export class RoleService {
     const {roleId,permissionId} = assignPermissionDto
     try
     {
-    const role = await this.roleRepository.findOne({id:roleId})
+    const role = await this.roleRepository.findOne({id:roleId},{relations:['premissions']})
     const permission = await Permission.findOne({id:permissionId})
     role.premissions.push(permission)
     await role.save()

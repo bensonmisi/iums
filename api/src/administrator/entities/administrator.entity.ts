@@ -1,8 +1,12 @@
-import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
  import * as bcrypt from 'bcrypt'
 import { Role } from "src/role/entities/role.entity";
 import { administratorResetToken } from "./administratorResetToken.entity";
 import { audit } from "src/audit/entities/audit.entity";
+import { Currency } from "src/currency/entities/currency.entity";
+import { Exchangerate } from "src/exchangerate/entities/exchangerate.entity";
+import { Bank } from "src/bank/entities/bank.entity";
+import { Manualtransaction } from "src/manualtransaction/entities/manualtransaction.entity";
 @Entity()
 export class Administrator extends BaseEntity {
  @PrimaryGeneratedColumn()
@@ -57,6 +61,18 @@ export class Administrator extends BaseEntity {
 
  @OneToMany(()=>audit,trail=>trail.administrator)
  trail:audit[]
+
+ @OneToMany(()=>Exchangerate,rate=>rate.agent)
+ rate:Exchangerate[]
+
+ @ManyToOne(()=>Bank, bank=>bank.administrator)
+ banks:Bank[]
+
+ @OneToMany(()=>Manualtransaction,manaul=>manaul.requester)
+ manualtransaction:Manualtransaction
+
+ @OneToMany(()=>Manualtransaction,manaul=>manaul.approver)
+ approvedtransaction:Manualtransaction
 
 
 }

@@ -27,12 +27,12 @@ export class Role extends BaseEntity {
       * Roles  can have many modules hence they have a many to many relationship
       */
 
-     @ManyToMany(()=>SystemModule,systemmodule=>systemmodule.role,{eager:true,cascade:true})     
+     @ManyToMany(()=>SystemModule,systemmodule=>systemmodule.role)     
      systemmodules:SystemModule[]
 
-     @ManyToMany(()=>Submodule,submodule=>submodule.role,{eager:true})
+     @ManyToMany(()=>Submodule,submodule=>submodule.role)
      submodules:Submodule[]
 
-     @ManyToMany(()=>Permission,permission=>permission.role,{eager:true})     
+     @ManyToMany(()=>Permission,permission=>permission.role)     
      premissions:Permission[]
 }

@@ -1,3 +1,4 @@
+import { Account } from "src/accounts/entities/account.entity";
 import { Document } from "src/documents/entities/document.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -19,4 +20,7 @@ export class Suppliertype extends BaseEntity {
 
     @OneToMany(()=>Document,document=>document.suppliertype)
     documents:Document[]
+     
+    @OneToMany(()=>Account,account=>account.suppliertype)
+    accounts:Account[]
 }

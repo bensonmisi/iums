@@ -21,6 +21,21 @@ import { DocumentsModule } from './documents/documents.module';
 import { RegistrationperiodModule } from './registrationperiod/registrationperiod.module';
 import { CurrencyModule } from './currency/currency.module';
 import { ExchangerateModule } from './exchangerate/exchangerate.module';
+import { RegistrationfeeModule } from './registrationfee/registrationfee.module';
+import { CompanyModule } from './company/company.module';
+import { UserModule } from './user/user.module';
+import { ContactsModule } from './contacts/contacts.module';
+import { DirectorateModule } from './directorate/directorate.module';
+import { AccountprofileModule } from './accountprofile/accountprofile.module';
+import { AccountdocumentsModule } from './accountdocuments/accountdocuments.module';
+import { AccountsModule } from './accounts/accounts.module';
+import { HelperModule } from './helper/helper.module';
+import { BanktransactionModule } from './banktransaction/banktransaction.module';
+import { BankModule } from './bank/bank.module';
+import { BankApiModule } from './bank-api/bank-api.module';
+import { SuspenseModule } from './suspense/suspense.module';
+import { AccountnumberModule } from './accountnumber/accountnumber.module';
+import { ManualtransactionModule } from './manualtransaction/manualtransaction.module';
 
 @Module({
   imports: [
@@ -55,6 +70,21 @@ import { ExchangerateModule } from './exchangerate/exchangerate.module';
     RegistrationperiodModule,
     CurrencyModule,
     ExchangerateModule,
+    RegistrationfeeModule,
+    CompanyModule,
+    UserModule,
+    ContactsModule,
+    DirectorateModule,
+    AccountprofileModule,
+    AccountdocumentsModule,
+    AccountsModule,
+    HelperModule,
+    BanktransactionModule,
+    BankModule,
+    BankApiModule,
+    SuspenseModule,
+    AccountnumberModule,
+    ManualtransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

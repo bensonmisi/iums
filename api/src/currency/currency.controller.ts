@@ -8,7 +8,7 @@ import { CurrencyService } from './currency.service';
 import { CreateCurrencyDto } from './dto/create-currency.dto';
 import { UpdateCurrencyDto } from './dto/update-currency.dto';
 
-@Controller('api/admin/currency')
+@Controller('admin/currency')
 @UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
 @HasAccesslevel('ADMIN')
 export class CurrencyController {

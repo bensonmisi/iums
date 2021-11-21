@@ -2,11 +2,12 @@ import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@n
 import { JwtService } from '@nestjs/jwt';
 import { AdministratorService } from 'src/administrator/administrator.service';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
+import { AdminmenusService } from 'src/adminmenus/adminmenus.service';
 import { AdminAuthDto } from './admin-auth.dto';
 
 @Injectable()
 export class AdminAuthService {
-    constructor(private administratorService:AdministratorService,private jwtservice:JwtService){}
+    constructor(private administratorService:AdministratorService,private jwtservice:JwtService,private menuService:AdminmenusService){}
 
     async Login(adminAuthDto:AdminAuthDto):Promise<any>{
      const user = await this.validate(adminAuthDto)
@@ -20,8 +21,11 @@ export class AdminAuthService {
       }
     }
 
-    async getProfile(id:number):Promise<Administrator>{
-        return await this.administratorService.showUserById(id)
+    async getProfile(id:number):Promise<any>{
+       
+       const user =  await this.administratorService.showUserById(id)
+       const menus = await this.menuService.getMenus(user.roleId)
+       return {user:{profile:user,menus:menus}}
     }
 
     async validate(adminAuthDto:AdminAuthDto){

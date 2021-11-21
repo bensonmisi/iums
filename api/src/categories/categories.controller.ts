@@ -8,7 +8,7 @@ import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
-@Controller('api/admin/categories')
+@Controller('admin/categories')
 @UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
 @HasAccesslevel('ADMIN')
 export class CategoriesController {

@@ -8,7 +8,7 @@ import { PermissionGuard } from 'src/guards/permission.guard';
 import { HasAccesslevel } from 'src/decorators/hasaccesslevel.decorator';
 import { HasPermission } from 'src/decorators/hasPermission.decorator';
 
-@Controller('api/admin/suppliertype')
+@Controller('admin/suppliertype')
 @UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
 @HasAccesslevel('ADMIN')
 export class SuppliertypeController {
@@ -26,6 +26,11 @@ export class SuppliertypeController {
     return this.suppliertypeService.findAll();
   }
 
+  @Get('/report/summary')
+  @HasPermission('GET_SUPPLIERTYPE_SUMMARY')
+  async summarylist(){
+    return await this.suppliertypeService.summary()
+  }
   @Get(':id')
   @HasPermission('GET_SUPPLIERTYPE')
   findOne(@Param('id') id: string) {

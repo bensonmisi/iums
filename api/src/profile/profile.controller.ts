@@ -6,7 +6,7 @@ import { changepasswordDto } from './changepassword.dto';
 import { personalDto } from './personal.dto';
 import { ProfileService } from './profile.service';
 
-@Controller('api/admin/profile')
+@Controller('admin/profile')
 @UseGuards(JwtAuthGuard,AccessLevelGuard)
 @HasAccesslevel('ADMIN')
 export class ProfileController {

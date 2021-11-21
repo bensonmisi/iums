@@ -12,7 +12,7 @@ import { AccessLevelGuard } from 'src/guards/accesslevel.guard';
 import { HasPermission } from 'src/decorators/hasPermission.decorator';
 import { PermissionGuard } from 'src/guards/permission.guard';
 
-@Controller('api/admin/role')
+@Controller('admin/role')
 @UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
 @HasAccesslevel('ADMIN')
 export class RoleController {

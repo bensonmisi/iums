@@ -1,34 +1,47 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete ,Request, UseGuards} from '@nestjs/common';
 import { ExchangerateService } from './exchangerate.service';
 import { CreateExchangerateDto } from './dto/create-exchangerate.dto';
 import { UpdateExchangerateDto } from './dto/update-exchangerate.dto';
+import { HasPermission } from 'src/decorators/hasPermission.decorator';
+import { JwtAuthGuard } from 'src/jwtsettings/jwt-auth.guard';
+import { AccessLevelGuard } from 'src/guards/accesslevel.guard';
+import { PermissionGuard } from 'src/guards/permission.guard';
+import { HasAccesslevel } from 'src/decorators/hasaccesslevel.decorator';
 
-@Controller('exchangerate')
+@Controller('admin/exchangerate')
+@UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
+@HasAccesslevel('ADMIN')
 export class ExchangerateController {
   constructor(private readonly exchangerateService: ExchangerateService) {}
 
   @Post()
-  create(@Body() createExchangerateDto: CreateExchangerateDto) {
-    return this.exchangerateService.create(createExchangerateDto);
+  @HasPermission('CREATE_EXCHANGERATE')
+  async create(@Body() createExchangerateDto: CreateExchangerateDto,@Request() req) {
+    const user = req.user
+    return await this.exchangerateService.create(createExchangerateDto,user.userId);
   }
 
   @Get()
-  findAll() {
-    return this.exchangerateService.findAll();
+  @HasPermission('GET_EXCHANGERATES')
+ async findAll() {
+    return await this.exchangerateService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.exchangerateService.findOne(+id);
+  @HasPermission('GET_PERMISSION')
+ async findOne(@Param('id') id: string) {
+    return await this.exchangerateService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExchangerateDto: UpdateExchangerateDto) {
-    return this.exchangerateService.update(+id, updateExchangerateDto);
+  @HasPermission('UPDATE_PERMISSION')
+  async update(@Param('id') id: string, @Body() updateExchangerateDto: UpdateExchangerateDto) {
+    return await this.exchangerateService.update(+id, updateExchangerateDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.exchangerateService.remove(+id);
+  @HasPermission('DELETE_PERMISSION')
+  async remove(@Param('id') id: string) {
+    return await this.exchangerateService.remove(+id);
   }
 }

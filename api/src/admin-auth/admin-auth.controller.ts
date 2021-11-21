@@ -3,7 +3,7 @@ import { JwtAuthGuard } from 'src/jwtsettings/jwt-auth.guard';
 import { AdminAuthDto } from './admin-auth.dto';
 import { AdminAuthService } from './admin-auth.service';
 
-@Controller('api/admin')
+@Controller('admin')
 export class AdminAuthController {
   constructor(private readonly adminAuthService: AdminAuthService) {}
 

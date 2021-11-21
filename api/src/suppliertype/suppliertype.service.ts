@@ -31,4 +31,8 @@ export class SuppliertypeService {
     await this.suppliertypeRepository.delete(id)
     return {'status':'success','message':'Supplier Type Successfully deleted'}
   }
+
+  async summary(){
+    await this.suppliertypeRepository.find({relations:["accounts"]})
+  }
 }

@@ -1,3 +1,4 @@
+
 export const getters = {
 
     isAuthenticated(state) {
@@ -11,7 +12,13 @@ export const getters = {
     
     return state.auth.user
     
+    },
+    getMenus(state)
+    {
+        return state.auth.user.menus
     }
+
+
     
     }
     
