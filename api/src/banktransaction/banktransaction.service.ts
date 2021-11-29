@@ -23,6 +23,7 @@ export class BanktransactionService {
       }})   
     }
 
+    
     async search(searchDto:SearchDto):Promise<Banktransaction[]>{
       let descriptionquery ={}
       let sourcereferencequery ={}

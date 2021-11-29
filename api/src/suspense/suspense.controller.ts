@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { SuspenseService } from './suspense.service';
 import { CreateSuspenseDto } from './dto/create-suspense.dto';
 import { UpdateSuspenseDto } from './dto/update-suspense.dto';
+import { SearchSuspenseDto } from './dto/searchsuspense.dto';
 
 @Controller('suspense')
 export class SuspenseController {
@@ -30,5 +31,9 @@ export class SuspenseController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.suspenseService.remove(+id);
+  }
+  @Post('searchByCode')
+  async searchbycode(@Body() searchSuspenseDto:SearchSuspenseDto){
+    return await this.suspenseService.seachBycode(searchSuspenseDto)
   }
 }

@@ -5,4 +5,6 @@ export class DecisionDto{
     id:number
     @IsNotEmpty()
     status:string
+
+    reason?:string
 }

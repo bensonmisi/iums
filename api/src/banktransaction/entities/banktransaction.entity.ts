@@ -66,8 +66,8 @@ export class Banktransaction extends BaseEntity{
     @ManyToOne(()=>Bank,bank=>bank.banktransactions)
     bank:Bank
 
-    @OneToOne(()=>Suspense,suspense=>suspense.transaction)
-    suspense:Suspense
+    @OneToOne(()=>Suspense,suspense=>suspense.banktransaction)
+    suspense:Suspense 
 
     //@ManyToOne(()=>Accountnumber,accountnumber=>accountnumber.transaction)
     //@JoinColumn([{name:'accountnumber',referencedColumnName:'accountnumber'}])

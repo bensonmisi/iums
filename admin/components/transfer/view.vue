@@ -15,25 +15,26 @@
                     <template v-slot:default>
                        <tbody>
                            <tr>
-                               <th>Recieved On</th><td>{{transaction.created_at | formatDate }}</td>
+                               <th>Source</th><td>{{transaction.source.regnumber }}</td>
                            </tr>
                             <tr>
-                               <th>Description</th><td>{{transaction.description }}</td>
+                               <th>Destination</th><td>{{transaction.destination.regnumber }}</td>
                            </tr>
                             <tr>
-                               <th>Account Number</th><td>{{transaction.accountnumber   }}</td>
+                               <th>Source Account</th><td>{{transaction.suspense.accountnumber  }}</td>
                            </tr>
                              <tr>
-                               <th>Reference number</th><td>{{transaction.referencenumber   }}</td>
+                               <th>Destination Account</th><td>{{transaction.accountnumber   }}</td>
                            </tr>
                            <tr>
-                               <th>Source reference number</th><td>{{transaction.source_reference   }}</td>
+                               <th>Amount</th><td>{{transaction.amount   }}</td>
                            </tr>
                            <tr>
-                               <th>Statement Reference</th><td>{{transaction.statement_reference  }}</td>
-                           </tr>
-                            <tr>
-                               <th>Requested By</th><td>{{transaction.requester.name}}{{transaction.requester.surname}}</td>
+                               <th>Requested By</th>
+                               <td>
+                              {{transaction.requester ? transaction.requester.name  : ''}}
+                             {{transaction.requester ? transaction.requester.surname : ''}}
+                             </td>
                            </tr>
                             <tr>
                                <th>Status</th><td>{{transaction.status   }}</td>
@@ -94,12 +95,12 @@ export default {
           this.loading=true
              try {
                this.form.id = this.transaction.id
-                 await this.$axios.post('api/admin/manualtransactions/decision',this.form).then((res)=>{
+                 await this.$axios.post('api/admin/suspensetransfers/decision',this.form).then((res)=>{
                         this.loading = false
                         this.color="success"
                         this.snackbar=true
                         this.text=res.data.message
-                         this.$store.dispatch('manualtransactions/getTransactions')
+                        this.$store.dispatch('suspensetransfers/getTransactions') 
                         this.$refs.form.reset()
                         this.addPermModel= false
 

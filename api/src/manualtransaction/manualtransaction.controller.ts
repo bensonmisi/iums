@@ -43,9 +43,9 @@ async update(@Param('id') id: string, @Body() updateManualtransactionDto: Update
 
   @Delete(':id')
   @HasPermission('DELETE_MANAUL_TRANSACTION_REQUEST')
- async remove(@Param('id') id: string,@Request() req) {
+ async remove(@Param('id') id: string,@Request() req) { 
     const user = req.user
-    return await this.manualtransactionService.remove(+id,user.id);
+    return await this.manualtransactionService.remove(+id,user.userId);
   }
 
   @Post('decision')

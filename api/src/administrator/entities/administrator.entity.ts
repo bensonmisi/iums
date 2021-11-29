@@ -7,6 +7,7 @@ import { Currency } from "src/currency/entities/currency.entity";
 import { Exchangerate } from "src/exchangerate/entities/exchangerate.entity";
 import { Bank } from "src/bank/entities/bank.entity";
 import { Manualtransaction } from "src/manualtransaction/entities/manualtransaction.entity";
+import { Suspensetransfer } from "src/suspensetransfers/entities/suspensetransfer.entity";
 @Entity()
 export class Administrator extends BaseEntity {
  @PrimaryGeneratedColumn()
@@ -74,5 +75,10 @@ export class Administrator extends BaseEntity {
  @OneToMany(()=>Manualtransaction,manaul=>manaul.approver)
  approvedtransaction:Manualtransaction
 
+ @OneToMany(()=>Suspensetransfer,transfer=>transfer.requester)
+ requests:Suspensetransfer
+
+ @OneToMany(()=>Suspensetransfer,transfer=>transfer.actioner)
+ actions:Suspensetransfer
 
 }

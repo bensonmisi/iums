@@ -3,8 +3,10 @@ import { Accountprofile } from "src/accountprofile/entities/accountprofile.entit
 import { Banktransaction } from "src/banktransaction/entities/banktransaction.entity";
 import { Contact } from "src/contacts/entities/contact.entity";
 import { Directorate } from "src/directorate/entities/directorate.entity";
+import { Onlinepayment } from "src/onlinepayment/entities/onlinepayment.entity";
 import { Suppliertype } from "src/suppliertype/entities/suppliertype.entity";
 import { Suspense } from "src/suspense/entities/suspense.entity";
+import { Suspensetransfer } from "src/suspensetransfers/entities/suspensetransfer.entity";
 import { User } from "src/user/entities/user.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -73,6 +75,17 @@ export class Account extends BaseEntity {
 
      @OneToMany(()=>Suspense,suspense=>suspense.account)
      suspense:Suspense[]
+
+     @OneToMany(()=>Suspensetransfer,transfer=>transfer.source)
+     fromtransfer:Suspensetransfer[]
+
+     @OneToMany(()=>Suspensetransfer,transfer=>transfer.destination)
+     todestination:Suspensetransfer[]
+
+     @OneToMany(()=>Onlinepayment,onlinepayments=>onlinepayments.account)
+     onlinepayments:Onlinepayment[]
+
+
 
 
 }

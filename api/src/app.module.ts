@@ -36,6 +36,9 @@ import { BankApiModule } from './bank-api/bank-api.module';
 import { SuspenseModule } from './suspense/suspense.module';
 import { AccountnumberModule } from './accountnumber/accountnumber.module';
 import { ManualtransactionModule } from './manualtransaction/manualtransaction.module';
+import { SuspensetransfersModule } from './suspensetransfers/suspensetransfers.module';
+import { SuspensereceiptModule } from './suspensereceipt/suspensereceipt.module';
+import { OnlinepaymentModule } from './onlinepayment/onlinepayment.module';
 
 @Module({
   imports: [
@@ -85,6 +88,9 @@ import { ManualtransactionModule } from './manualtransaction/manualtransaction.m
     SuspenseModule,
     AccountnumberModule,
     ManualtransactionModule,
+    SuspensetransfersModule,
+    SuspensereceiptModule,
+    OnlinepaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

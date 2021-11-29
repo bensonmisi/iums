@@ -1,27 +1,137 @@
 <template>
   <div>
-      <v-btn icon depressed color="primary" @click="addSubModel=true"><v-icon>mdi-pencil</v-icon></v-btn>
+      <v-btn x-small icon depressed color="primary" @click="addPermModel=true"><v-icon>mdi-pencil</v-icon></v-btn>
    
-      <v-dialog v-model="addSubModel" width="300">
+      <v-dialog v-model="addPermModel" width="500">
            <v-form v-model="valid" ref="form" lazy-validation>
        <v-card>
            <v-card-title>
-               Update Role
+               Update transaction
                <v-spacer/>
-               <v-btn icon @click="addSubModel=false"><v-icon>mdi-close</v-icon></v-btn>
+               <v-btn icon @click="addPermModel=false"><v-icon>mdi-close</v-icon></v-btn>
            </v-card-title>
            <v-card-text>
-                  <v-text-field
-                            label="Name"
+                <v-row>
+                      <v-col>
+                        <v-select
+                            label="Bank"
                             outlined
-                            v-model="form.name"
-                            :rules="nameRule"
+                            v-model="form.bankId"
+                            :rules="bankRule"
+                            :items="banks"
+                            item-text="name"
+                            item-value="id"
                         />
-                        
+                   </v-col>
+                   <v-col>
+                  <v-text-field
+                            label="Description"
+                            outlined
+                            v-model="form.description"
+                            :rules="descriptionRule"
+                        />
+                   </v-col>
+               </v-row>
+               <v-row>
+
+                      <v-col>
+                  <v-text-field
+                            label="Source Reference"
+                            outlined
+                            v-model="form.source_reference"
+                            :rules="sourcereferenceRule"
+                        />
+                   </v-col>
+                   <v-col>
+                  <v-text-field
+                            label="Reference"
+                            outlined
+                            v-model="form.referencenumber"
+                            :rules="referenceRule"
+                        />
+                   </v-col>
+                  </v-row>
+                  <v-row>
+                      <v-col>
+                  <v-text-field
+                            label="Statement Reference"
+                            outlined
+                            v-model="form.statement_reference"
+                            :rules="statementreferenceRule"
+                        />
+                   </v-col>
+                   <v-col>
+                    <v-select
+                            label="Account Numbers"
+                            outlined
+                            v-model="form.accountnumber"
+                            :rules="accountnumberRule"
+                            :items="accountnumbers"
+                            item-text="accountnumber"
+                            item-value="accountnumber"
+                            @change="getCurrency"
+                        />
+                   </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <v-menu
+                            ref="menu"
+                            v-model="menu"
+                            :close-on-content-click="false"
+                            :return-value.sync="date"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="auto"
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                                v-model="date"
+                                label="From date"
+                               prepend-inner-icon="mdi-calendar"
+                                outlined
+                                readonly
+                                v-bind="attrs"
+                                v-on="on"
+                            ></v-text-field>
+                            </template>
+                            <v-date-picker
+                            v-model="date"
+                            no-title
+                            scrollable
+                            >
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                text
+                                color="primary"
+                                @click="menu = false"
+                            >
+                                Cancel
+                            </v-btn>
+                            <v-btn
+                                text
+                                color="primary"
+                                @click="$refs.menu.save(date)"
+                            >
+                                OK
+                            </v-btn>
+                            </v-date-picker>
+                        </v-menu>
+                   </v-col>
+                      <v-col>
+                      <v-text-field
+                            label="Amount"
+                            outlined
+                            v-model="form.amount"
+                            :rules="amountRule"
+                        />
+                   </v-col>
+               </v-row>
+                      
                           
            </v-card-text>
            <v-card-actions>
-               <v-btn rounded class="error" @click="addSubModel=false">Cancel</v-btn>
+               <v-btn rounded class="error" @click="addPermModel=false">Cancel</v-btn>
                <v-spacer/>
                <v-btn rounded class="success" @click="submit" :loading="loading" :disabled="loading">Submit</v-btn>
            </v-card-actions>
@@ -29,7 +139,7 @@
            </v-form>
       </v-dialog>
        <v-snackbar
-      
+     
       :color="color"
       right
       top
@@ -40,19 +150,40 @@
 
 <script>
 export default {
-    props:['role'],
+    props:['transaction'],
+     async fetch(){
+          await this.$store.dispatch('accountnumbers/getAccountnumbers') 
+          await this.$store.dispatch('banks/getBanks') 
+    },
  data(){
      return{
-         addSubModel:false,
+         addPermModel:false,
          valid:false,
          form:{
-             name:this.role.name,
+              bankId:this.transaction.bankId,
+              description:this.transaction.description,
+              source_reference:this.transaction.source_reference,
+              statement_reference:this.transaction.statement_reference,
+              referencenumber:this.transaction.referencenumber,
+              accountnumber:this.transaction.accountnumber,
+              currency:this.transaction.currency,
+              amount:this.transaction.amount,
+              transactionDate:this.transaction.transactionDate
          },
-         nameRule:[v=>!!v || 'Role name is required'],
+         bankRule:[v=>!!v || 'Select Source Bank'],
+         descriptionRule:[v=>!!v || 'Description required'],
+         sourcereferenceRule:[v=>!!v || 'Source reference required'],
+         referenceRule:[v=>!!v || 'Reference number required'],
+         statementreferenceRule:[v=>!!v || 'Statement reference required'],
+         accountnumberRule:[v=>!!v || 'Account number required'],
+         currencyRule:[v=>!!v || 'Currency required'],
+         amountRule:[v=>!!v || 'Amount required'],
          snackbar:false,
          color:'',
          text:'',
-         loading:false
+         loading:false,
+         date:null,
+         menu:false
      }
  },methods:{
      async submit(){
@@ -61,14 +192,15 @@ export default {
           this.valid = true
           this.loading=true
              try {
-                 await this.$axios.patch('api/admin/role/'+this.role.id,this.form).then((res)=>{
+                 this.form.transactionDate = this.date
+                 await this.$axios.patch('api/admin/manualtransactions/'+this.transaction.id,this.form).then((res)=>{
                         this.loading = false
                         this.color="success"
                         this.snackbar=true
                         this.text=res.data.message
-                        this.$store.dispatch('roles/getRoles',this.role.id)
+                         this.$store.dispatch('manualtransactions/getTransactions')
                         this.$refs.form.reset()
-                        this.addSubModel = false
+                        this.addPermModel= false
 
                  })
              }catch (err) {
@@ -78,8 +210,23 @@ export default {
                 this.text=err.response.data.message
             }
        }
+     },getCurrency(){
+        
+         const data = this.$store.state.accountnumbers.accountnumbers
+         data.forEach(element => {
+              if(element.accountnumber === this.form.accountnumber){
+                  this.form.currency = element.currency
+              }
+         });
      }
- }
+ },computed:{
+    accountnumbers(){
+        return this.$store.state.accountnumbers.accountnumbers
+    }, 
+    banks(){
+        return this.$store.state.banks.banks
+    }
+    }
 }
 </script>
 

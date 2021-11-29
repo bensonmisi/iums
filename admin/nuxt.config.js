@@ -29,7 +29,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/axios',
-    '~/plugins/filterdate'
+    '~/plugins/filterdate',
+    '~/plugins/pushnotification'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -75,12 +76,6 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: 'http://localhost:4000'
-  },
-  services: {
-    messaging:  {
-      createServiceWorker: true,
-      inject: fs.readFileSync('./serviceWorker.js')
-    }
   },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

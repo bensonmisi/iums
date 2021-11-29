@@ -5,37 +5,19 @@
               <v-card>
                   <v-card-text class="d-flex">
                       <v-btn text to="dashboard">Dashboard</v-btn>
-                       <v-btn text disabled>Manual Transaction Requests </v-btn>
+                       <v-btn text disabled>Suspense Wallet Transfers </v-btn>
                   </v-card-text>
               </v-card>
           </v-col>
       </v-row>
-      <v-row>
-          <v-col  >
-              <v-card>
-                  <v-card-text>
-                       <v-simple-table dense>
-                    <template v-slot:default>
-                        <tr>
-                            <td v-for="(account,index) in transactions.accountnumbers" :key="index" class="border-r">
-                                <div> {{index}}</div>
-                    <div class="title">  {{account.length}}</div> 
-                            </td>
-                        </tr>
-                    </template>
-                       </v-simple-table>
-                 
-                  </v-card-text>
-              </v-card>
-          </v-col>
-      </v-row>
-      <v-row class="mt-5">
+       <v-row class="mt-5">
           <v-col>
                 <v-card>
                 <v-card-title>
-                   Bank transactions
+                   Suspense Wallet
                     <v-spacer/>
-                  <ManualtransactionsAdd/>
+                     <downloadexcel :data="rawdata"><v-btn  depressed class="primary mr-2">Export</v-btn></downloadexcel>
+                  <TransferAdd/>
                 </v-card-title>
                 <v-card-text>
                   
@@ -56,23 +38,30 @@
                     <template v-slot:default>
                     <thead>
                         <tr>
-                        <th class="text-left">
-                           Received On
+                               <th class="text-left">
+                        Created At
                         </th>
+                        
                         <th class="text-left">
-                          Description  
+                         Source 
+                         </th>
+                         <th class="text-left">
+                          Destination 
                         </th>
-                        <th class="text-left">
-                          Account 
+                          <th class="text-left">
+                        Source  Account 
                         </th>
                          <th class="text-left">
-                          Reference 
+                         Destination Account
                         </th>
                          <th class="text-left">
-                         Amount
+                           Amount
                         </th>
                          <th class="text-left">
-                        Status
+                           Requested By
+                        </th>
+                           <th class="text-left">
+                         Status
                         </th>
                          <th class="text-right">
                        
@@ -84,26 +73,38 @@
                         v-for="per in account"
                         :key="per.id"
                         >
-                        <td>{{ per.created_at | formatDate  }}</td>
+                           <td>{{ per.created_at | formatDate}}</td>
+                    
                         <td>
-                            {{per.description}}
+                          {{per.source.regnumber}}
+                            
                         </td>
+                          <td>
+                         
+                           {{per.destination.regnumber}}
+                        </td>
+                            <td>{{ per.suspense.accountnumber}}</td>
                           <td>
                             {{per.accountnumber}}
                         </td>
                           <td>
-                            {{per.source_reference}}
+                            {{per.amount}}
                         </td>
                           <td>
-                            {{per.currency}}{{per.amount}}
+                            {{per.requester ? per.requester.name  : ''}}
+                             {{per.requester ? per.requester.surname : ''}}
                         </td>
                          <td>
                             {{per.status}}
                         </td>
                         <td class="d-flex pt-2 pb-2">
-                            <ManualtransactionsEdit :transaction="per"/>
-                           <ManualtransactionsDelete :transaction="per"/>
-                            <ManualtransactionsView :transaction="per"/> 
+                          <template v-if="per.status=='PENDING'">
+                          <TransferDelete :request="per"/>
+                           <TransferView :transaction="per"/>
+                          </template>
+                          <template v-else>
+                            <TransferDetails :transaction="per"/>
+                          </template>
                         </td>
                       
                         </tr>
@@ -135,8 +136,12 @@
 </template>
 
 <script>
+import JsonExcel from "vue-json-excel";
 export default {
 layout:'user',
+components:{
+downloadexcel:JsonExcel
+},
 data(){
     return{
         overlay:false,
@@ -145,11 +150,11 @@ data(){
 },
 async fetch(){
     this.overlay=true
-   await this.$store.dispatch('manualtransactions/getTransactions') 
+   await this.$store.dispatch('suspensetransfers/getTransactions') 
    this.overlay = false
 },computed:{
     transactions(){
-       const transaction =  this.$store.state.manualtransactions.transactions
+       const transaction =  this.$store.state.suspensetransfers.transactions
        const transactions = transaction.reduce((acc,obj)=>{
          const key = obj['status']
          if(!acc[key]){
@@ -159,7 +164,18 @@ async fetch(){
          return acc
        },{})
 
-      return transactions
+      return  transactions
+    },
+    rawdata(){
+      return this.$store.state.suspensetransfers.transactions 
+    }
+},methods:{
+    computedTotals(obj){
+        let total = 0;
+        obj.forEach(element => {
+             total = total+ Number(element.amount)
+        });
+        return total
     }
 }
 }

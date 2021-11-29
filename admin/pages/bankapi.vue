@@ -11,17 +11,21 @@
           </v-col>
       </v-row>
       <v-row>
-          <v-col  >
+          <v-col>
               <v-card>
                   <v-card-text>
                        <v-simple-table dense>
                     <template v-slot:default>
-                        <tr>
-                            <td v-for="(account,index) in transactions.accountnumbers" :key="index" class="border-r">
-                                <div> {{index}}</div>
-                    <div class="title">  {{computedTotals(account)}}</div> 
+                        <tbody>
+                        <tr  v-for="(account,index) in transactions.accountnumbers" :key="index" >
+                            <th>
+                           {{index}}
+                            </th>
+                            <td>
+                     {{computedTotals(account)}} 
                             </td>
                         </tr>
+                        </tbody>
                     </template>
                        </v-simple-table>
                  

@@ -56,7 +56,9 @@ export class ManualtransactionService {
   async remove(id: number,requester:number) {
     const record = await this.manualtransactionRepository.findOne(id)
     if(record){
-      if(record.requestedBy === requester){
+      console.log(record.requestedBy)
+      console.log(requester)
+      if(record.requestedBy == requester){
            if(record.status ==='PENDING')
             {
               await this.manualtransactionRepository.delete(id)
@@ -66,7 +68,7 @@ export class ManualtransactionService {
              throw new HttpException("Record not in pending statue cannot be updated",HttpStatus.BAD_REQUEST)
             }
       }else{
-       throw new HttpException("Unauthorized to update record",HttpStatus.BAD_REQUEST)
+       throw new HttpException("Unauthorized to delete record",HttpStatus.BAD_REQUEST)
       }
 }else{
   throw new HttpException("record not found",HttpStatus.BAD_REQUEST)
@@ -77,12 +79,16 @@ async decision(decisionDto:DecisionDto,adminId:number):Promise<any>{
    const record = await this.manualtransactionRepository.findOne({id:decisionDto.id,status:'PENDING'})
      record.status = decisionDto.status
      record.approvedBy=adminId
-     await this.manualtransactionRepository.save(record)
+     await this.manualtransactionRepository.save(record) 
    if(decisionDto.status==='APPROVED'){
      const created = await Banktransaction.create({bankId:record.bankId,description:record.description,transactionDate:record.transactionDate,referencenumber:record.referencenumber,sourcereference:record.source_reference,statementreference:record.statement_reference,amount:record.amount,accountnumber:record.accountnumber,status:'PENDING',currency:record.currency,adminId:record.requestedBy})
        await  created.save()
     const requester = await Administrator.findOne(record.requestedBy)
-    const message = "Dear "+requester.name+" "+requester.surname+" Your manual bank transaction request with source reference "+record.source_reference+"  has been "+decisionDto.status
+    let reason =""
+    if(decisionDto.reason){
+      reason = "Because "+decisionDto.reason
+    }
+    const message = "Dear "+requester.name+" "+requester.surname+" Your manual bank transaction request with source reference "+record.source_reference+"  has been "+decisionDto.status+" "+reason
        /**
         * notify requester 
         */

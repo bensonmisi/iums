@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Account } from 'src/accounts/entities/account.entity';
+import { Suspense } from 'src/suspense/entities/suspense.entity';
 
 @Injectable()
 export class HelperService {
@@ -66,5 +67,76 @@ export class HelperService {
         pusher.trigger("manualbanktranactions", event, {
           message: message
         });
+      }
+
+    async   get_suspense_balance_by_id(id:number){
+        const suspense = await Suspense.findOne({where:{id:id},relations:['receipts','transfers']})
+        if(suspense){         
+        
+               let totalreceipts = 0   
+               let total_approved_transfers=0    
+               /**
+                * calculating total  suspense receipts */        
+                 suspense.receipts.forEach(receipt=>{
+                    totalreceipts = totalreceipts+Number(receipt.amount)
+                 })
+
+                 /**
+                  * calculating  total suspense  transfers
+                  */
+               
+                 suspense.transfers.forEach(transfer => {
+                   if(transfer.status =='APPROVED')
+                     {
+                       total_approved_transfers = total_approved_transfers+Number(transfer.amount)
+                     }     
+                 });
+
+                /**
+                 * return actual suspense balance
+                 */
+                 const balance = Number(suspense.amount)-totalreceipts-total_approved_transfers
+                 if(balance==0 && suspense.status=="PENDING"){
+                   suspense.status ="UTILIZED"
+                   await suspense.save()
+                 }
+                   
+            return balance
+        }else{
+          return 0
+        }
+      }
+
+      compute_suspense_balance(suspense:Suspense){
+        if(suspense){         
+        
+          let totalreceipts = 0   
+          let total_approved_transfers=0    
+          /**
+           * calculating total  suspense receipts */        
+            suspense.receipts.forEach(receipt=>{
+               totalreceipts = totalreceipts+Number(receipt.amount)
+            })
+
+            /**
+             * calculating  total suspense  transfers
+             */
+          
+            suspense.transfers.forEach(transfer => {
+              if(transfer.status =='APPROVED')
+                {
+                  total_approved_transfers = total_approved_transfers+Number(transfer.amount)
+                }     
+            });
+
+           /**
+            * return actual suspense balance
+            */
+            const balance = Number(suspense.amount)-totalreceipts-total_approved_transfers
+              
+       return balance
+   }else{
+     return 0
+   }
       }
 }

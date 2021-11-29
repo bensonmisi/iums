@@ -54,7 +54,7 @@ export class RoleService {
     try
     {
     const {roleId,systemmoduleId} = assignmoduleDto
-    const role = await this.roleRepository.findOne({id:roleId})
+    const role = await this.roleRepository.findOne({id:roleId},{relations:['systemmodules']})
     const module = await SystemModule.findOne({id:systemmoduleId})   
     role.systemmodules.push(module)
    await this.roleRepository.save(role)
