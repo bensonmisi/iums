@@ -39,6 +39,11 @@ import { ManualtransactionModule } from './manualtransaction/manualtransaction.m
 import { SuspensetransfersModule } from './suspensetransfers/suspensetransfers.module';
 import { SuspensereceiptModule } from './suspensereceipt/suspensereceipt.module';
 import { OnlinepaymentModule } from './onlinepayment/onlinepayment.module';
+import { TenderinvoiceModule } from './tenderinvoice/tenderinvoice.module';
+import { TenderapplicationModule } from './tenderapplication/tenderapplication.module';
+import { ProcuremententityModule } from './procuremententity/procuremententity.module';
+import { TenderfeetypeModule } from './tenderfeetype/tenderfeetype.module';
+import { ReceiptModule } from './receipt/receipt.module';
 
 @Module({
   imports: [
@@ -91,6 +96,11 @@ import { OnlinepaymentModule } from './onlinepayment/onlinepayment.module';
     SuspensetransfersModule,
     SuspensereceiptModule,
     OnlinepaymentModule,
+    TenderinvoiceModule,
+    TenderapplicationModule,
+    ProcuremententityModule,
+    TenderfeetypeModule,
+    ReceiptModule,
   ],
   controllers: [AppController],
   providers: [AppService],

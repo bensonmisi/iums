@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Account } from 'src/accounts/entities/account.entity';
+import { Procuremententity } from 'src/procuremententity/entities/procuremententity.entity';
 import { Suspense } from 'src/suspense/entities/suspense.entity';
 
 @Injectable()
@@ -11,12 +12,17 @@ export class HelperService {
         return reg
       }
 
+    async generateEntityNumber(id:number) {
+        const random= await Math.floor(Math.random() * Math.floor(10000));
+        const reg = "PE"+random+""+id
+        return reg
+      }
+
       async checkCompanyName(account:Account[], name:string){
           let found = true
            const needle = this.sanitizename(name)
             account.forEach(account=>{
                  const val = this.sanitizename(account.name)
-                console.log("db_record-  ("+val+")     needle- {"+needle+"}")
                  if(val===needle){ 
                   found = false              
                  }
@@ -24,6 +30,20 @@ export class HelperService {
           return found
           
       }
+
+      async checkEntityName(account:Procuremententity[], name:string){
+        let found = true
+         const needle = this.sanitizename(name)
+          account.forEach(account=>{
+               const val = this.sanitizename(account.name)
+               if(val===needle){ 
+                found = false              
+               }
+          })
+        return found
+        
+    }
+
 
       sanitizename(name:string){
         name = name.replace(/\s/g, "")

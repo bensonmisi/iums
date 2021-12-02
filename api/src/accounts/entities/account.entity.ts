@@ -7,6 +7,8 @@ import { Onlinepayment } from "src/onlinepayment/entities/onlinepayment.entity";
 import { Suppliertype } from "src/suppliertype/entities/suppliertype.entity";
 import { Suspense } from "src/suspense/entities/suspense.entity";
 import { Suspensetransfer } from "src/suspensetransfers/entities/suspensetransfer.entity";
+import { Tenderapplication } from "src/tenderapplication/entities/tenderapplication.entity";
+import { Tenderinvoice } from "src/tenderinvoice/entities/tenderinvoice.entity";
 import { User } from "src/user/entities/user.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -84,6 +86,13 @@ export class Account extends BaseEntity {
 
      @OneToMany(()=>Onlinepayment,onlinepayments=>onlinepayments.account)
      onlinepayments:Onlinepayment[]
+
+     @OneToMany(()=>Tenderapplication,tenderapplication=>tenderapplication.account)
+     applications:Tenderapplication[]
+
+     @OneToMany(()=>Tenderinvoice,tenderinvoice=>tenderinvoice.account)
+     tenderinvoices:Tenderinvoice[]
+
 
 
 
