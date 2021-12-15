@@ -13,13 +13,13 @@ export class Accountdocument extends BaseEntity {
     @Column()
     documentId:number
 
-    @Column()
+    @Column({nullable:true})
     administratorId:number
 
     @Column({default:'PENDING'})
     status:string
 
-    @Column()
+    @Column({nullable:true})
     approved_on:Date
 
     @CreateDateColumn()

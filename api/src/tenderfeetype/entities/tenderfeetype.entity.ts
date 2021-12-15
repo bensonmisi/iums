@@ -1,8 +1,8 @@
 import { Tenderapplication } from "src/tenderapplication/entities/tenderapplication.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Tenderfeetype {
+export class Tenderfeetype extends BaseEntity{
     @PrimaryGeneratedColumn()
     id:number
 
@@ -23,4 +23,8 @@ export class Tenderfeetype {
 
     @OneToMany(()=>Tenderapplication,tenderapplication=>tenderapplication.tenderfeetype)
     applications:Tenderapplication[]
+
+    @ManyToOne(()=>Tenderfeetype)
+    @JoinColumn({name:'required',referencedColumnName:'id'})
+    requiredType:Tenderfeetype
 }

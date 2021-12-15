@@ -24,6 +24,9 @@
                                        Description
                                      </th>
                                      <th>
+                                      Type
+                                     </th>
+                                     <th>
                                          Amount
                                      </th>
                                      <th></th>
@@ -34,6 +37,7 @@
                                   <td>{{invoice.invoicenumber}}</td>
                                   <td>{{invoice.tendernumber}}</td>
                                   <td>{{invoice.description}}</td>
+                                   <td>{{invoice.type}}</td>
                                   <td>{{invoice.currency.name}}{{invoice.amount}}</td>
                                   <td>
                                       <receipt :id="invoice.id"/>

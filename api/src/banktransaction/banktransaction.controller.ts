@@ -25,4 +25,10 @@ export class BanktransactionController {
     return await this.banktransactionService.search(searchDto)
   }
 
+  @Post('claim')
+  @HasPermission('CLAIM_BANKTRANSACTIONS')
+  async claim(@Body() data:any):Promise<any>{
+    return await this.banktransactionService.claim(data)
+  }
+
 }

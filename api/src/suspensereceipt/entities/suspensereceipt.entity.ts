@@ -1,8 +1,8 @@
 import { Suspense } from "src/suspense/entities/suspense.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Suspensereceipt{
+export class Suspensereceipt extends BaseEntity{
 
  @PrimaryGeneratedColumn()
  id:number
@@ -16,6 +16,9 @@ export class Suspensereceipt{
  @Column()
  currency:string
 
+@Column({nullable:true})
+suspenseId:number
+
  @Column()
  amount:string
 
@@ -26,6 +29,7 @@ export class Suspensereceipt{
  updated_at:Date
 
  @ManyToOne(()=>Suspense,suspense=>suspense.receipts)
+ @JoinColumn()
  suspense:Suspense
 
 

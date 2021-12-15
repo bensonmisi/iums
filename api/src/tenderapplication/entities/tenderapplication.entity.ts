@@ -3,10 +3,10 @@ import { Currency } from "src/currency/entities/currency.entity";
 import { Procuremententity } from "src/procuremententity/entities/procuremententity.entity";
 import { Tenderfeetype } from "src/tenderfeetype/entities/tenderfeetype.entity";
 import { Tenderinvoice } from "src/tenderinvoice/entities/tenderinvoice.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Tenderapplication {
+export class Tenderapplication extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id:number
@@ -69,7 +69,7 @@ export class Tenderapplication {
     @ManyToOne(()=>Currency)
     currency:Currency
 
-    @OneToOne(()=>Tenderinvoice)
+    @OneToOne(()=>Tenderinvoice,tenderinvoice=>tenderinvoice.tenderapplication)
     tenderinvoice:Tenderinvoice
 
     @ManyToOne(()=>Tenderfeetype,tenderfeetype=>tenderfeetype.applications)

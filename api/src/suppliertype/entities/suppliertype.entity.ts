@@ -10,7 +10,7 @@ export class Suppliertype extends BaseEntity {
     @Column()
     name:string 
 
-    @Column({type:'text'})
+    @Column({type:'text',nullable:true})
     allowed_categories:string
 
     @CreateDateColumn()

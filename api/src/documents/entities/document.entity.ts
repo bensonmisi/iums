@@ -15,13 +15,16 @@ export class Document extends BaseEntity {
      @Column()
      pages:number
 
-     @Column()
+     @Column({default:"pdf"})
      filetype:string
 
-     @Column()
+     @Column({default:'5MB'})
      filesize:string
      @Column()
      suppliertypeId:number
+
+     @Column({default:'ACTIVE'})
+     status:string
      
      @CreateDateColumn()
      created_at:Date

@@ -23,6 +23,11 @@ export class TenderinvoiceController {
     return this.tenderinvoiceService.findOne(+id);
   }
 
+  @Get('getInvoiceData/:id')
+  async getInvoiceData(@Param('id') id:string):Promise<any>{
+    return await this.tenderinvoiceService.getInvoiceData(+id)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTenderinvoiceDto: UpdateTenderinvoiceDto) {
     return this.tenderinvoiceService.update(+id, updateTenderinvoiceDto);

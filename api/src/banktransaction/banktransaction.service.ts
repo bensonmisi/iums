@@ -8,6 +8,9 @@ import { Raw, Repository } from 'typeorm';
 import { PostTransactionDto } from './dto/posttransaction.dto';
 import { SearchDto } from './dto/search.dto';
 import { Banktransaction } from './entities/banktransaction.entity';
+import { Account } from 'src/accounts/entities/account.entity';
+import { Rtg } from 'src/rtgs/entities/rtg.entity';
+import { Suspense } from 'src/suspense/entities/suspense.entity';
 
 @Injectable()
 export class BanktransactionService {
@@ -130,6 +133,30 @@ export class BanktransactionService {
       }else{
         throw new UnauthorizedException({message:'Unauthorized to post transaction',status:HttpStatus.UNAUTHORIZED})
       }
+  }
+
+  async claim(data:any){
+    const record = await  this.banktransactionRepository.findOne({where:{id:data.id,status:'PENDING'}})
+    if(record){
+        const account = await Account.findOne(data.accountId)
+        record.regnumber = account.regnumber
+        record.status='CLAIMED'
+        await record.save() 
+
+      const suspenserecord =   await Suspense.create({banktransactionId:record.id,source:"banktransactions",accountId:account.id,accountnumber:record.accountnumber,currency:record.currency,amount:record.amount})
+      const suspense =  await Suspense.save(suspenserecord)
+      const rtgs = await Rtg.findOne({where:{id:data.rtgsId}})
+      rtgs.suspenseId = suspense.id
+      rtgs.status="APPROVED"
+      await rtgs.save()
+
+      return {'status':'success','message':'Transaction successfully claimed'}
+      
+    }else{
+      return {'status':'error','message':'Transaction Not Found'}
+    }
+    
+    
   }
 
 

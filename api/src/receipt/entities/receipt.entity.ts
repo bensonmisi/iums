@@ -1,5 +1,6 @@
+import { Currency } from "src/currency/entities/currency.entity";
 import { Tenderinvoice } from "src/tenderinvoice/entities/tenderinvoice.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Receipt extends BaseEntity{
@@ -9,7 +10,7 @@ export class Receipt extends BaseEntity{
     @Column()
     invoicenumber:string
 
-    @Column({unique:true})
+    @Column()
     receiptnumber:string
 
     @Column()
@@ -17,7 +18,7 @@ export class Receipt extends BaseEntity{
 
     @Column()
     description:string
-
+ 
     @Column()
     accountId:number
 
@@ -27,7 +28,7 @@ export class Receipt extends BaseEntity{
     @Column({nullable:true})
     sourceId:number
 
-    @Column()
+    @Column({nullable:true})
     currencyId:number
 
     @Column()
@@ -44,5 +45,8 @@ export class Receipt extends BaseEntity{
 
     @UpdateDateColumn()
     updated_at:Date
+
+    @ManyToOne(()=>Currency)
+    currency:Currency
 
 }

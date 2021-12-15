@@ -1,6 +1,8 @@
 export const state =()=>({
     invoices:[],
-    accountinvoices:[]
+    accountinvoices:[],
+    invoicedata:[],
+    receiptData:[]
 })
 
 export const mutations={
@@ -9,6 +11,12 @@ export const mutations={
     },
     setaccountInvoices(state,payload){
         state.accountinvoices = payload
+    },
+    setInvoiceData(state,payload){
+        state.invoicedata = payload
+    },
+    setreceiptData(state,payload){
+        state.receiptData = payload
     }
 }
 
@@ -22,6 +30,35 @@ export const actions={
     async getByCompany({commit},payload){
         await this.$axios.get('api/tenderinvoice/'+payload).then((res)=>{
             commit('setaccountInvoices',res.data)
+          })
+    },
+    async getInvoiceData({commit},payload){
+        await this.$axios.get('api/tenderinvoice/getInvoiceData/'+payload).then((res)=>{
+            commit('setInvoiceData',res.data)
+          })
+    },
+    async deleteApplication({commit},payload){
+        const invoiceId = payload.invoiceId
+       await this.$axios.delete('api/admin/tenderapplication/'+payload.applicationId).then((res)=>{
+        this.dispatch('awaitingtenderinvoices/getInvoiceData',invoiceId)
+      })
+    },
+    async linkApplication({commit},payload){
+        const invoiceId = payload.invoiceId
+       await this.$axios.get('api/admin/tenderapplication/'+payload.applicationId).then((res)=>{
+        this.dispatch('awaitingtenderinvoices/getInvoiceData',invoiceId)
+      })
+    },
+    async deleteInvoice({commit},payload){
+       
+       await this.$axios.delete('api/tenderinvoice/'+payload.invoice.id).then((res)=>{
+        this.dispatch('awaitingtenderinvoices/getInvoiceData',payload.invoice.id)
+        this.dispatch('awaitingtenderinvoices/getByCompany',payload.invoice.accountId)
+      })
+    },
+      async getReceiptData({commit},payload){
+        await this.$axios.get('api/admin/receipting/'+payload).then((res)=>{
+            commit('setreceiptData',res.data)
           })
     }
 }

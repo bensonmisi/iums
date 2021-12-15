@@ -37,15 +37,15 @@ export class Suspense extends BaseEntity {
     @Column({default:"PENDING"})
     status:string
 
-    @CreateDateColumn()
+    @CreateDateColumn() 
     created_at:Date
 
     @UpdateDateColumn()
     updated_at:Date
 
-    @OneToOne(()=>Banktransaction,banktransaction=>banktransaction.suspense)
-    @JoinColumn()
-    banktransaction:Banktransaction
+   // @OneToOne(()=>Banktransaction,banktransaction=>banktransaction.suspense)
+    //@JoinColumn()
+    //banktransaction:Banktransaction
 
     @OneToOne(()=>Onlinepayment,onlinepayment=>onlinepayment)
     @JoinColumn()
@@ -58,7 +58,7 @@ export class Suspense extends BaseEntity {
     transfers:Suspensetransfer[]
 
     @OneToMany(()=>Suspensereceipt,suspensereceipt=>suspensereceipt.suspense)
-    receipts:Suspensereceipt[]
+     receipts:Suspensereceipt[]
 
 
     @OneToOne(() => Suspensetransfer)

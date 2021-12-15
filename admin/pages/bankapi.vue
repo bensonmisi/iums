@@ -39,7 +39,9 @@
                 <v-card-title>
                    Bank transactions
                     <v-spacer/>
-                   <downloadexcel :data="transactions.transactions"><v-btn  depressed class="primary mr-2">Export</v-btn></downloadexcel><BankapiFilter/>
+                   <downloadexcel :data="transactions.transactions"><v-btn  depressed class="primary mr-2">Export</v-btn></downloadexcel>
+                   <BankapiFilter/>
+                   <upload/>
                 </v-card-title>
                 <v-card-text>
                  <v-simple-table dense>

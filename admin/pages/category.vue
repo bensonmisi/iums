@@ -12,6 +12,22 @@
       </v-row>
       <v-row class="mt-5">
           <v-col>
+                  <v-card>
+                <v-card-text>
+                  
+                   
+                     <v-text-field
+                            label="Filter"
+                            outlined
+                            v-model="filter"
+                        />
+                      
+                </v-card-text>
+                  </v-card>
+          </v-col>
+      </v-row>
+      <v-row class="mt-5">
+          <v-col>
                 <v-card>
                 <v-card-title>
                    Categories
@@ -83,7 +99,8 @@ export default {
 layout:'user',
 data(){
     return{
-        overlay:false
+        overlay:false,
+        filter:""
     }
 },
 async fetch(){
@@ -92,7 +109,14 @@ async fetch(){
    this.overlay = false
 },computed:{
     categories(){
-        return this.$store.state.category.categories
+        const data =  this.$store.state.category.categories
+            if(this.filter !='')
+            {
+                return data.filter(dt=>(!dt.name.toUpperCase().indexOf(this.filter.toUpperCase()) || !dt.code.toUpperCase().indexOf(this.filter.toUpperCase())))
+            }else{
+                return data
+            }
+
     }
 }
 }

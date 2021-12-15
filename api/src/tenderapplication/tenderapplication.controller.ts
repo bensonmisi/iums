@@ -3,7 +3,7 @@ import { TenderapplicationService } from './tenderapplication.service';
 import { CreateTenderapplicationDto } from './dto/create-tenderapplication.dto';
 import { UpdateTenderapplicationDto } from './dto/update-tenderapplication.dto';
 
-@Controller('tenderapplication')
+@Controller('admin/tenderapplication')
 export class TenderapplicationController {
   constructor(private readonly tenderapplicationService: TenderapplicationService) {}
 
@@ -28,7 +28,7 @@ export class TenderapplicationController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tenderapplicationService.remove(+id);
+  async remove(@Param('id') id: string):Promise<any> {
+    return await this.tenderapplicationService.remove(+id);
   }
 }

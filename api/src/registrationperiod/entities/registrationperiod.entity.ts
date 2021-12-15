@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.entity";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Registrationperiod extends BaseEntity{
@@ -7,5 +8,9 @@ export class Registrationperiod extends BaseEntity{
 
     @Column({unique:true})
     regyear:number
+
+
+    @OneToMany(()=>Supplierinvoice,supplierinvoice=>supplierinvoice.registrationperiod)
+    supplierinvoice:Supplierinvoice[]
 
 }

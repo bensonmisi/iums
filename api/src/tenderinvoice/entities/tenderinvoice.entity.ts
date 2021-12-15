@@ -2,10 +2,11 @@ import { Account } from "src/accounts/entities/account.entity";
 import { Currency } from "src/currency/entities/currency.entity";
 import { Receipt } from "src/receipt/entities/receipt.entity";
 import { Tenderapplication } from "src/tenderapplication/entities/tenderapplication.entity";
-import { Column, CreateDateColumn, Entity,  JoinColumn,  ManyToOne,  OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Tenderfeetype } from "src/tenderfeetype/entities/tenderfeetype.entity";
+import { BaseEntity, Column, CreateDateColumn, Entity,  JoinColumn,  ManyToOne,  OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Tenderinvoice {
+export class Tenderinvoice extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id:number
@@ -22,8 +23,11 @@ export class Tenderinvoice {
     @Column()
     tendernumber:string
     
-    @Column()
+    @Column({nullable:true})
     description:string
+
+    @Column({nullable:true})
+    tenderfeetypeId:number
 
     @Column()
     type:string
@@ -59,8 +63,7 @@ export class Tenderinvoice {
     updated_at:Date
 
 
-    @OneToOne(()=>Tenderapplication)
-    @JoinColumn()
+    @OneToOne(()=>Tenderapplication,tenderapplication=>tenderapplication.tenderinvoice)
     tenderapplication:Tenderapplication
 
     @ManyToOne(()=>Account,account=>account.tenderinvoices)
@@ -68,6 +71,9 @@ export class Tenderinvoice {
 
     @ManyToOne(()=>Currency)
     currency:Currency
+    
+    @ManyToOne(()=>Tenderfeetype)
+    tenderfeetype:Tenderfeetype
 
 
 

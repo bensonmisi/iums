@@ -4,11 +4,11 @@
       v-model="drawer"
       fixed
       app
-      dark
-      color ="blue darken-3 accent-4"
+     light
+     
     >
-    <div class="d-flex justify-center pa-3">
-               <img src="v.png" width="90px"/>
+    <div class="d-flex justify-center pa-3 white">
+               <img src="icon.png" width="90px"/>
                </div>
                
      <SideBar :menus="getMenus"/>
@@ -21,10 +21,11 @@
       </template>
     </v-navigation-drawer>
     <v-app-bar
-       color="white"
+    dark
       fixed
       app
       flat
+      color="green"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
      
@@ -34,7 +35,7 @@
       <template v-slot:activator="{ on, attrs }">
         <v-btn
           text
-          light
+          dark
           v-bind="attrs"
           v-on="on"
           
@@ -96,10 +97,10 @@ export default {
       offset:true,
       fixed:true,
       items: [],
-      title: 'Vuetify.js',
+      title: 'PRAZ PORTAL',
       overlay:false
     }
-  },fetch(){
+  },created(){
     this.$store.dispatch('sidebar/getMenus')
      this.getNotitications()
   },methods:{
@@ -107,12 +108,18 @@ export default {
     await this.$auth.logout()
   },
   getNotitications(){
-      
+      /* 
        let pusher = new Pusher('4f2ecae30d5d8824089a', { cluster: 'ap2' })
       pusher.subscribe('manualbanktranactions')
       pusher.bind('DECISION_MANUAL_TRANSACTION_REQUEST', data => {
         this.$swal(data.message)
-      })
+      }) */
+/*  
+})
+
+window.$OneSignal.push(['addListenerForNotificationOpened', (data) => {
+  console.log('Received NotificationOpened:', data )}
+]); */
   }
   },
   computed:{

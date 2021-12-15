@@ -3,7 +3,7 @@
        <v-row class="mt-5">
            <v-col md="4" offset-md="4">
                <div class="d-flex justify-center">
-               <img src="v.png"/>
+               <img src="icon.png" width="200" height="200"/>
                </div>
                <v-card class="mt-4">
                    <v-card-text>

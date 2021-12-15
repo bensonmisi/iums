@@ -44,6 +44,16 @@ import { TenderapplicationModule } from './tenderapplication/tenderapplication.m
 import { ProcuremententityModule } from './procuremententity/procuremententity.module';
 import { TenderfeetypeModule } from './tenderfeetype/tenderfeetype.module';
 import { ReceiptModule } from './receipt/receipt.module';
+import { BidbondthresholdModule } from './bidbondthreshold/bidbondthreshold.module';
+import { DbrefactorModule } from './dbrefactor/dbrefactor.module';
+import { TendereditrequestModule } from './tendereditrequest/tendereditrequest.module';
+import { ReceiptingModule } from './receipting/receipting.module';
+import { RtgsModule } from './rtgs/rtgs.module';
+import { ImporttransactionModule } from './importtransaction/importtransaction.module';
+import { SupplierModule } from './supplier/supplier.module';
+import { SupplierinvoiceModule } from './supplierinvoice/supplierinvoice.module';
+import { SupplierreceiptingModule } from './supplierreceipting/supplierreceipting.module';
+
 
 @Module({
   imports: [
@@ -101,6 +111,15 @@ import { ReceiptModule } from './receipt/receipt.module';
     ProcuremententityModule,
     TenderfeetypeModule,
     ReceiptModule,
+    BidbondthresholdModule,
+    DbrefactorModule,
+    TendereditrequestModule,
+    ReceiptingModule,
+    RtgsModule,
+    ImporttransactionModule,
+    SupplierModule,
+    SupplierinvoiceModule,
+    SupplierreceiptingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

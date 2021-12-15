@@ -15,7 +15,15 @@
           <v-col>
                 <v-card>
                 <v-card-title>
-                   Awaiting Tender Invoices 
+                  
+                   
+                     <v-text-field
+                            label="Filter"
+                            width="100px"
+                            outlined
+                            v-model="filter"
+                        />
+                      
                 </v-card-title>
                 <v-card-text>
                   
@@ -28,6 +36,9 @@
                                          Date
                                      </th>
                                      <th>
+                                        Reg number
+                                     </th>
+                                     <th>
                                          Account Name
                                      </th>
                                      <th>
@@ -38,14 +49,17 @@
                              <tbody>
                                <tr v-for="(account,index) in transactions" :key="index">
                                 <td>
-                                  {{account[0].created_at | formatDate}}
+                                  {{account.created_at | formatDate}}
+                                </td>
+                                   <td>
+                                    {{account.regnumber  }}
                                 </td>
                                 <td>
-                                    {{account[0].account ? account[0].account.name :" NULL" }}
+                                    {{account.name  }}
                                 </td>
 
                                <td>
-                                  <TenderinvoiceAwaiting :account="account[0].account"/>
+                                  <TenderinvoiceAwaiting :account="account.account"/>
                                </td>
                                </tr>
 
@@ -81,7 +95,8 @@ layout:'user',
 data(){
     return{
         overlay:false,
-        tabs:null
+        tabs:null,
+        filter:''
     }
 },
 async fetch(){
@@ -90,17 +105,16 @@ async fetch(){
    this.overlay = false
 },computed:{
     transactions(){
-       const transaction =  this.$store.state.awaitingtenderinvoices.invoices
-       const transactions = transaction.reduce((acc,obj)=>{
-         const key = obj['accountId']
-         if(!acc[key]){
-             acc[key]=[]
-         }
-         acc[key].push(obj)
-         return acc
-       },{})
+     const data =  this.$store.state.awaitingtenderinvoices.invoices
+      
+            if(this.filter !='')
+            {
+                return data.filter(dt=>(!dt.name.toUpperCase().indexOf(this.filter.toUpperCase())))
+            }else{
+                return data
+            }
 
-      return transactions
+      
     }
 }
 }
