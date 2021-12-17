@@ -53,6 +53,7 @@ import { ImporttransactionModule } from './importtransaction/importtransaction.m
 import { SupplierModule } from './supplier/supplier.module';
 import { SupplierinvoiceModule } from './supplierinvoice/supplierinvoice.module';
 import { SupplierreceiptingModule } from './supplierreceipting/supplierreceipting.module';
+import { BidbondperiodModule } from './bidbondperiod/bidbondperiod.module';
 
 
 @Module({
@@ -120,6 +121,7 @@ import { SupplierreceiptingModule } from './supplierreceipting/supplierreceiptin
     SupplierModule,
     SupplierinvoiceModule,
     SupplierreceiptingModule,
+    BidbondperiodModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -160,6 +160,18 @@ export class ReceiptingService {
               return invoicebalance
             }
 
+            async checkfee(applicationId){
+
+              /**
+               * 1. Get application transactions
+               * 2. Get Supplierfeetype
+               * 3. Get Required supplier fee type
+               * 4. Check if the supplier fee type exists
+               * 5. If Bidbond check if establishment fee is paid
+               * 6. If Bidbond check if the establishment fee is correct
+               */
+            }
+
             /**
              * end of helper functions
              */

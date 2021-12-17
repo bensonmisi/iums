@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateBidbondthresholdDto } from './dto/create-bidbondthreshold.dto';
 import { UpdateBidbondthresholdDto } from './dto/update-bidbondthreshold.dto';
+import { Bidbondthreshold } from './entities/bidbondthreshold.entity';
 
 @Injectable()
 export class BidbondthresholdService {
-  create(createBidbondthresholdDto: CreateBidbondthresholdDto) {
-    return 'This action adds a new bidbondthreshold';
+  constructor(@InjectRepository(Bidbondthreshold) private readonly bidbondthresholdRepository:Repository<Bidbondthreshold>){}
+  async create(createBidbondthresholdDto: CreateBidbondthresholdDto):Promise<any> {
+     const record = await this.bidbondthresholdRepository.findOne({where:{lowerlimit:createBidbondthresholdDto.lowerlimit,upperlimit:createBidbondthresholdDto.upperlimit,currencyId:createBidbondthresholdDto.currencyId,status:'ACTIVE'}})
+     if(!record)
+     {
+     await this.bidbondthresholdRepository.save(createBidbondthresholdDto)
+     return {'status':'success','message':'Record successfully Saved'}
+     }else{
+       throw new HttpException("Record already captured",HttpStatus.BAD_REQUEST)
+     }
   }
 
-  findAll() {
-    return `This action returns all bidbondthreshold`;
+  async findAll():Promise<Bidbondthreshold[]>{
+    return await this.bidbondthresholdRepository.find({relations:['currency']});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bidbondthreshold`;
+  async findOne(id: number):Promise<Bidbondthreshold[]> {
+    return await this.bidbondthresholdRepository.find({where:{validityperiod:id},relations:['currency']});
   }
 
-  update(id: number, updateBidbondthresholdDto: UpdateBidbondthresholdDto) {
-    return `This action updates a #${id} bidbondthreshold`;
+  async update(id: number, updateBidbondthresholdDto: UpdateBidbondthresholdDto):Promise<any> {
+     await this.bidbondthresholdRepository.update(id,updateBidbondthresholdDto)
+     return {'status':'success','message':'Record successfully Update'}
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bidbondthreshold`;
+ async remove(id: number):Promise<any> {
+   const record = await this.bidbondthresholdRepository.findOne(id)
+   record.status ="DELETED"
+   await record.save()
+   return {'status':'success','message':'Record successfully Deleted'}
   }
 }
