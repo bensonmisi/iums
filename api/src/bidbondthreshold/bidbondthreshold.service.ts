@@ -9,7 +9,7 @@ import { Bidbondthreshold } from './entities/bidbondthreshold.entity';
 export class BidbondthresholdService {
   constructor(@InjectRepository(Bidbondthreshold) private readonly bidbondthresholdRepository:Repository<Bidbondthreshold>){}
   async create(createBidbondthresholdDto: CreateBidbondthresholdDto):Promise<any> {
-     const record = await this.bidbondthresholdRepository.findOne({where:{lowerlimit:createBidbondthresholdDto.lowerlimit,upperlimit:createBidbondthresholdDto.upperlimit,currencyId:createBidbondthresholdDto.currencyId,status:'ACTIVE'}})
+     const record = await this.bidbondthresholdRepository.findOne({where:{validityperiod:createBidbondthresholdDto.validityperiod,lowerlimit:createBidbondthresholdDto.lowerlimit,upperlimit:createBidbondthresholdDto.upperlimit,currencyId:createBidbondthresholdDto.currencyId,status:'ACTIVE'}})
      if(!record)
      {
      await this.bidbondthresholdRepository.save(createBidbondthresholdDto)
@@ -33,9 +33,7 @@ export class BidbondthresholdService {
   }
 
  async remove(id: number):Promise<any> {
-   const record = await this.bidbondthresholdRepository.findOne(id)
-   record.status ="DELETED"
-   await record.save()
+   const record = await this.bidbondthresholdRepository.delete(id)
    return {'status':'success','message':'Record successfully Deleted'}
   }
 }

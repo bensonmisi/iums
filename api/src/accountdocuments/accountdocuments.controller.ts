@@ -13,8 +13,8 @@ export class AccountdocumentsController {
   }
 
   @Get()
-  findAll() {
-    return this.accountdocumentsService.findAll();
+  findAll() { 
+    return this.accountdocumentsService.findAll(); 
   }
 
   @Get(':id')

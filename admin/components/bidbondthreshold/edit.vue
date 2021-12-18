@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn fab color="primary" depressed x-small @click="addModel=true"><v-icon>mdi-plus</v-icon></v-btn>
+    <v-btn icon color="primary" depressed  @click="addModel=true"><v-icon>mdi-pencil</v-icon></v-btn>
    
       <v-dialog v-model="addModel" width="300">
            <v-form v-model="valid" ref="form" lazy-validation>
@@ -51,7 +51,7 @@
                           
            </v-card-text>
            <v-card-actions>
-               <v-btn rounded class="error" @click="addPermModel=false">Cancel</v-btn>
+               <v-btn rounded class="error" @click="addModel=false">Cancel</v-btn>
                <v-spacer/>
                <v-btn rounded class="success" @click="submit" :loading="loading" :disabled="loading">Submit</v-btn>
            </v-card-actions>
@@ -63,18 +63,18 @@
 
 <script>
 export default {
-    props:['period'],
+    props:['threshold'],
  data(){
      return{
          addModel:false,
          valid:false,
          form:{
-             locality:'',
-              upperlimit:'',
-              lowerlimit:'',
-              amount:'',
-              currencyId:'',
-              validityperiod:''
+             locality:this.threshold.locality,
+              upperlimit:this.threshold.upperlimit,
+              lowerlimit:this.threshold.lowerlimit,
+              amount:this.threshold.amount,
+              currencyId:this.threshold.currencyId,
+              validityperiod:this.threshold.validityperiod
          },
          localitylist:['LOCAL','FOREIGN'],
          upperlimitRule:[v=>!!v || 'Upper limit  is required'],
@@ -90,11 +90,10 @@ export default {
        {
           this.valid = true
           this.loading=true
-          this.form.validityperiod = this.period.days
-          this.$store.dispatch('bidbondthreshold/addThreshold',this.form)
+          const data = {id:this.threshold.id,data:this.form}
+          this.$store.dispatch('bidbondthreshold/updateThreshold',data)
           this.loading=false
           this.addPermModel=false
-          this.$refs.form.reset()
        }
      }
  },computed:{

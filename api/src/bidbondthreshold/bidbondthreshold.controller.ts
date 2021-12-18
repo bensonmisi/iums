@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { HasAccesslevel } from 'src/decorators/hasaccesslevel.decorator';
 import { HasPermission } from 'src/decorators/hasPermission.decorator';
 import { AccessLevelGuard } from 'src/guards/accesslevel.guard';
@@ -16,7 +16,9 @@ export class BidbondthresholdController {
 
   @Post()
   @HasPermission('CREATE_BIDBONDTHRESHOLD')
-  create(@Body() createBidbondthresholdDto: CreateBidbondthresholdDto) {
+  create(@Body() createBidbondthresholdDto: CreateBidbondthresholdDto,@Request() req) {
+    const user = req.user
+    createBidbondthresholdDto.administratorId = user.userId
     return this.bidbondthresholdService.create(createBidbondthresholdDto);
   }
 

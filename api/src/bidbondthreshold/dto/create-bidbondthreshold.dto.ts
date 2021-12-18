@@ -19,4 +19,6 @@ export class CreateBidbondthresholdDto {
     @IsNotEmpty()
     amount:string
 
+    administratorId?:number
+
 }

@@ -4,7 +4,7 @@ import { UpdateTenderfeetypeDto } from './dto/update-tenderfeetype.dto';
 
 @Injectable()
 export class TenderfeetypeService {
-  create(createTenderfeetypeDto: CreateTenderfeetypeDto) {
+ async create(createTenderfeetypeDto: CreateTenderfeetypeDto) {
     return 'This action adds a new tenderfeetype';
   }
 

@@ -14,7 +14,7 @@
                 <v-btn icon @click="addPermModel=false"><v-icon>mdi-close</v-icon></v-btn>
               Bid Bond Thresholds
                <v-spacer/>
-               <v-btn fab color="primary" depressed x-small @click="addPermModel=false"><v-icon>mdi-plus</v-icon></v-btn>
+              <add :period="period"/>
            </v-card-title>
            <v-card-text>
                 <v-simple-table>
@@ -52,9 +52,9 @@
                           <td>{{ per.currency? per.currency.name:"" }}{{ per.lowerlimit }}</td>
                            <td>{{ per.currency? per.currency.name:"" }}{{ per.upperlimit }}</td>
                             <td>{{ per.currency? per.currency.name:"" }}{{ per.amount }}</td>
-                        <td>
-                          
-                     
+                        <td class="d-flex pt-2 pb-2">
+                           <edit :threshold="per"/> 
+                           <deleteThreshold :threshold="per"/>                    
                         </td>
                         </tr>
                         </template>
@@ -76,7 +76,11 @@
 </template>
 
 <script>
+import add from './add.vue'
+import edit from './edit.vue'
+import deleteThreshold from './delete.vue'
 export default {
+    components:{add,edit,deleteThreshold},
     props:['period'],
  data(){
      return{
