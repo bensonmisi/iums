@@ -14,7 +14,7 @@ const validMimeTypes:validMimeType[]=["application/pdf"]
 export const importPOP={
 
 storage:diskStorage({
-    destination:'./transfers',
+    destination:'./public/transfers',
     filename:(req,file,cb)=>{
         const fileExtention:string = path.extname(file.originalname);
         const filename:string= uuidV4()+fileExtention;

@@ -5,5 +5,7 @@ export class CreateTenderfeetypeDto {
     name:string
 
     required?:string
+
+    rule?:string
     
 }

@@ -4,6 +4,7 @@ import { Banktransaction } from "src/banktransaction/entities/banktransaction.en
 import { Contact } from "src/contacts/entities/contact.entity";
 import { Directorate } from "src/directorate/entities/directorate.entity";
 import { Onlinepayment } from "src/onlinepayment/entities/onlinepayment.entity";
+import { Supplier } from "src/supplier/entities/supplier.entity";
 import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.entity";
 import { Suppliertype } from "src/suppliertype/entities/suppliertype.entity";
 import { Suspense } from "src/suspense/entities/suspense.entity";
@@ -96,6 +97,9 @@ export class Account extends BaseEntity {
 
      @OneToMany(()=>Supplierinvoice,supplierinvoice=>supplierinvoice.account)
      supplierinvoice:Supplierinvoice[]
+
+     @OneToMany(()=>Supplier,supplier=>supplier.account)
+     registrations:Supplier[] 
 
 
 

@@ -23,8 +23,8 @@ export class TenderapplicationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTenderapplicationDto: UpdateTenderapplicationDto) {
-    return this.tenderapplicationService.update(+id, updateTenderapplicationDto);
+  async update(@Param('id') id: string, @Body() updateTenderapplicationDto: UpdateTenderapplicationDto):Promise<any> {
+    return await this.tenderapplicationService.update(+id, updateTenderapplicationDto);
   }
 
   @Delete(':id')

@@ -63,9 +63,7 @@ export default {
              try {
                  await this.$axios.post('api/admin/role',this.form).then((res)=>{
                         this.loading = false
-                        this.color="success"
-                        this.snackbar=true
-                        this.text=res.data.message
+                        this.$swal("success",res.data.message,"success")
                          this.$store.dispatch('roles/getRoles')
                         this.$refs.form.reset()
                         this.addPermModel= false
@@ -73,9 +71,8 @@ export default {
                  })
              }catch (err) {
                  this.loading = false
-                 this.color="error"
-                this.snackbar=true
-                this.text=err.response.data.message
+                this.$swal("error",err.response.data.message,"error")
+                
             }
        }
      }

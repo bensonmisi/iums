@@ -30,7 +30,46 @@ export class HelperService {
        generateUUId(){
         return  uuidv4()
       }
+  
+      async accountdocuments(account:Account){
+     
+    const documents = await Document.find({where:{suppliertypeId:account.suppliertypeId,locality:account.locality}})
+    
+    let array = []
+     if(documents.length>0){
+       let id=[]
+      documents.forEach(document => { id.push(document.id) })
+      const uploaded = await Accountdocument.find({where:{accountId:account.id,documentId:In(id)}})
+       
+  
 
+     documents.forEach(document => { 
+      let element = {
+        id: document.id,
+        name: document.name,
+        filename: '',
+        docstatus: 'NOTFOUND',
+        status: 'NOTFOUND'
+
+      }
+          uploaded.forEach(upload=>{
+         
+            if(upload.documentId==document.id){
+             element.filename = upload ? upload.path : ''
+             element.docstatus = upload ? 'UPLOADED' : 'NOTFOUND'
+             element.status = upload ? upload.status : 'NULL' 
+
+            }
+          })
+
+          array.push(element)
+      })
+
+    
+   }
+   return array
+   
+      }
       async generate_tender_invoice_number(accountId){
         const date = new  Date()
         const year = date.getFullYear()
@@ -187,7 +226,31 @@ export class HelperService {
         return await Suspense.find({where:{accountnumber:In(array),accountId:accountId,status:'PENDING'},relations:['receipts','transfers']})
          
       }
+      
+      
+ async get_suspense_balances(accountId:number){
 
+  // get account numbers
+  const non_refundable_usd_accounts = await Accountnumber.find({where:{type:'NONREFUNDABLE',currency:'USD'}})
+  const non_refundable_zwl_accounts = await Accountnumber.find({where:{type:'NONREFUNDABLE',currency:'ZWL'}})
+  const refundable_usd_accounts = await Accountnumber.find({where:{type:'REFUNDABLE',currency:'USD'}})
+  const refundable_zwl_accounts = await Accountnumber.find({where:{type:'REFUNDABLE',currency:'ZWL'}})
+
+  /// get suspense data 
+  const non_refundable_usd_suspense_data = await this.get_suspense_data(non_refundable_usd_accounts,accountId)
+  const non_refundable_zwl_suspense_data = await this.get_suspense_data(non_refundable_zwl_accounts,accountId)
+  const refundable_usd_suspense_data = await this.get_suspense_data(refundable_usd_accounts,accountId)
+  const refundable_zwl_suspense_data = await this.get_suspense_data(refundable_zwl_accounts,accountId)
+
+  /// computing  balances
+  let array=[]
+  array.push({type:'NONREFUNDABLE',currency:'USD',balance:this.compute_suspenses_balance(non_refundable_usd_suspense_data)})
+  array.push({type:'NONREFUNDABLE',currency:'ZWL',balance:this.compute_suspenses_balance(non_refundable_zwl_suspense_data)})
+  array.push({type:'REFUNDABLE',currency:'USD',balance:this.compute_suspenses_balance(refundable_usd_suspense_data)})
+  array.push({type:'REFUNDABLE',currency:'ZWL',balance:this.compute_suspenses_balance(refundable_zwl_suspense_data)})
+
+  return array
+}
       compute_suspense_accounts(suspenses:Suspense[]){
         let totalreceipts =0 
         let total_approved_transfers  = 0
@@ -212,6 +275,50 @@ export class HelperService {
         }
 
         return array
+      }
+
+      
+      compute_suspenses_balance(suspenses:Suspense[]){
+        if(suspenses.length>0){         
+        
+          let totalreceipts = 0   
+          let total_approved_transfers=0  
+          let total_amount = 0  
+       
+          suspenses.forEach(suspense=>{
+
+            /** computing total suspense amount  */
+
+            total_amount = total_amount+ Number(suspense.amount)
+               /**
+           * calculating total  suspense receipts */  
+
+            suspense.receipts.forEach(receipt=>{
+              totalreceipts = totalreceipts+Number(receipt.amount)
+           })
+
+           /**
+            * calculating  total suspense  transfers
+            */
+         
+           suspense.transfers.forEach(transfer => {
+             if(transfer.status =='APPROVED')
+               {
+                 total_approved_transfers = total_approved_transfers+Number(transfer.amount)
+               }     
+           });
+          })      
+            
+
+           /**
+            * return actual suspense balance
+            */
+            const balance = total_amount-totalreceipts-total_approved_transfers
+              
+       return balance
+   }else{
+     return 0
+   }
       }
 
       compute_suspense_balance(suspense:Suspense){
@@ -347,5 +454,11 @@ export class HelperService {
     }else{
       return {status:false,message:"Account not found"}
     }
+  }
+
+  async calculate_maturity_date(date:string,days:number){
+    var result = new Date(date)
+    result.setDate(result.getDate()+days)
+    return result
   }
 }

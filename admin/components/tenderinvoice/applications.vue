@@ -23,7 +23,9 @@
                             <th>#ID</th>
                             <th>Tender Number</th>
                             <th>Type</th>
+                            <th>Closing Date</th>
                             <th>Validity Period</th>
+                            <th>Maturity Date</th>
                             <th>Amount</th>
                             <th>Status</th>
                             <th>Code</th>
@@ -43,7 +45,13 @@
                                {{application.type}}
                              </td>
                               <td>
+                               {{application.closingDate}}
+                             </td>
+                              <td>
                                {{application.validityperiod}}
+                             </td>
+                             <td>
+                               {{application.maturitydate}}
                              </td>
                               <td>
                                {{application.currency.name}}{{application.amount}}
@@ -63,6 +71,9 @@
                                      <p class="red--text">Application not linked to invoice</p>
                                       <v-btn x-small depressed color="info" rounded :loading="loading" :disabled="loading" @click="link(application)">Iink application</v-btn>
                                    </template>
+                                 </template>
+                                 <template v-if="application.status=='PENDING'">
+                                   <editapplication :application="application" :id="id"/>
                                  </template>
                              </td>
                           </tr>
@@ -95,8 +106,10 @@
 <script>
 import Duplicates from './duplicates.vue'
 import payments from './payments.vue'
+import editapplication from './editapplication.vue'
+
 export default {
-  components: { payments, Duplicates },
+  components: { payments, Duplicates,editapplication },
  props:['tenderapplication','id','invoice'],
  data(){
 return{

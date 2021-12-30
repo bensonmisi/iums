@@ -8,11 +8,12 @@ import { MailModule } from 'src/mail/mail.module';
 import { MailService } from 'src/mail/mail.service';
 import { RoleModule } from 'src/role/role.module';
 import { AdminmenusModule } from 'src/adminmenus/adminmenus.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Administrator,administratorResetToken]),MailModule,RoleModule,AdminmenusModule],
+  imports:[TypeOrmModule.forFeature([Administrator,administratorResetToken]),MailModule,RoleModule,AdminmenusModule,BullModule],
   controllers: [AdministratorController],
-  providers: [AdministratorService,MailService],
+  providers: [AdministratorService],
   exports:[AdministratorService]
 })
 export class AdministratorModule {}

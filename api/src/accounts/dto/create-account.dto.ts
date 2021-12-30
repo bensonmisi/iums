@@ -8,10 +8,9 @@ export class CreateAccountDto {
     sector:string
 
     @IsNotEmpty()
-    suppliertype_id:number
+    suppliertypeId:number
 
-    @IsNotEmpty()
-    locality:string
+  
 
     @IsNotEmpty()
     country:string
@@ -22,6 +21,8 @@ export class CreateAccountDto {
     province?:string
 
     district?:string
+
+    locality?:string
 
     
 }

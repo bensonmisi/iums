@@ -1,6 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile, Request, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile, Request, HttpException, HttpStatus, StreamableFile } from '@nestjs/common';
 import { RtgsService } from './rtgs.service';
-import { CreateRtgDto } from './dto/create-rtg.dto';
 import { UpdateRtgDto } from './dto/update-rtg.dto';
 import { JwtAuthGuard } from 'src/jwtsettings/jwt-auth.guard';
 import { AccessLevelGuard } from 'src/guards/accesslevel.guard';
@@ -8,8 +7,9 @@ import { PermissionGuard } from 'src/guards/permission.guard';
 import { HasAccesslevel } from 'src/decorators/hasaccesslevel.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { importPOP, isFileSafe, removeFile } from 'src/uploadhelpers/pops.storage';
-import { reduce } from 'rxjs';
 import { join } from 'path';
+import { createReadStream } from 'fs';
+import process from 'process';
 
 @Controller('admin/rtgs')
 @UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
@@ -23,7 +23,7 @@ export class RtgsController {
    
     const filename = file?.filename
    if(filename){
-    const folderPath = join(process.cwd(),'transfers')
+    const folderPath = join(__dirname+'/public','transfers')
     const fullfilepath = join(folderPath+"/"+filename);  
     const isfilesafe = await isFileSafe(fullfilepath)
     if(isfilesafe)
@@ -42,14 +42,18 @@ export class RtgsController {
    
   }
 
-  @Get()
-  findAll() {
-    return this.rtgsService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.rtgsService.find(+id);
+  }
+  @Get('streaming/:id')
+   async streamfile(@Param('id') id:string):Promise<StreamableFile>{
+    const record =await this.rtgsService.findOne(+id)
+    const folderPath = __dirname+'/public'
+    const fullfilepath = join(folderPath+"/"+record.filename)
+    console.log(fullfilepath)
+    const file = createReadStream(fullfilepath)
+    return new StreamableFile(file)
   }
 
   @Patch(':id')
@@ -62,3 +66,4 @@ export class RtgsController {
     return this.rtgsService.remove(+id);
   }
 }
+

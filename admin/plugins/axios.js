@@ -5,12 +5,9 @@ export default function ({ $axios, redirect }) {
   
     $axios.onError(error => {
         switch (error.response.status) {
-            case 500:
-                redirect('/500')
-                break;
-            
+                    
             case 403:
-                    redirect('/403')
+                    this.$swal("error","You do not have permissions to perform action","error")
              break;
             default:
                 break;

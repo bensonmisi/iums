@@ -1,9 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { HasPermission } from 'src/decorators/hasPermission.decorator';
+import { AccessLevelGuard } from 'src/guards/accesslevel.guard';
+import { PermissionGuard } from 'src/guards/permission.guard';
+import { JwtAuthGuard } from 'src/jwtsettings/jwt-auth.guard';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 
-@Controller('api/admin/accounts')
+@Controller('admin/accounts')
+@UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
@@ -23,17 +28,19 @@ export class AccountsController {
   }
 
   @Patch(':id')
+  @HasPermission('UPDATE_ACCOUNT')
   update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
     return this.accountsService.update(+id, updateAccountDto);
   }
 
   @Delete(':id')
+  @HasPermission('DELETE_ACCOUNT')
   remove(@Param('id') id: string) {
     return this.accountsService.remove(+id);
   }
 
-  @Get('/search/:query')
-  async search(@Param('query') query:string){
-    return await this.accountsService.search(query)
+  @Post('/search')
+  async search(@Body() data:any){
+    return await this.accountsService.search(data)
   }
 }

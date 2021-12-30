@@ -49,7 +49,7 @@
                              <tbody>
                                <tr v-for="(account,index) in transactions" :key="index">
                                 <td>
-                                  {{account.created_at | formatDate}}
+                                  {{account.created_at | formateHumanDiff}}
                                 </td>
                                    <td>
                                     {{account.regnumber  }}

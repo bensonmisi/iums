@@ -186,17 +186,15 @@ export default {
            this.loading = true
            const dt= {accountId:this.accountId,id:this.transactionId,rtgsId:id}
           await this.$axios.post('api/admin/banktransaction/claim',dt).then((res)=>{
-             this.color="success"
-                this.snackbar=true
-                        this.text=res.data.message
-                          this.loading = false
+            this.loading = false
+            this.$swal("success",res.data.message,"success")
             this.$store.dispatch('awaitingtenderinvoices/getReceiptData',this.invoiceId)
+            this.addPermModel = false
+            this.claimModel =false
                      
           }).catch((err)=>{
                this.loading = false
-                 this.color="error"
-                this.snackbar=true
-                this.text=err.response.data.message
+                 this.$swal("error",err.response.data.message,"error")
           })
          
      }

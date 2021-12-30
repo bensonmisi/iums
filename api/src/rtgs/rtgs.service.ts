@@ -13,8 +13,8 @@ export class RtgsService {
      return {"status":'success',"message":"Proof of Payment successfully Uploaded"}
   }
 
-  findAll() {
-    return `This action returns all rtgs`;
+  async findOne(id:number) {
+    return await this.rtgRepository.findOne(id);
   }
 
   async find(id: number) {

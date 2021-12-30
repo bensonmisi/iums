@@ -1,8 +1,8 @@
 import { Account } from "src/accounts/entities/account.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Directorate {
+export class Directorate extends BaseEntity {
 @PrimaryGeneratedColumn()
 id:number
 

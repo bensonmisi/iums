@@ -31,6 +31,7 @@
      
       <v-toolbar-title v-text="title" />
       <v-spacer />
+       <Search/>
        <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -90,7 +91,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import Pusher from 'pusher-js'
+import Search from '~/components/customer/search.vue'
 export default {
+  components: { Search },
   data () {
     return {
       drawer: true,

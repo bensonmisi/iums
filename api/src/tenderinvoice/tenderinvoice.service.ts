@@ -49,12 +49,12 @@ checkarray(array,value){
        if(invoice)
         {
  
-           const requiredId = invoice.tenderfeetype.required
+           const required = invoice.tenderfeetype ? invoice.tenderfeetype.required : null
            let requiredfee = null
            let requiredapplication = null
-            if(requiredId){
-                requiredfee = await Tenderfeetype.findOne({where:{id:requiredId}})
-                requiredapplication =  await Tenderapplication.find({where:{accountId:invoice.accountId,tendernumber:invoice.tendernumber,tenderfeetypeId:requiredId},relations:['currency','tenderfeetype']})
+            if(required){
+                requiredfee = await Tenderfeetype.findOne({where:{name:required}})
+                requiredapplication =  await Tenderapplication.find({where:{accountId:invoice.accountId,tendernumber:invoice.tendernumber,tenderfeetypeId:requiredfee.id},relations:['currency','tenderfeetype']})
             }
             
            const tenderapplication = await Tenderapplication.find({where:{accountId:invoice.accountId,tendernumber:invoice.tendernumber,type:invoice.description},relations:['currency','tenderfeetype']})

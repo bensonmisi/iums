@@ -1,6 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Accountnumber } from 'src/accountnumber/entities/accountnumber.entity';
 import { HelperService } from 'src/helper/helper.service';
+import { MailService } from 'src/mail/mail.service';
+import { Mailinglist } from 'src/mailinglist/entities/mailinglist.entity';
 import { Receipt } from 'src/receipt/entities/receipt.entity';
 import { Rtg } from 'src/rtgs/entities/rtg.entity';
 import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.entity';
@@ -10,7 +12,7 @@ import { In } from 'typeorm';
 
 @Injectable()
 export class SupplierreceiptingService {
-    constructor( private readonly helperService:HelperService){}
+    constructor( private readonly helperService:HelperService,private mailService:MailService){}
     async getInvoiceData(invoicenumber:string):Promise<any>{
         const invoice = await Supplierinvoice.findOne({where:{invoicenumber:invoicenumber},relations:['currency']})
         const receipts = await Receipt.find({where:{invoicenumber:invoicenumber},relations:['currency']})
@@ -107,6 +109,7 @@ export class SupplierreceiptingService {
             
              const check = await this.checkInvoiceStatus(invoices[0].invoicenumber)
              if(check){
+
                return {"status":"success","message":"Invoice successfully settled"}
              }else{
               return {"status":"success","message":"Invoice successfully received but not yet settled"}
@@ -166,6 +169,13 @@ export class SupplierreceiptingService {
      const receipts = await Receipt.find({where:{invoicenumber:invoicenumber}})
       const check = await this.helperService.check_supplier_invoice(invoices,receipts)
        const fin = Promise.resolve(check)
+       if(fin){
+         const maillist = await Mailinglist.findOne({where:{accountId:invoices[0].accountId}})
+         if(maillist)
+         {
+         this.mailService.supplierinvoiceSettled(maillist.email)
+         }
+       }
        return fin
     }
 }

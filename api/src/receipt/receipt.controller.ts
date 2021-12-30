@@ -3,7 +3,7 @@ import { ReceiptService } from './receipt.service';
 import { CreateReceiptDto } from './dto/create-receipt.dto';
 import { UpdateReceiptDto } from './dto/update-receipt.dto';
 
-@Controller('receipt')
+@Controller('admin/receipts')
 export class ReceiptController {
   constructor(private readonly receiptService: ReceiptService) {}
 
@@ -17,9 +17,9 @@ export class ReceiptController {
     return this.receiptService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.receiptService.findOne(+id);
+  @Get(':receiptnumber')
+  async findOne(@Param('receiptnumber') receiptnumber: string) {
+    return await this.receiptService.findOne(receiptnumber);
   }
 
   @Patch(':id')

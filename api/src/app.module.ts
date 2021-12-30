@@ -54,13 +54,28 @@ import { SupplierModule } from './supplier/supplier.module';
 import { SupplierinvoiceModule } from './supplierinvoice/supplierinvoice.module';
 import { SupplierreceiptingModule } from './supplierreceipting/supplierreceipting.module';
 import { BidbondperiodModule } from './bidbondperiod/bidbondperiod.module';
-
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { BullModule } from '@nestjs/bull';
+import { MailinglistModule } from './mailinglist/mailinglist.module';
+import { DocumentcommentsModule } from './documentcomments/documentcomments.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),    
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 5003,
+      },
     }),
+    BullModule.registerQueue({
+      name:'emailnotification'   
+       
+    }),
+    
+    EventEmitterModule.forRoot(),
     TypeOrmModule.forRoot({ 
       type: process.env.DB_TYPE as any,
       host: process.env.DB_HOST,
@@ -122,6 +137,8 @@ import { BidbondperiodModule } from './bidbondperiod/bidbondperiod.module';
     SupplierinvoiceModule,
     SupplierreceiptingModule,
     BidbondperiodModule,
+    MailinglistModule,
+    DocumentcommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

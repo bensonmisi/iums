@@ -14,6 +14,9 @@ export class Accountdocument extends BaseEntity {
     documentId:number
 
     @Column({nullable:true})
+    path:string
+
+    @Column({nullable:true})
     administratorId:number
 
     @Column({default:'PENDING'})

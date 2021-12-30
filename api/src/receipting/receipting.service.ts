@@ -1,7 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
+import { check } from 'prettier';
 import { Accountnumber } from 'src/accountnumber/entities/accountnumber.entity';
+import { Bidbondthreshold } from 'src/bidbondthreshold/entities/bidbondthreshold.entity';
+import { Events } from 'src/events';
 import { HelperService } from 'src/helper/helper.service';
+import { MessageProducerService } from 'src/message.producer.service';
 import { Receipt } from 'src/receipt/entities/receipt.entity';
 import { Rtg } from 'src/rtgs/entities/rtg.entity';
 import { Suspense } from 'src/suspense/entities/suspense.entity';
@@ -13,7 +18,9 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class ReceiptingService {
     constructor(@InjectRepository(Receipt) private receiptRepository:Repository<Receipt>,
-               private readonly helperService:HelperService){}
+               private readonly helperService:HelperService,
+               private readonly eventEmitter:Events
+               ){}
 
                async getData(id:number):Promise<any>{
                    const invoice = await Tenderinvoice.findOne(id,{relations:['currency']})
@@ -25,7 +32,7 @@ export class ReceiptingService {
                            const receipts = await this.receiptRepository.find({where:{invoicenumber:invoice.invoicenumber},relations:['currency']})
                            
                            /** get rtgs */
-                           const rtgs = await Rtg.find({where:{invoicenumber:invoice.invoicenumber}})
+                           const rtgs = await Rtg.find({where:{accountId:invoice.accountId,status:'PENDING'}})
 
                            /** get suspense balances */
                           const accounts =  await this.getAccounts(invoice.currency.name,invoice.type,invoice.accountId)
@@ -47,11 +54,15 @@ export class ReceiptingService {
                       if(balance>0){
                         const invoice = await Tenderinvoice.findOne(invoiceId,{relations:['currency','tenderfeetype']})
                         if(invoice){
-                         
+                              const checkfee =await this.checkfee(invoice.tenderapplicationId)
+                              if(checkfee)
+                              {
+                              
                              const invoicebalance = await this.computeInvoiceBalanace(invoice)
                             if(invoicebalance>0){
                                 const uuid = this.helperService.generateUUId()
                                 const receiptnumber = await this.helperService.generate_receipt_number(invoice.id)
+                                console.log(invoice)
                                 const code = await this.helperService.generate_tender_code(invoice.tenderfeetype.name,invoice.accountId)
                                 let paymentstatus=invoicebalance<=balance ? "PAID" :"PENDING"
                                 let amount =invoicebalance>=balance ? balance : invoicebalance                  
@@ -71,6 +82,7 @@ export class ReceiptingService {
                                await invoice.save();
                                 throw new HttpException("Invoice Invoice Already Settled",HttpStatus.BAD_REQUEST)     
                             }
+                          }
                      
                         }else{
                             throw new HttpException("Invoice not found",HttpStatus.BAD_REQUEST)  
@@ -115,7 +127,10 @@ export class ReceiptingService {
 
               if(Number(invoice.amount)<=total){
                 invoice.status="PAID"
-                await invoice.save()
+                await invoice.save()                
+                 this.eventEmitter.emitTendeerInvoiceSettlementEvent("benson.misi@gmail.com",invoice.tendernumber,invoice.description)
+                 
+               
               }
             }
 
@@ -164,12 +179,82 @@ export class ReceiptingService {
 
               /**
                * 1. Get application transactions
-               * 2. Get Supplierfeetype
-               * 3. Get Required supplier fee type
-               * 4. Check if the supplier fee type exists
+               * 2. Get tenderfeetype
+               * 3. Get Required tender fee type
+               * 4. Check if the tender  fee type exists
                * 5. If Bidbond check if establishment fee is paid
                * 6. If Bidbond check if the establishment fee is correct
                */
+
+              //1
+
+              const application = await Tenderapplication.findOne({where:{id:applicationId},relations:['tenderfeetype']})
+              if(application){
+               const required = application.tenderfeetype ? application.tenderfeetype.required : null
+               const rule =  application.tenderfeetype ? application.tenderfeetype.rule : null
+               if(required){
+                   if(rule=='PAID'){
+                      if(required.toUpperCase()==='ESTABLISHMENT FEE'){
+                         /**
+                          * calculate the correct establishment fee based on the bidbond value and validity period
+                          */
+                          const invoice = await Tenderinvoice.findOne({where:{accountId:application.accountId,tendernumber:application.tendernumber,description:'ESTABLISHMENT FEE',status:'PAID'}})
+                          if(!invoice){
+                            throw new HttpException(required+" has to be settled first",HttpStatus.BAD_REQUEST)
+                          }else{
+                            const checkfee = await this.calculate_establishment_fee(application.amount,application.validityperiod.toString(),application.currencyId)
+                             if(checkfee){
+                               if(Number(invoice.amount) < checkfee){
+                                 throw new HttpException("ESTABLISHMENT FEE PAID of"+invoice.amount+"  is less than the expected of "+checkfee,HttpStatus.BAD_REQUEST)
+                               }else{
+                                 return true
+                               }
+                             }
+                          }
+
+                      }
+                   }else{
+                    if(required.toUpperCase()==='BIDBOND'){
+                         /**
+                          * calculate the correct establishment fee based on the bidbond value and validity period
+                          */  
+
+                       const bidbond = await Tenderapplication.findOne({where:{accountId:application.accountId,tendernumber:application.tendernumber,type:required}})
+                       if(bidbond){
+                             const checkfee = await this.calculate_establishment_fee(bidbond.amount,bidbond.validityperiod.toString(),bidbond.currencyId)
+                             if(Number(application.amount) !== checkfee){
+                              throw new HttpException("ESTABLISHMENT FEE INVOICED "+application.amount+" . Expected  Fee : "+checkfee,HttpStatus.BAD_REQUEST)
+                               }else{
+                                 return true
+                               }
+                       }else{
+                         throw new HttpException(required+" Fee is required in order to process invoice",HttpStatus.BAD_REQUEST)
+                       }
+                    }
+                  }
+               }
+               return true
+              }else{
+                throw new HttpException('Application cannot be found',HttpStatus.BAD_REQUEST)
+              }
+
+            }
+
+            async calculate_establishment_fee(bidvalue:string,validityperiod:string,currencyId:number){
+               const bidbonds = await Bidbondthreshold.find({where:{currencyId:currencyId,validityperiod:validityperiod}})
+               if(bidbonds.length>0){
+                   let fee = 0;
+
+                   bidbonds.forEach(bid=>{
+                     if(Number(bid.lowerlimit)< Number(bidvalue)&& Number(bidvalue)<Number(bid.upperlimit)){
+                       fee = Number(bid.amount)
+                        }
+                   })
+                   return fee
+               }
+               else{
+                 throw new HttpException("Bid Bond Threshold not set",HttpStatus.BAD_REQUEST)
+               }
             }
 
             /**

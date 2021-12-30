@@ -82,7 +82,7 @@ export default {
                          await this.$store.dispatch('supplierreceipting/getReceiptData',this.invoicenumber) 
                          }
                          else{
-                             
+                             await this.$store.dispatch('awaitingtenderinvoices/getReceiptData',this.invoicenumber)  
                          }
 
                  })

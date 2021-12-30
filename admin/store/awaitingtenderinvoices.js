@@ -48,7 +48,18 @@ export const actions={
        await this.$axios.get('api/admin/tenderapplication/'+payload.applicationId).then((res)=>{
         this.dispatch('awaitingtenderinvoices/getInvoiceData',invoiceId)
       })
-    },
+    },   
+    async editApplication({commit},payload){
+      try {
+        await this.$axios.patch('api/admin/tenderapplication/'+payload.data.id,payload.data).then((res)=>{
+          this.$swal("success",res.data.message,"success")
+          this.dispatch('awaitingtenderinvoices/getInvoiceData',payload.invoiceId)
+        })
+      } catch (error) {
+        this.$swal("error",error.response.data.message,"error")
+      }
+   
+  },
     async deleteInvoice({commit},payload){
        
        await this.$axios.delete('api/tenderinvoice/'+payload.invoice.id).then((res)=>{

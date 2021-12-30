@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import moment from 'moment'
 Vue.filter('formatDate', (value) => {
   const date = new Date(value)
   return date.toLocaleString(['en-US'], {
@@ -10,3 +10,9 @@ Vue.filter('formatDate', (value) => {
     minute: '2-digit',
   })
 })
+
+Vue.filter('formateHumanDiff',(value)=>{
+  const date = new Date(value)
+  return moment(date).fromNow()
+})
+

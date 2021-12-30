@@ -4,6 +4,8 @@ import { join } from 'path';
 import { MailService } from './mail.service';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BullModule } from '@nestjs/bull';
+import { MailProcessor } from './mail.processor';
 
 @Module({
   imports:[
@@ -32,8 +34,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       }),
       inject: [ConfigService],
     }),
+    BullModule.registerQueue({
+      name:'emailnotification',    
+        redis: {        
+          host: 'localhost',
+          port: 5003,
+        },
+ 
+    })
   ],
-  providers: [MailService],
-  exports:[MailService]
+  providers: [MailService,MailProcessor],
+  exports:[MailService,BullModule]
 })
 export class MailModule {}

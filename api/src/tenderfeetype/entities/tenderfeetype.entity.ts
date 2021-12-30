@@ -10,7 +10,10 @@ export class Tenderfeetype extends BaseEntity{
     name:string
 
     @Column({nullable:true})
-    required:number
+    required:string
+
+    @Column({nullable:true})
+    rule:string
     
     @Column({default:'ACTIVE'})
     status:string
@@ -24,7 +27,5 @@ export class Tenderfeetype extends BaseEntity{
     @OneToMany(()=>Tenderapplication,tenderapplication=>tenderapplication.tenderfeetype)
     applications:Tenderapplication[]
 
-    @ManyToOne(()=>Tenderfeetype)
-    @JoinColumn({name:'required',referencedColumnName:'id'})
-    requiredType:Tenderfeetype
+
 }

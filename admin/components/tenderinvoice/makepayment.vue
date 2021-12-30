@@ -83,23 +83,26 @@
                     <v-card class="mt-5">
           <v-toolbar color="blue" dark>    
              <v-toolbar-title>Proof Of Payments</v-toolbar-title>
+             <v-spacer/>
+
+              <Uploadpop :id="receiptdata.invoice ? receiptdata.invoice.accountId :''" mode="tender" :invoicenumber="receiptdata.invoice? receiptdata.invoice.id :''"/>
          </v-toolbar>
             <v-card-text>
                <v-simple-table>
                     <template v-slot:default>
                       <thead>
                       <tr>
-                        <th>Payment Date</th>
                         <th>Bank</th>
                         <th></th>
                        </tr> 
                       </thead>
                       <tbody>
                          <template v-if="receiptdata.rtgs.length>0">
-                           <tr v-for="rtg in receiptdata.rtgs" :key="rtg.id">
-                             <td>{{rtg.paymentdate}}</td>
-                             <td>{{rtg.bank}}</td>
-                             <td></td>
+                           <tr v-for="rtg in receiptdata.rtgs" :key="rtg.id">                           
+                             <td>{{rtg.name}}</td>
+                             <td class="text-right">
+                               <v-btn x-small depressed rounded color="primary" @click="viewFile(rtg.filename)">View</v-btn>
+                             </td>
                            </tr>
                          </template>
                          <template v-else>
@@ -119,6 +122,19 @@
 
        
       </v-dialog>
+
+      <v-dialog v-model="fileModel">
+             <v-card>
+           <v-card-title>
+              File View
+               <v-spacer/>
+               <v-btn icon @click="fileModel=false"><v-icon>mdi-close</v-icon></v-btn>
+           </v-card-title>
+           <v-card-text>
+              <pdf :src="path"></pdf>
+           </v-card-text>
+             </v-card>
+      </v-dialog>
        <v-snackbar
      
       :color="color"
@@ -130,9 +146,11 @@
 </template>
 
 <script>
+import Edit from '../accountnumber/edit.vue'
 import topup from '../topup.vue'
+import pdf from 'vue-pdf'
 export default {
-  components: { topup },
+  components: { topup, Edit ,pdf},
  props:['invoice'],
  data(){
    return{
@@ -140,7 +158,10 @@ export default {
      snackbar:false,
      text:"",
      openModel:false,
-     loading:false
+     loading:false,
+     path:"",
+     numPages: undefined,
+     fileModel:false
 
    }
  },methods:{
@@ -160,10 +181,8 @@ export default {
         this.loading = true
         try {          
         
-          await this.$axios.post('api/admin/receipting',formdata).then((res)=>{
-              this.color="success"
-                        this.snackbar=true
-                        this.text=res.data.message
+          await this.$axios.post('api/admin/receipting',formdata).then((res)=>{           
+                         this.$swal("success",res.data.message,'success')
                          this.loading = false
                           this.$store.dispatch('awaitingtenderinvoices/getReceiptData',this.invoice.id)
           })
@@ -177,6 +196,10 @@ export default {
    },
    calculateBalance(amount,paid){
      return Number(amount)-paid
+   },
+   viewFile(filename){
+   const path = "http://localhost:4000/"+filename
+   window.open(path)
    }
  },computed:{
     receiptdata(){

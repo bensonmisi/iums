@@ -2,6 +2,10 @@
 /dist
 /node_modules
 
+# folders
+
+/api/transfers
+
 # Logs
 logs
 *.log

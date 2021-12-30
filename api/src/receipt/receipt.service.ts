@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateReceiptDto } from './dto/create-receipt.dto';
 import { UpdateReceiptDto } from './dto/update-receipt.dto';
+import { Receipt } from './entities/receipt.entity';
 
 @Injectable()
 export class ReceiptService {
+  constructor(@InjectRepository(Receipt) private readonly receiptRepository:Repository<Receipt>){}
   create(createReceiptDto: CreateReceiptDto) {
     return 'This action adds a new receipt';
   }
@@ -12,8 +16,8 @@ export class ReceiptService {
     return `This action returns all receipt`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} receipt`;
+  async findOne(receiptnumber: string):Promise<any> {
+    return await this.receiptRepository.findOne({where:{receiptnumber:receiptnumber},relations:['currency']})
   }
 
   update(id: number, updateReceiptDto: UpdateReceiptDto) {
