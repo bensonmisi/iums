@@ -17,9 +17,7 @@
            </v-card-text>
        </v-card>
        <v-dialog v-model="infoDialog" width="900">
-      <v-card
-      
-  >
+      <v-card>
     <v-card-title class="white--text blue darken-4">
       Documents   
    </v-card-title>

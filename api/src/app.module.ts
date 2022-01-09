@@ -58,12 +58,22 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BullModule } from '@nestjs/bull';
 import { MailinglistModule } from './mailinglist/mailinglist.module';
 import { DocumentcommentsModule } from './documentcomments/documentcomments.module';
-
+import { BidbondmanagementModule } from './bidbondmanagement/bidbondmanagement.module';
+import { NoticeModule } from './notice/notice.module';
+import { NoticefeeModule } from './noticefee/noticefee.module';
+import { NoticetypeModule } from './noticetype/noticetype.module';
+import { BankdetailsModule } from './bankdetails/bankdetails.module';
+import { BidbondrefundModule } from './bidbondrefund/bidbondrefund.module';
+import { NoticeproductModule } from './noticeproduct/noticeproduct.module';
+import { ContactfeethresholdModule } from './contactfeethreshold/contactfeethreshold.module';
+import * as connectionOptions from '../ormconfig'
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),    
+   
+    TypeOrmModule.forRoot(connectionOptions),
     BullModule.forRoot({
       redis: {
         host: 'localhost',
@@ -76,16 +86,7 @@ import { DocumentcommentsModule } from './documentcomments/documentcomments.modu
     }),
     
     EventEmitterModule.forRoot(),
-    TypeOrmModule.forRoot({ 
-      type: process.env.DB_TYPE as any,
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      entities: ["dist/**/*.entity{.ts,.js}"],
-      synchronize:true,
-    }),
+ 
     RoleModule,
     AdministratorModule,
     SubmoduleModule,
@@ -139,6 +140,14 @@ import { DocumentcommentsModule } from './documentcomments/documentcomments.modu
     BidbondperiodModule,
     MailinglistModule,
     DocumentcommentsModule,
+    BidbondmanagementModule,
+    NoticeModule,
+    NoticefeeModule,
+    NoticetypeModule,
+    BankdetailsModule,
+    BidbondrefundModule,
+    NoticeproductModule,
+    ContactfeethresholdModule,
   ],
   controllers: [AppController],
   providers: [AppService],

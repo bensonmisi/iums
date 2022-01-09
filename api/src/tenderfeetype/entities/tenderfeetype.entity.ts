@@ -1,5 +1,7 @@
+import { Noticefee } from "src/noticefee/entities/noticefee.entity";
+import { Noticetype } from "src/noticetype/entities/noticetype.entity";
 import { Tenderapplication } from "src/tenderapplication/entities/tenderapplication.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Tenderfeetype extends BaseEntity{
@@ -26,6 +28,13 @@ export class Tenderfeetype extends BaseEntity{
 
     @OneToMany(()=>Tenderapplication,tenderapplication=>tenderapplication.tenderfeetype)
     applications:Tenderapplication[]
+
+    @ManyToMany(()=>Noticetype,noticetype=>noticetype.tenderfeetype)  
+    noticetype:Noticetype
+
+    @ManyToMany(()=>Noticefee,noticefee=>noticefee.tenderfeetype)
+    @JoinTable()
+    noticefee:Noticefee
 
 
 }

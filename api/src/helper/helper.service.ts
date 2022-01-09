@@ -3,11 +3,13 @@ import { Accountdocument } from 'src/accountdocuments/entities/accountdocument.e
 import { Accountnumber } from 'src/accountnumber/entities/accountnumber.entity';
 import { Account } from 'src/accounts/entities/account.entity';
 import { Bidbondthreshold } from 'src/bidbondthreshold/entities/bidbondthreshold.entity';
+import { Category } from 'src/categories/entities/category.entity';
 import { Document } from 'src/documents/entities/document.entity';
 import { Procuremententity } from 'src/procuremententity/entities/procuremententity.entity';
 import { Receipt } from 'src/receipt/entities/receipt.entity';
 import { Supplier } from 'src/supplier/entities/supplier.entity';
 import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.entity';
+import { Suppliertype } from 'src/suppliertype/entities/suppliertype.entity';
 import { Suspense } from 'src/suspense/entities/suspense.entity';
 import { In } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
@@ -250,6 +252,21 @@ export class HelperService {
   array.push({type:'REFUNDABLE',currency:'ZWL',balance:this.compute_suspenses_balance(refundable_zwl_suspense_data)})
 
   return array
+}
+
+async check_registration_permission(suppliertypeId:number,registrations:Supplier[]){
+  const type = await Suppliertype.findOne({where:{id:suppliertypeId}})
+
+  let message =[];
+   if(type.allowed_categories !="ALL"){
+   const array = type.allowed_categories.split(',')
+     registrations.forEach(registration=>{
+         if(!array.includes(registration.category.code)){
+          message.push({message:'Client supplier type can only register in the following categories:  '+ type.allowed_categories})
+         }
+     })
+   }
+   return message
 }
       compute_suspense_accounts(suspenses:Suspense[]){
         let totalreceipts =0 

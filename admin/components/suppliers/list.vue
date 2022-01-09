@@ -4,7 +4,7 @@
          <v-dialog v-model="infoDialog" width="900">
        <v-card>
            <v-card-title dark class="white--text orange darken-4">
-               Accounts
+               Suppliers List
                <v-spacer/>
                <v-btn icon @click="infoDialog=false"><v-icon>mdi-close</v-icon></v-btn>
            </v-card-title>
@@ -33,7 +33,7 @@
                                  {{account.name}}
                              </td>
                              <td>
-                                <v-btn x-small depressed rounded color="success">OPEN</v-btn>   
+                                <supplierdetails :id="account.id"/> 
                              </td>
                             </tr>                     
                         </tbody>
@@ -46,7 +46,9 @@
 </template>
 
 <script>
+import supplierdetails from './details.vue'
 export default {
+  components: { supplierdetails},
  name:'supplierlist',
  props:['accounts'],
  data(){

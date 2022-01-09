@@ -5,9 +5,6 @@ export class Documentcomment extends BaseEntity{
     @PrimaryGeneratedColumn()
     id:number
     
-     @Column({nullable:true})
-     documentId:number
-
     @Column({nullable:true})
     administratorId:number
 

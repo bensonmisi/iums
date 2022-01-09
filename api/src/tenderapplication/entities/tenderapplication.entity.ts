@@ -1,5 +1,6 @@
 import { Account } from "src/accounts/entities/account.entity";
 import { Currency } from "src/currency/entities/currency.entity";
+import { Noticefee } from "src/noticefee/entities/noticefee.entity";
 import { Procuremententity } from "src/procuremententity/entities/procuremententity.entity";
 import { Tenderfeetype } from "src/tenderfeetype/entities/tenderfeetype.entity";
 import { Tenderinvoice } from "src/tenderinvoice/entities/tenderinvoice.entity";
@@ -21,7 +22,7 @@ export class Tenderapplication extends BaseEntity {
     procuremententityId:number
 
     @Column({nullable:true})
-     noticeId:number
+     noticefeeId:number
  
     @Column({nullable:true})
     tendernumber:string
@@ -44,7 +45,7 @@ export class Tenderapplication extends BaseEntity {
     @Column({nullable:true})
     code:string
 
-    @Column()
+    @Column({nullable:true})
     amount:string
 
     @Column()
@@ -52,6 +53,12 @@ export class Tenderapplication extends BaseEntity {
 
     @Column({default:'PENDING'})
     status:string
+
+    @Column({default:'N'})
+    refund:string
+
+    @Column({default:'PENDING'})
+    refunded:string
 
     @CreateDateColumn()
     created_at:Date
@@ -63,7 +70,7 @@ export class Tenderapplication extends BaseEntity {
     @ManyToOne(()=>Procuremententity,procuremententity=>procuremententity.applications)
     procuremententity:Procuremententity
 
-    @ManyToOne(()=>Account,account=>account.applications)
+    @ManyToOne(()=>Account,account=>account.applications,{eager:true})
     account:Account
 
     @ManyToOne(()=>Currency)
@@ -75,9 +82,8 @@ export class Tenderapplication extends BaseEntity {
     @ManyToOne(()=>Tenderfeetype,tenderfeetype=>tenderfeetype.applications)
     tenderfeetype:Tenderfeetype
 
-    /**
-     *  to put procurement notice relationship
-     */
+    @ManyToOne(()=>Noticefee,noticefee=>noticefee.tenderapplication)
+    noticefee:Noticefee
 
 }
  

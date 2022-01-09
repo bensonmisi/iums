@@ -79,4 +79,26 @@ export class MailService {
      return false
    }
   }
+
+  async generalNotification(email:string,comment:string){
+    const url = process.env.CLIENT_API;
+    try {
+      await this.mailQueue.add('generalNotification',{
+        email,url,comment})
+   } catch (error) {
+     console.log(error)
+     return false
+   }
+  }
+
+  async bankdetailNotification(email:string){
+    const url = process.env.CLIENT_API;
+    try {
+      await this.mailQueue.add('bankdetailNotification',{
+        email,url})
+   } catch (error) {
+     console.log(error)
+     return false
+   }
+  }
 }

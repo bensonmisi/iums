@@ -16,3 +16,10 @@ Vue.filter('formateHumanDiff',(value)=>{
   return moment(date).fromNow()
 })
 
+Vue.filter('formatDays',(value)=>{
+  const date = new Date(value)
+  return moment(date).startOf('days').fromNow()
+})
+
+
+

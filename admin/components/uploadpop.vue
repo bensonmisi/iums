@@ -64,7 +64,7 @@ export default {
           this.loading=true
           const formData = new FormData();
           formData.append('file',this.file)
-          formData.append('accountId',this.id)
+          formData.append('accountId',this.id) 
           formData.append('name',this.name)
         let config = { headers: {'content-type': 'multipart/form-data'}}
              try {

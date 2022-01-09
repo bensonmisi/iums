@@ -15,7 +15,7 @@ export class SupplierController {
   constructor(private readonly supplierService: SupplierService) {}
 
   @Post()
-  @HasPermission('SUPPLIER_COMMENT')
+  @HasPermission('SUPPLIERS_FILTER')
   create(@Body() createSupplierDto: CreateSupplierDto) {
     return this.supplierService.create(createSupplierDto);
   }

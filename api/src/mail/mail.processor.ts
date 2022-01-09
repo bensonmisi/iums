@@ -99,7 +99,53 @@ export class MailProcessor{
             throw error
         }
       }
+      
+      @Process('generalNotification')
+      async generalNotification(job: Job<{ email: string, url: string ,comment:string}>): Promise<any> {
+        this.logger.log(`Sending general notification email to '${job.data.email}'`)
 
+        try {
+           const result =  await this.mailerService.sendMail({
+                to: job.data.email,
+                subject: 'PRAZ Notification:URGENT ATTENTION',
+                template: './notification', 
+                context: { 
+                  comment: job.data.comment,
+                  url:job.data.url
+                },
+              }); 
+
+             
+
+            return result
+        } catch (error) {
+            this.logger.error(`Failed to send confirmation email to '${job.data.email}'`, error.stack)
+            throw error
+        }
+      }
+
+      @Process('bankdetailNotification')
+      async bankdetailNotification(job: Job<{ email: string, url: string }>): Promise<any> {
+        this.logger.log(`Sending general notification email to '${job.data.email}'`)
+
+        try {
+           const result =  await this.mailerService.sendMail({
+                to: job.data.email,
+                subject: 'Banking Details Required',
+                template: './bidderbankdetails', 
+                context: { 
+                  url:job.data.url
+                },
+              }); 
+
+             
+
+            return result
+        } catch (error) {
+            this.logger.error(`Failed to send confirmation email to '${job.data.email}'`, error.stack)
+            throw error
+        }
+      }
       @Process('TenderinvoiceSettled')
       async TenderinvoiceSettled(job: Job): Promise<any> {
           this.logger.log(`Sending invoice settled email to '${job.data.email.email}'`)

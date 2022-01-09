@@ -62,7 +62,9 @@ export class Account extends BaseEntity {
      @OneToMany(()=>User,user=>user.account)
      user:User[]
 
-     @OneToOne(()=>Contact,contact=>contact.account)
+     @OneToOne(()=>Contact,contact=>contact.account,{
+        eager: true
+    })
      contact:Contact
 
      @OneToMany(()=>Accountdocument,document=>document.account)

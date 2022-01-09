@@ -1,9 +1,9 @@
 import { Section } from "src/sections/entities/section.entity";
 import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Category {
+export class Category  extends BaseEntity{
     @PrimaryGeneratedColumn()
     id:number
 

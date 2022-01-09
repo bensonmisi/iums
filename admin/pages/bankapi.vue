@@ -55,7 +55,7 @@
                           Description  
                         </th>
                         <th class="text-left">
-                          Account 
+                          Account  
                         </th>
                          <th class="text-left">
                           Reference 

@@ -1,6 +1,6 @@
 <template>
   <div>
-      <v-btn x-small rounded depressed color="primary" @click="showModel">thresholds</v-btn>
+      <v-btn small rounded depressed color="primary" @click="showModel">Fees</v-btn>
    
       <v-dialog 
       v-model="addPermModel" 
@@ -12,7 +12,7 @@
        <v-card>
            <v-card-title>
                 <v-btn icon @click="addPermModel=false"><v-icon>mdi-close</v-icon></v-btn>
-              Bid Bond Thresholds
+              Bid Establishment Fees
                <v-spacer/>
               <add :period="period"/>
            </v-card-title>
@@ -60,7 +60,7 @@
                         </template>
                         <template v-else>
                             <tr>
-                                <td colspan="7" class="pa-3 text-center red--text">No Bidbond Thresholds Found</td>
+                                <td colspan="7" class="pa-3 text-center red--text">No Fees Found</td>
                             </tr>
                         </template>
                     </tbody>
