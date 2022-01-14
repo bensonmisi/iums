@@ -17,6 +17,7 @@ export class TenderinvoiceController {
   async findAll():Promise<Tenderinvoice> {
     return this.tenderinvoiceService.findAll();
   }
+ 
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -26,6 +27,10 @@ export class TenderinvoiceController {
   @Get('getInvoiceData/:id')
   async getInvoiceData(@Param('id') id:string):Promise<any>{
     return await this.tenderinvoiceService.getInvoiceData(+id)
+  }
+  @Get('/data/invoices/allcontracts')
+  async allcontracts():Promise<Tenderinvoice> {
+    return this.tenderinvoiceService.Allcontracts();
   }
 
   @Patch(':id')

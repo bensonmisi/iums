@@ -12,16 +12,16 @@ export class Banktransaction extends BaseEntity{
     @Column()
     bankId:number
 
-    @Column()
-    description:string
+    @Column({type:"text",nullable:true})
+    description
 
     @Column()
     transactionDate:string
 
-    @Column({unique:true})
+    @Column({nullable:true})
     referencenumber:string
 
-    @Column({unique:true})
+    @Column({nullable:true})
     sourcereference:string
 
     @Column({nullable:true})

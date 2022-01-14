@@ -25,6 +25,15 @@ listenToSupplierInvoceSettlement(email:string){
     this.mailService.supplierinvoiceSettled(email)
  }
 
+emitBidbondRefundEvent(email:string,comment:string){
+    this.eventEmitter.emit('bidbond.refunded',{email,comment})
+}
+
+@OnEvent('bidbond.refunded')
+listenToBidbondRefund(email:string,comment:string){
+    this.mailService.generalNotification(email,comment)
+}
+
 
 
 

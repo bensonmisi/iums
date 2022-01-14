@@ -31,6 +31,7 @@
      
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <Taskslist/>
        <Search/>
        <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
@@ -74,7 +75,7 @@
     </v-app-bar>
     <v-main class="grey lighten-4">
       
-      <v-container>
+      <v-container fluid>
         <Nuxt />
       </v-container>
     </v-main>
@@ -92,8 +93,9 @@
 import { mapGetters } from 'vuex'
 import Pusher from 'pusher-js'
 import Search from '~/components/customer/search.vue'
+import Taskslist from '~/components/tasks/list.vue'
 export default {
-  components: { Search },
+  components: { Search ,Taskslist},
   data () {
     return {
       drawer: true,

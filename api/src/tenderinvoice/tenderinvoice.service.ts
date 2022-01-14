@@ -4,6 +4,7 @@ import { type } from 'os';
 import { Bidbondthreshold } from 'src/bidbondthreshold/entities/bidbondthreshold.entity';
 import { HelperService } from 'src/helper/helper.service';
 import { Receipt } from 'src/receipt/entities/receipt.entity';
+import { Taskmanager } from 'src/taskmanager/entities/taskmanager.entity';
 import { Tenderapplication } from 'src/tenderapplication/entities/tenderapplication.entity';
 import { Tenderfeetype } from 'src/tenderfeetype/entities/tenderfeetype.entity';
 import { In, Not, Repository } from 'typeorm';
@@ -19,14 +20,31 @@ export class TenderinvoiceService {
   }
 
   async findAll(): Promise<any> {
-    const data =  await this.tenderinvoiceRepository.find({where:{status:'AWAITING'},relations:['account'],order: {created_at: "DESC"}}) 
+    const data =  await this.tenderinvoiceRepository.find({where:{status:'AWAITING',description:In(['SPOC','BIDBOND','ESTABLISHMENT FEE'])},relations:['account'],order: {created_at: "DESC"}}) 
     let array =[]
-     data.forEach(dt=>{
+     data.forEach(async dt=>{
        if(!this.checkarray(array,dt.accountId)){
-         array.push({id:dt.id,accountId:dt.accountId,account:dt.account,regnumber:dt.account ? dt.account.regnumber :" NULL",name:dt.account ? dt.account.name :" NULL",created_at:dt.created_at})
-       }
+       //  const checkrecord = await this.checkifPicked(dt.tendernumber)
+       //   const finalcheck = Promise.resolve(checkrecord)
+         array.push({id:dt.id,tendernumber:dt.tendernumber,accountId:dt.accountId,account:dt.account,regnumber:dt.account ? dt.account.regnumber :" NULL",name:dt.account ? dt.account.name :" NULL",created_at:dt.created_at})
+         
+        }
      })
-
+  
+     return array
+  }
+  async Allcontracts(): Promise<any> {
+    const data =  await this.tenderinvoiceRepository.find({where:{status:'AWAITING',description:In(['CONTRACT FEE'])},relations:['account'],order: {created_at: "DESC"}}) 
+    let array =[]
+     data.forEach(async dt=>{
+       if(!this.checkarray(array,dt.accountId)){
+       //  const checkrecord = await this.checkifPicked(dt.tendernumber)
+       //   const finalcheck = Promise.resolve(checkrecord)
+         array.push({id:dt.id,tendernumber:dt.tendernumber,accountId:dt.accountId,account:dt.account,regnumber:dt.account ? dt.account.regnumber :" NULL",name:dt.account ? dt.account.name :" NULL",created_at:dt.created_at})
+         
+        }
+     })
+  
      return array
   }
 checkarray(array,value){
@@ -39,7 +57,7 @@ checkarray(array,value){
     return checked
 }
  async findOne(id: number):Promise<any> {
-   return  await this.tenderinvoiceRepository.find({where:{accountId:id,status:'AWAITING'},relations:['currency']})
+   return  await this.tenderinvoiceRepository.find({where:{accountId:id,status:'AWAITING'},relations:['account','currency']})
       
   }
 
@@ -86,6 +104,15 @@ checkarray(array,value){
   record.save()
   return {"status":"success","message":"Invoice Successfully Cancelled"}
 
+  }
+
+  async checkifPicked(tendernumber:string){
+    const record =  await Taskmanager.findOne({where:{identifier:tendernumber}})
+    if(record){
+      return false
+    }else{
+      return true
+    }
   }
 
 

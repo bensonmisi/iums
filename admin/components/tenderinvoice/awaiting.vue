@@ -1,11 +1,11 @@
 <template>
   <div>
-      <v-btn x-small depressed color="primary" @click="submit" :loading="loading" :disabled="loading">View</v-btn>
+      <v-btn x-small rounded class="ml-2" depressed color="primary" @click="submit" :loading="loading" :disabled="loading">View</v-btn>
    
       <v-dialog v-model="addPermModel" width="900">
        <v-card>
            <v-card-title>
-            {{account ? account.name :" NULL" }}
+            {{invoices.length>0 ? invoices[0].account.name :" NULL" }}
                <v-spacer/>
                <v-btn icon @click="addPermModel=false"><v-icon>mdi-close</v-icon></v-btn>
            </v-card-title>
@@ -66,7 +66,7 @@ import receipt from './receipt.vue'
 
 export default {
   components: { receipt },
-    props:['account'],
+    props:['id'],
   
         data(){
      return{
@@ -80,7 +80,7 @@ export default {
  },methods:{
      async submit(){
            this.loading=true
-         await this.$store.dispatch('awaitingtenderinvoices/getByCompany',this.account.id) 
+         await this.$store.dispatch('awaitingtenderinvoices/getByCompany',this.id) 
           this.loading = false
           this.addPermModel = true
              

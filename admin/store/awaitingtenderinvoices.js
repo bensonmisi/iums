@@ -26,6 +26,13 @@ export const actions={
             commit('setInvoices',res.data)
           })
     },
+    async getContractInvoices({commit}){
+      console.log("hello")
+      await this.$axios.get('api/tenderinvoice/data/invoices/allcontracts').then((res)=>{
+          commit('setInvoices',res.data)
+        })
+  },
+
 
     async getByCompany({commit},payload){
         await this.$axios.get('api/tenderinvoice/'+payload).then((res)=>{

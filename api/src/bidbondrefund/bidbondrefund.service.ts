@@ -66,7 +66,7 @@ export class BidbondrefundService {
           const mailinglist = await Mailinglist.findOne({where:{accountId:record.application.accountId}})
           if(mailinglist){
             const comment = "A bidbond for a tender with reference number "+record.application.tendernumber+"  has been successfully refunded. Please login to your portal to view transfer details"
-            this.mailService.generalNotification(mailinglist.email,comment)
+             this.mailService.generalNotification(mailinglist.email,comment)
             return {'status':'success','message':'Email notification successfully send'}
            }
          return {"status":"success","message":"Refund request successfully Updated"}  

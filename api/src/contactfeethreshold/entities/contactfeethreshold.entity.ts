@@ -5,11 +5,14 @@ export class Contactfeethreshold extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
 
-    @Column({default:"LOCAL"})
-    locality:string
-
     @Column()
     currencyId:number
+
+    @Column()
+    noticetypeId:number
+
+    @Column({default:'DOMESTIC'})
+    group:string
 
     @Column()
     lower:string
@@ -21,7 +24,10 @@ export class Contactfeethreshold extends BaseEntity {
     type:string
 
     @Column()
-    cost:string
+    mincost:string
+
+    @Column()
+    maxcost:string
 
 
     @Column()

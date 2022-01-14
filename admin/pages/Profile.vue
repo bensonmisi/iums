@@ -42,16 +42,17 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 export default {
- auth:false,
+ auth:true,
  layout:'user',
+ 
  data(){
      return{
         form:{
-        name: '',
-        surname:'',
-        email:''
+        name:'',
+        surname: '',
+        email: ''
         },
         nameRule:[v=>!!v || 'Name is Required'],
         surnameRule:[v=>!!v || 'Surname is Required'],
@@ -63,7 +64,7 @@ export default {
         text:""
      }
  },computed:{
-
+     ...mapGetters([ 'loggedInUser']),
      profile(){
          const user = this.$store.state.auth.user
          this.form.name = user.name

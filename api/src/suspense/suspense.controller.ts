@@ -4,7 +4,7 @@ import { CreateSuspenseDto } from './dto/create-suspense.dto';
 import { UpdateSuspenseDto } from './dto/update-suspense.dto';
 import { SearchSuspenseDto } from './dto/searchsuspense.dto';
 
-@Controller('suspense')
+@Controller('admin/suspense')
 export class SuspenseController {
   constructor(private readonly suspenseService: SuspenseService) {}
 

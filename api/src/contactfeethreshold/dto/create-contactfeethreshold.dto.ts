@@ -2,7 +2,7 @@ import { IsNotEmpty } from "class-validator";
 
 export class CreateContactfeethresholdDto {
     @IsNotEmpty()
-    locality:string
+    group:string
 
     @IsNotEmpty()
     currencyId:number

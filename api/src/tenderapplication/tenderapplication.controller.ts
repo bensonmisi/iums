@@ -12,14 +12,15 @@ export class TenderapplicationController {
     return this.tenderapplicationService.create(createTenderapplicationDto);
   }
 
-  @Get()
-  findAll() {
-    return this.tenderapplicationService.findAll();
-  }
+  
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tenderapplicationService.findOne(+id);
+  }
+  @Get('type/:type')
+  findAll(@Param('type') type:string) {
+    return this.tenderapplicationService.findAll(type);
   }
 
   @Patch(':id')

@@ -176,7 +176,7 @@ export class HelperService {
           message: message
         });
       }
-
+  
     async   get_suspense_balance_by_id(id:number){
         const suspense = await Suspense.findOne({where:{id:id},relations:['receipts','transfers']})
         if(suspense){         
@@ -477,5 +477,10 @@ async check_registration_permission(suppliertypeId:number,registrations:Supplier
     var result = new Date(date)
     result.setDate(result.getDate()+days)
     return result
+  }
+
+
+  async getReceipts(invoicenumbers){
+    return await Receipt.find({where:{invoicenumber:In(invoicenumbers)}})
   }
 }

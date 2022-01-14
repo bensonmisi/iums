@@ -9,6 +9,7 @@ import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.en
 import { Suppliertype } from "src/suppliertype/entities/suppliertype.entity";
 import { Suspense } from "src/suspense/entities/suspense.entity";
 import { Suspensetransfer } from "src/suspensetransfers/entities/suspensetransfer.entity";
+import { Taskmanager } from "src/taskmanager/entities/taskmanager.entity";
 import { Tenderapplication } from "src/tenderapplication/entities/tenderapplication.entity";
 import { Tenderinvoice } from "src/tenderinvoice/entities/tenderinvoice.entity";
 import { User } from "src/user/entities/user.entity";
@@ -102,6 +103,9 @@ export class Account extends BaseEntity {
 
      @OneToMany(()=>Supplier,supplier=>supplier.account)
      registrations:Supplier[] 
+
+     @OneToMany(()=>Taskmanager,taskmanager=>taskmanager.account)
+     taskmanager:Taskmanager[]
 
 
 

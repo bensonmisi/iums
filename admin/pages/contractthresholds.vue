@@ -16,6 +16,7 @@
                 <v-card-title>
                 Contract Fee Threshold
                     <v-spacer/>
+                    <ContractthresholdAdd/>
                 </v-card-title>
                 <v-card-text>
                  <v-simple-table>
@@ -23,7 +24,19 @@
                     <thead>
                         <tr>
                         <th class="text-left">
-                            Name
+                            Locality
+                        </th>
+                          <th class="text-left">
+                            Lower
+                        </th>
+                          <th class="text-left">
+                            Upper
+                        </th>
+                          <th class="text-left">
+                            Type
+                        </th>
+                          <th class="text-left">
+                            Value
                         </th>
                         <th class="text-right">
                            
@@ -31,7 +44,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                      
+                        <template v-if="thresholds.length>0">
+                            <tr v-for="threshold in thresholds" :key="threshold.id">
+                                <td>{{threshold.locality}}</td>
+                                <td>{{threshold.currency.name}} {{threshold.lower}}</td>
+                                <td>{{threshold.currency.name}} {{threshold.upper}}</td>
+                                <td>{{threshold.type}}</td>
+                                <td>{{threshold.currency.name}} {{threshold.cost}}</td>
+                                <td></td>
+
+                            </tr>
+                        </template>
+                        <template v-else>
+                            <tr>
+                                <td colspan="7" class="text-center red--text"> Contract Fee Thresholds not found</td>
+                            </tr>
+                        </template>
                     </tbody>
                     </template>
                 </v-simple-table>

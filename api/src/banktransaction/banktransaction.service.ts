@@ -34,7 +34,7 @@ export class BanktransactionService {
       let datequery={}
       let accountnumberquery ={}
       let currencyquery ={}
-      let defaultquery ={}
+      let defaultquery ={} 
   
       if(searchDto.description){
         descriptionquery = Object.assign({description: Like("%"+searchDto.description+"%")})

@@ -83,7 +83,6 @@ export class SupplierinvoiceService {
  }
 
  async checkinvoice(invoicenumber:string){
-   console.log("checking invoice")
   const invoices = await this.supplierinvoiceRepository.find({where:{invoicenumber:invoicenumber}})
   const receipts = await Receipt.find({where:{invoicenumber:invoicenumber}})
    const check = await this.helperService.check_supplier_invoice(invoices,receipts)

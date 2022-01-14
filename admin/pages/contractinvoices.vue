@@ -5,7 +5,7 @@
               <v-card>
                   <v-card-text class="d-flex">
                       <v-btn text to="dashboard">Dashboard</v-btn>
-                       <v-btn text disabled>Awaiting Tender Invoices </v-btn>
+                       <v-btn text disabled>Awaiting Contract Invoices </v-btn>
                   </v-card-text>
               </v-card>
           </v-col>
@@ -102,7 +102,7 @@ data(){
 },
 async fetch(){
     this.overlay=true
-   await this.$store.dispatch('awaitingtenderinvoices/getInvoices') 
+   await this.$store.dispatch('awaitingtenderinvoices/getContractInvoices') 
    this.overlay = false
 },computed:{
     transactions(){

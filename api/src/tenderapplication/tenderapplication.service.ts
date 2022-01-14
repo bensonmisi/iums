@@ -15,8 +15,8 @@ export class TenderapplicationService {
     return 'This action adds a new tenderapplication';
   }
 
-  findAll() {
-    return `This action returns all tenderapplication`;
+  async findAll(type:string) {
+    return await this.tenderapplicationRepository.find({where:{type:type,status:'PAID'},relations:['account','currency','procuremententity']});
   }
 
   async findOne(id: number) :Promise<any> {

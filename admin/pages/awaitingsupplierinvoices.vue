@@ -28,7 +28,7 @@
                 <v-card-text>
                   
                     <template v-if="transactions">
-                      <v-simple-table dense>
+                      <v-simple-table>
                          <template v-slot:default>
                              <thead>
                                  <tr>
@@ -59,7 +59,8 @@
                                 </td>
 
                                <td>
-                                  <SupplierinvoiceAwaiting :account="account.account"/>
+                                    <TasksAdd :accountId="account.accountId" :identifier="account.id" type="SUPPLIERINVOICES"/>
+                                 
                                </td>
                                </tr>
 

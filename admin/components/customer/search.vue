@@ -1,6 +1,6 @@
 <template>
   <div>
-       <v-btn rounded outlined depressed @click="searchModel=true">Customer Search</v-btn>
+       <v-btn rounded outlined depressed @click="searchModel=true">Search</v-btn>
        <v-dialog width="700" v-model="searchModel">
         <v-card>
          <v-card-title>Customer Search<v-spacer/><v-btn icon @click="searchModel=false"><v-icon>mdi-icon</v-icon></v-btn></v-card-title>

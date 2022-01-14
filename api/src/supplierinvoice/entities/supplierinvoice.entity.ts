@@ -67,6 +67,6 @@ export class Supplierinvoice extends BaseEntity {
     @ManyToOne(()=>Account,account=>account.supplierinvoice)
     account:Account
 
-    @OneToMany(()=>Receipt,receipt=>receipt.invoicenumber)
-    receipts:Receipt[]
+    /* @OneToMany(()=>Receipt,receipt=>receipt.supplierinvoice)    
+    receipts:Receipt[] */
 }

@@ -1,4 +1,5 @@
 import { Currency } from "src/currency/entities/currency.entity";
+import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.entity";
 import { Tenderinvoice } from "src/tenderinvoice/entities/tenderinvoice.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -48,5 +49,9 @@ export class Receipt extends BaseEntity{
 
     @ManyToOne(()=>Currency)
     currency:Currency
+
+    /* @ManyToOne(()=>Supplierinvoice,supplierinvoice=>supplierinvoice.receipts)
+    @JoinColumn({name:'invoicenumber',referencedColumnName:'invoicenumber'})
+    supplierinvoice:Supplierinvoic */
 
 }

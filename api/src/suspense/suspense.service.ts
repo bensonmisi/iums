@@ -1,10 +1,11 @@
 import { ForbiddenException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Account } from 'src/accounts/entities/account.entity';
+import { Banktransaction } from 'src/banktransaction/entities/banktransaction.entity';
 import { HelperService } from 'src/helper/helper.service';
+import { Onlinepayment } from 'src/onlinepayment/entities/onlinepayment.entity';
 import { SearchSuspenseDto } from 'src/suspense/dto/searchsuspense.dto';
 import { Repository } from 'typeorm';
-import { CreateSuspenseDto } from './dto/create-suspense.dto';
 import { UpdateSuspenseDto } from './dto/update-suspense.dto';
 import { Suspense } from './entities/suspense.entity';
 
@@ -25,12 +26,53 @@ export class SuspenseService {
       throw new HttpException(error.sqlMessage,HttpStatus.UNAUTHORIZED)
   }
 }
-  findAll() {
-    return `This action returns all suspense`;
+ async findAll() {
+    const suspenselist=  await this.suspenseRepository.find({where:{status:'PENDING'},relations:['account','receipts','transfers'],order:{id:'DESC'}});
+    let array = []
+     if(suspenselist.length>0){
+      suspenselist.forEach(suspense=>{
+         const balance = this.helperService.compute_suspense_balance(suspense)
+         const name =  suspense.account ? suspense.account.name :""
+         const regnumber = suspense.account ? suspense.account.regnumber :""
+         const accountnumber = suspense.accountnumber
+         const receipts = suspense.receipts
+         const transfers = suspense.transfers 
+         const amount = suspense.amount
+         const status = suspense.status
+         const created_at = suspense.created_at
+         const currency = suspense.currency
+         const source = suspense.source
+         const el={id:suspense.id,name:name,source:source,regnumber:regnumber,accountnumber:accountnumber,currency:currency,status:status,receipts:receipts,transfers:transfers,amount:amount,created_at:created_at,balance:balance}
+         array.push(el)
+       })
+     }
+    return array
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} suspense`;
+  async findOne(id: number) {
+    const record =   await this.suspenseRepository.findOne({where:{id:id},relations:['account','receipts','transfers']});
+    let banktrans
+    let onlinepayment
+    if(record.source==="banktransactions"){
+      const rec = await Banktransaction.findOne({where:{id:record.banktransactionId}})
+      if(rec){
+        banktrans = rec
+      }
+    }
+
+    if(record.source ==="ONEMONEY" || record.source==="ECOCASH" || record.source==="PAYNOW"){
+      const onl = await Onlinepayment.findOne({where:{id:record.banktransactionId}})
+      if(onl){
+        onlinepayment = onl
+      }
+    }
+
+    if(record.source==="suspensetransfer"){
+      const suspensetransfer =  await this.suspenseRepository.findOne({where:{id:record.banktransactionId}})
+      banktrans = await Banktransaction.findOne({where:{id:suspensetransfer.banktransactionId}})
+    }
+    
+    return {suspense:record,banktransaction:banktrans,onlinepayment:onlinepayment}
   }
 
   update(id: number, updateSuspenseDto: UpdateSuspenseDto) {

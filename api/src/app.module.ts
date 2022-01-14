@@ -66,6 +66,9 @@ import { BankdetailsModule } from './bankdetails/bankdetails.module';
 import { BidbondrefundModule } from './bidbondrefund/bidbondrefund.module';
 import { NoticeproductModule } from './noticeproduct/noticeproduct.module';
 import { ContactfeethresholdModule } from './contactfeethreshold/contactfeethreshold.module';
+import { TaskmanagerModule } from './taskmanager/taskmanager.module';
+import { SupplierreportModule } from './supplierreport/supplierreport.module';
+import { SupplierrevenuereportModule } from './supplierrevenuereport/supplierrevenuereport.module';
 import * as connectionOptions from '../ormconfig'
 @Module({
   imports: [
@@ -148,6 +151,9 @@ import * as connectionOptions from '../ormconfig'
     BidbondrefundModule,
     NoticeproductModule,
     ContactfeethresholdModule,
+    TaskmanagerModule,
+    SupplierreportModule,
+    SupplierrevenuereportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
