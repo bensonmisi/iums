@@ -1,6 +1,6 @@
 import { Section } from "src/sections/entities/section.entity";
 import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Category  extends BaseEntity{
@@ -19,6 +19,9 @@ export class Category  extends BaseEntity{
     created_at:Date
     @UpdateDateColumn()
     updated_at:Date
+
+    @DeleteDateColumn()
+    deleted_at:Date
 
     @ManyToOne(()=>Section,section=>section.category,{onDelete:'SET NULL',eager:true})
     section:Section

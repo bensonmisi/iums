@@ -14,19 +14,50 @@ export class SupplierrevenuereportService {
     ){}
 
     async getReports(){
-        return await this.supplierreportRepository.find({where:{status:"PAID",year:moment().year,updated_at:moment().format('YYYY-mm-dd hh:mm:ss')},relations:['currency','account','receipts','category']})  
-       }
+        var today = new Date();
+var date1 = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+var date2 = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
+let datequery=Object.assign({ updated_at:  Raw((alias) => `${alias} BETWEEN :date AND :date2 `, { date: date1 ,date2: date2  })})
+let statusquery=Object.assign({status:'PAID'})
+let   yearquery=Object.assign({year:today.getFullYear()})
+let currencyquery=Object.assign({currencyId:2})
+
+const query={
+    ...datequery,
+    ...statusquery,
+    ...yearquery,
+    ...currencyquery
+}
+        
+        const invoices =  await this.supplierreportRepository.find({where:query,relations:['currency','account']})  
+       
+        const invoicenumbers=[]
+        invoices.forEach(invoice=>{
+                 if(!invoicenumbers.includes(invoice.invoicenumber)){
+                  invoicenumbers.push(invoice.invoicenumber)
+                } 
+          })
+
+          const records = await this.getData(invoicenumbers,invoices)       
+        return records 
+    
+    }
    
        async filterReport(formdata:any){
            let datequery={}
            let settlementquery={}
            let statusquery=Object.assign({status:'PAID'})
-           let currencyquery={}
+           let currencyquery=Object.assign({currencyId:2})
+           let yearquery={}
            if(formdata.fromdate && formdata.todate ){
-               datequery=Object.assign({ updated_at:  Raw((alias) => `${alias} BETWEEN :date AND :date2 `, { date: formdata.fromdate,date2:formdata.todate })})
+               datequery=Object.assign({ updated_at:  Raw((alias) => `${alias} BETWEEN :date AND :date2 `, { date:formdata.fromdate,date2:formdata.todate })})
               }
            if(formdata.settlement){
                settlementquery=Object.assign({settlement:formdata.settlement})
+           }
+
+           if(formdata.regyear){
+               yearquery=Object.assign({year:formdata.regyear})
            }
                
           
@@ -36,11 +67,13 @@ export class SupplierrevenuereportService {
            const query={
                ...datequery,
                ...settlementquery,
-               ...statusquery
+               ...statusquery,
+               ...currencyquery,
+               ...yearquery
            }
-   
-       const invoices =  await this.supplierreportRepository.find({where:query,relations:['currency','account']})  
-      
+       
+       const invoices =  await this.supplierreportRepository.find({where:query,relations:['currency','account'],order:{updated_at:'DESC'}})  
+       console.log(invoices)
         const invoicenumbers=[]
         invoices.forEach(invoice=>{
                  if(!invoicenumbers.includes(invoice.invoicenumber)){
@@ -49,7 +82,7 @@ export class SupplierrevenuereportService {
           })
 
           const records = await this.getData(invoicenumbers,invoices)
-        console.log()
+       
         return records
 
 

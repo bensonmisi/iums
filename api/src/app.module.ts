@@ -69,6 +69,16 @@ import { ContactfeethresholdModule } from './contactfeethreshold/contactfeethres
 import { TaskmanagerModule } from './taskmanager/taskmanager.module';
 import { SupplierreportModule } from './supplierreport/supplierreport.module';
 import { SupplierrevenuereportModule } from './supplierrevenuereport/supplierrevenuereport.module';
+import { TenderrevenuereportModule } from './tenderrevenuereport/tenderrevenuereport.module';
+import { AuthModule } from './portal-domain/auth/auth.module';
+import { ProfileModule as BidderProfileModule } from './portal-domain/profile/profile.module';
+import { DashboardModule } from './portal-domain/dashboard/dashboard.module';
+import { RegistrationsModule } from './portal-domain/registrations/registrations.module';
+import { DocumentsModule as BidderDocuments} from './portal-domain/documents/documents.module';
+import { SupplierinvoicingModule } from './portal-domain/supplierinvoicing/supplierinvoicing.module';
+import { RegistrationoptionModule } from './registrationoption/registrationoption.module';
+import { MobilepaymentModule } from './portal-domain/mobilepayment/mobilepayment.module';
+import { ReceiptingModule } from './portal-domain/receipting/receipting.module';
 import * as connectionOptions from '../ormconfig'
 @Module({
   imports: [
@@ -154,6 +164,15 @@ import * as connectionOptions from '../ormconfig'
     TaskmanagerModule,
     SupplierreportModule,
     SupplierrevenuereportModule,
+    TenderrevenuereportModule,
+    AuthModule,
+    BidderProfileModule,
+    DashboardModule,
+    RegistrationsModule,
+    BidderDocuments,
+    SupplierinvoicingModule,
+    RegistrationoptionModule,
+    MobilepaymentModule
   ],
   controllers: [AppController],
   providers: [AppService],

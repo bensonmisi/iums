@@ -1,12 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Accountdocument } from 'src/accountdocuments/entities/accountdocument.entity';
 import { Accountnumber } from 'src/accountnumber/entities/accountnumber.entity';
 import { Account } from 'src/accounts/entities/account.entity';
 import { Bidbondthreshold } from 'src/bidbondthreshold/entities/bidbondthreshold.entity';
 import { Category } from 'src/categories/entities/category.entity';
 import { Document } from 'src/documents/entities/document.entity';
+import { Exchangerate } from 'src/exchangerate/entities/exchangerate.entity';
 import { Procuremententity } from 'src/procuremententity/entities/procuremententity.entity';
 import { Receipt } from 'src/receipt/entities/receipt.entity';
+import { Registrationfee } from 'src/registrationfee/entities/registrationfee.entity';
 import { Supplier } from 'src/supplier/entities/supplier.entity';
 import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.entity';
 import { Suppliertype } from 'src/suppliertype/entities/suppliertype.entity';
@@ -77,6 +79,19 @@ export class HelperService {
         const year = date.getFullYear()
         const random= await Math.floor(Math.random() * Math.floor(10000)); 
         return "invT"+year+""+random+""+accountId
+      }
+
+      async generate_registration_invoice_number(accountId:number,regyear:number){
+      const invoice = await Supplierinvoice.findOne({where:{accountId:accountId,year:regyear,status:'PENDING0'}})
+      if(invoice){
+        return invoice.invoicenumber
+      }
+      else{
+        const date = new  Date()
+        const year = date.getFullYear()
+        const random= await Math.floor(Math.random() * Math.floor(10000)); 
+        return "inv"+year+""+random+""+accountId
+      }
       }
 
       async generate_receipt_number(invoiceId){
@@ -406,7 +421,6 @@ async check_registration_permission(suppliertypeId:number,registrations:Supplier
   
      if(balance<=0){
        invoice.forEach(async inv=>{
-         console.log("invoice paid")
           await this.capture_supplier(inv,status) 
           inv.status ='PAID'
           await inv.save()
@@ -482,5 +496,29 @@ async check_registration_permission(suppliertypeId:number,registrations:Supplier
 
   async getReceipts(invoicenumbers){
     return await Receipt.find({where:{invoicenumber:In(invoicenumbers)}})
+  }
+
+  async get_registration_price(account:Account,currenyId:number){
+    let locality ='LOCAL'
+    if(account.country.toUpperCase()!=='ZIMBABWE'){
+      locality='FOREIGN'
+    }
+    const rate = await Exchangerate.findOne({order:{id:'DESC'}})
+    const price = await Registrationfee.findOne({where:{locality:locality},order:{id:'DESC'}})
+
+    if(price){
+      if(price.currencyId ==currenyId){
+        return {exchangrerate:rate.id,cost:price.price}
+      }else{
+     
+
+        if(!rate){
+          throw new HttpException("Exchange rate not found please contact System Administrator",HttpStatus.BAD_REQUEST)  
+        }
+
+        return {exchangrerate:rate.id,cost:Number(rate.value) * Number(price.price)}
+      }
+    }
+    throw new HttpException("Price not found please contact System Administrator",HttpStatus.BAD_REQUEST)
   }
 }

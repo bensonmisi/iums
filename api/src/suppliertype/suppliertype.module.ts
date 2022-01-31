@@ -7,6 +7,7 @@ import { Suppliertype } from './entities/suppliertype.entity';
 @Module({
   imports:[TypeOrmModule.forFeature([Suppliertype])],
   controllers: [SuppliertypeController],
-  providers: [SuppliertypeService]
+  providers: [SuppliertypeService],
+  exports:[SuppliertypeService]
 })
 export class SuppliertypeModule {}

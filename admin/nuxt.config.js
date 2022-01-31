@@ -6,8 +6,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - client',
-    title: 'client',
+    titleTemplate: '%s - admin',
+    title: 'admin',
     htmlAttrs: {
       lang: 'en'
     },
@@ -20,6 +20,10 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
+  },
+  
+  server: {
+    port: 5000 // default: 3000
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -51,6 +55,7 @@ export default {
     '@nuxtjs/pwa'
   ],
   router: {
+    base: '/admin/',
     middleware: ['auth']
   },
   auth: {

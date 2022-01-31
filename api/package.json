@@ -20,7 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
-    "migration:generate":"npm run build && npm run typeorm migration:generate -- -n"
+    "migration:generate": "npm run build && npm run typeorm migration:generate -- -n"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "^1.6.0",
@@ -50,6 +50,9 @@
     "nodemailer": "^6.7.0",
     "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
+    "paynow": "^1.0.9",
+    "pdf-page-counter": "^1.0.3",
+    "pdfkit": "^0.13.0",
     "pusher": "^5.0.0",
     "read-excel-file": "^5.2.25",
     "redis": "^3.1.2",

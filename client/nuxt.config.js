@@ -27,8 +27,12 @@ export default {
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-  ],
+ 
+    plugins: [
+      '~/plugins/formatedate'
+    ],
+  
+ 
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -43,16 +47,49 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
+    'vue-sweetalert2/nuxt'
   ],
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'access_token',
+          global: true,
+          // required: true,
+          // type: 'Bearer'
+        },
+        user: {
+          property: false,
+          // autoFetch: true
+        },
+        endpoints: {
+          login: { url: '/api/auth/login', method: 'post' },
+          logout: false,
+          user: { url: '/api/bidder/profile', method: 'get' }
+        }
+      }
+    },
+    redirects:{
+     login:'/',
+     logout:'/',
+     home:'/dashboard'
 
+    }
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:4000'
+  },
+  router: {
+    middleware: ['auth',]
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,

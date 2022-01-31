@@ -23,13 +23,13 @@ export class Account extends BaseEntity {
     @Column({nullable:true})
     regnumber:string
 
-    @Column({unique:true})
+    @Column({nullable:true})
     name:string
 
     @Column({nullable:true})
     sector:string
 
-    @Column()
+    @Column({nullable:true})
     suppliertypeId:number 
 
     @Column({nullable:true})

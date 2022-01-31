@@ -12,10 +12,10 @@ export class audit extends BaseEntity{
     entity:string
 
     @Column({type:"json",nullable:true})
-    oldValue:{}
+    oldvalue:{}
 
     @Column({type:"json" ,nullable:true})
-    newValue:{}
+    newvalue:{}
     
     @Column()
     action:string

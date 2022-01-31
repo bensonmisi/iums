@@ -5,7 +5,7 @@ import { Exchangerate } from "src/exchangerate/entities/exchangerate.entity";
 import { Receipt } from "src/receipt/entities/receipt.entity";
 import { Registrationperiod } from "src/registrationperiod/entities/registrationperiod.entity";
 import { Supplier } from "src/supplier/entities/supplier.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Supplierinvoice extends BaseEntity {
@@ -36,6 +36,12 @@ export class Supplierinvoice extends BaseEntity {
     @Column({default:'PENDING'})
     status:string
 
+    @Column({nullable:true})
+    settlement:string
+
+    @Column({nullable:true})
+    uuid:string
+    
     @Column()
     cost:string
 
@@ -49,10 +55,10 @@ export class Supplierinvoice extends BaseEntity {
     created_at:Date
 
     @UpdateDateColumn()
-    updated_at:Date
+    updated_at:Date    
 
 
-    @ManyToOne(()=>Exchangerate,exchangerate=>exchangerate.supplierinvoice)
+    @ManyToOne(()=>Exchangerate)
     exchangerate:Exchangerate
 
     @ManyToOne(()=>Currency,currency=>currency.supplierinvoice)

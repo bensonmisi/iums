@@ -1,10 +1,10 @@
 import { Administrator } from "src/administrator/entities/administrator.entity";
 import { Currency } from "src/currency/entities/currency.entity";
 import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Exchangerate {
+export class Exchangerate extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
     @Column()
@@ -39,8 +39,6 @@ export class Exchangerate {
     @JoinColumn({name:'administratorId'})
     agent:Administrator
 
-    @OneToMany(()=>Supplierinvoice,supplierinvoice=>supplierinvoice.exchangerate)
-    supplierinvoice:Supplierinvoice[]
 
 
 }

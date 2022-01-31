@@ -27,7 +27,7 @@ export class BankdetailsController {
    const fullfilepath = join(folderPath+"/"+filename);  
    const isfilesafe = await isFileSafe(fullfilepath)
    if(isfilesafe)
-   {
+   { 
     const path = "authorization/"+filename
     const user = req.user
     createBankdetailDto.letter = path

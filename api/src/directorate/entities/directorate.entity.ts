@@ -18,6 +18,9 @@ gender:string
 @Column()
 idnumber:string
 
+@Column()
+filename:string
+
 @CreateDateColumn()
 created_at:Date
 

@@ -32,9 +32,16 @@ export class Supplier  extends BaseEntity {
 
     @Column({nullable:true})
     issued_on:Date
+
+    @Column({nullable:true})
+    expiry_date:Date
+
+    @Column({nullable:true})
+    option:string
     
     @CreateDateColumn()
     created_at:Date
+
 
     @UpdateDateColumn()
     updated_at:Date

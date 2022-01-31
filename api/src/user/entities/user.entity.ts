@@ -7,7 +7,7 @@ export class User  extends BaseEntity{
     @PrimaryGeneratedColumn()
     id:number
 
-    @Column()
+    @Column({default:12})
     roleId:number
 
     @Column()
@@ -20,7 +20,7 @@ export class User  extends BaseEntity{
     surname:string
 
     @Column({nullable:true})
-    phone:string
+    phone:string 
 
     @Column({unique:true})
     email:string
@@ -39,6 +39,9 @@ export class User  extends BaseEntity{
 
     @Column({nullable:true})
     password:string
+    
+    @Column({default:'N'})
+    passwordChange:string
 
     @CreateDateColumn()
     created_at:Date
@@ -50,6 +53,16 @@ export class User  extends BaseEntity{
     async hashPassword() {
     this.password = await bcrypt.hash(this.password,10)
     }
+
+    
+ async validatepassword(password:string):Promise<boolean>{
+    if(this.passwordChange=='N')
+     {
+     this.password = this.password.replace(/^\$2y(.+)$/i, '$2a$1')
+     }   
+   return bcrypt.compare(password,this.password);
+     
+}
 
     @ManyToOne(()=>Role)
     @JoinColumn()

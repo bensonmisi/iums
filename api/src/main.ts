@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   var corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000','http://localhost:5000'],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
   app.setGlobalPrefix('api')

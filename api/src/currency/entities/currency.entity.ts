@@ -1,10 +1,10 @@
 import { Exchangerate } from "src/exchangerate/entities/exchangerate.entity";
 import { Registrationfee } from "src/registrationfee/entities/registrationfee.entity";
 import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Currency {
+export class Currency extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
 
