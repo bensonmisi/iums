@@ -4,9 +4,10 @@ import { ReceiptingController } from './receipting.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.entity';
 import { Receipt } from 'src/receipt/entities/receipt.entity';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Supplierinvoice,Receipt])],
+  imports:[TypeOrmModule.forFeature([Supplierinvoice,Receipt]),MailModule],
   providers: [ReceiptingService],
   controllers: [ReceiptingController]
 })

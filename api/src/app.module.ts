@@ -78,7 +78,9 @@ import { DocumentsModule as BidderDocuments} from './portal-domain/documents/doc
 import { SupplierinvoicingModule } from './portal-domain/supplierinvoicing/supplierinvoicing.module';
 import { RegistrationoptionModule } from './registrationoption/registrationoption.module';
 import { MobilepaymentModule } from './portal-domain/mobilepayment/mobilepayment.module';
-import { ReceiptingModule } from './portal-domain/receipting/receipting.module';
+import { ReceiptingModule as BidderReceiptingModule } from './portal-domain/receipting/receipting.module';
+import { PaynowPaymentModule } from './portal-domain/paynow-payment/paynow-payment.module';
+import { BankPaymentModule } from './portal-domain/bank-payment/bank-payment.module';
 import * as connectionOptions from '../ormconfig'
 @Module({
   imports: [
@@ -172,7 +174,10 @@ import * as connectionOptions from '../ormconfig'
     BidderDocuments,
     SupplierinvoicingModule,
     RegistrationoptionModule,
-    MobilepaymentModule
+    MobilepaymentModule,
+    BidderReceiptingModule,
+    PaynowPaymentModule,
+    BankPaymentModule
   ],
   controllers: [AppController],
   providers: [AppService],

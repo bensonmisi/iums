@@ -10,7 +10,7 @@ import { DocumentsService } from './documents.service';
 export class DocumentsController {
     constructor(private readonly documentsService:DocumentsService){}
     @Get()
-    async getDocs(@Request() req){
+    async getDocs(@Request() req){ 
         const user = req.user
         return await this.documentsService.findAll(user.userId)
     }
@@ -24,7 +24,7 @@ export class DocumentsController {
          const fullfilepath = join(folderPath+"/"+filename);  
          const isfilesafe = await isFileSafe(fullfilepath)
          const pcount = await pageCount(fullfilepath,formdata.id)  
-         console.log(pcount)      
+         
          if(isfilesafe)
          { 
            

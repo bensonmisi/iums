@@ -12,7 +12,7 @@ import { In } from 'typeorm';
 
 @Injectable()
 export class SupplierreceiptingService {
-    constructor( private readonly helperService:HelperService,private mailService:MailService){}
+    constructor( private readonly helperService:HelperService,private readonly mailService:MailService){}
     async getInvoiceData(invoicenumber:string):Promise<any>{
         const invoice = await Supplierinvoice.findOne({where:{invoicenumber:invoicenumber},relations:['currency']})
         const receipts = await Receipt.find({where:{invoicenumber:invoicenumber},relations:['currency']})

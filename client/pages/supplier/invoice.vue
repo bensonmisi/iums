@@ -22,7 +22,7 @@
                 <v-card-title>Invoicing<v-spacer/><addItem/></v-card-title>
                  <v-divider></v-divider>
                 <v-card-text>
-                    <template v-if="invoices.length>0">
+                    <template v-if="invoices && invoices.length>0">
                      <div >
                     <v-row class="mb-1 mt-1" v-for="inv in invoices" :key="inv.id">
                         <v-col cols="12" sm="2">
@@ -51,12 +51,31 @@
 
                     </v-row>
                     <v-divider/>
-                    <v-row class="pt-3 pb-5">
+                    <v-row class="pt-3 pb-5 headline">
                       <v-col md="10">
-                         <div class="display-1">Total Invoices</div>
+                         Total Invoices
                       </v-col>
                       <v-col md="2">
-                           <div class="display-1 text-right">{{totalInvoice}}</div>
+                           <div class="text-right">{{invoices[0].currency.name}}{{totalInvoice}}</div>
+                          
+                      </v-col>
+                    </v-row>
+                     <v-row class="pt-3 pb-5 headline">
+                      <v-col md="10">
+                        Total Paid
+                      </v-col>
+                      <v-col md="2">
+                           <div class="text-right">{{invoices[0].currency.name}}{{totalreceipts}}</div>
+                           <v-divider/>
+                      </v-col>
+                    </v-row>
+
+                     <v-row class="pt-3 pb-5 headline">
+                      <v-col md="10">
+                         <div>Balance</div>
+                      </v-col>
+                      <v-col md="2">
+                           <div class="text-right">{{invoices[0].currency.name}}{{totalInvoice-totalreceipts}}</div>
                            <v-divider/>
                       </v-col>
                     </v-row>
@@ -75,10 +94,10 @@
 
                     </template>
                 </v-card-text>
-                <v-card-actions>
+                <v-card-actions v-if="invoices && invoices.length>0">
                   <v-btn depressed rounded color="primary" to="print/invoice"><v-icon>mdi-printer</v-icon> Invoice</v-btn>
                   <v-spacer/>
-                    <v-btn depressed rounded color="success">Make Payment</v-btn>
+                  <v-btn depressed rounded color="success" to="/supplier/receipting">Make payment</v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -153,19 +172,35 @@ if(this.documents.length==0){
        return this.$store.state.documents.data
    },
    invoices(){
-       return this.$store.state.invoicing.data
+    return this.$store.state.invoicing.invoice ? this.$store.state.invoicing.invoice.invoices  :[]   
+      
    },
    totalInvoice(){
      let array = []
      let total = 0
-     array = this.$store.state.invoicing.data
+     array = this.$store.state.invoicing.invoice.invoices
 
      array.forEach(inv=>{
        total = total + Number(inv.cost)
      })
 
-     return   array[0].currency.name+""+total
+     return  total
+   },
+   totalreceipts(){
+     let array = []
+     let total = 0
+     const invoices = this.$store.state.invoicing.invoice.invoices
+     array = this.$store.state.invoicing.invoice.receipts
+
+     array.forEach(inv=>{
+       total = total + Number(inv.amount)
+     })
+
+     return total 
    }
+
+  
+
    }
 }
 </script>

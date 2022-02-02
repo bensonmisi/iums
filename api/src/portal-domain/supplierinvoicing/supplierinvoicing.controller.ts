@@ -38,15 +38,11 @@ export class SupplierinvoicingController {
         return await this.supplierinvoiceService.getSettings(user.userId)
     }
 
-    @Get('/invoice/print')
-    async printinvoice(@Res() res:Response):Promise<void>{
-        const buffer = await this.supplierinvoiceService.printInvoice()        
-        res.set({
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': 'inline; filename=example.pdf',
-            'Content-Length': buffer.length,
-          })
-      
-          res.end(buffer)
+    @Get('/reset/:invoicenumber')
+    async reset(@Param('invoicenumber') invoicenumber:string,@Request() req){
+        const user = req.user
+        return await this.supplierinvoiceService.resetInvoice(invoicenumber,user.userId)
     }
+
+    
 }

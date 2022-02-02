@@ -31,10 +31,10 @@ export class Supplier  extends BaseEntity {
     code:string
 
     @Column({nullable:true})
-    issued_on:Date
+    issued_on:string
 
     @Column({nullable:true})
-    expiry_date:Date
+    expiry_date:string
 
     @Column({nullable:true})
     option:string

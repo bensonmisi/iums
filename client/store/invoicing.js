@@ -1,5 +1,6 @@
 export const state =()=>({
     data:[],
+    invoice:{},
     setting:[]
 })
 
@@ -9,6 +10,9 @@ export const mutations={
     },
     setSetting(state,payload){
         state.setting = payload
+    },
+    setInvoice(state,payload){
+        state.invoice= payload
     }
 }
 
@@ -20,7 +24,7 @@ export const actions={
     },
     async getPending({commit}){
         await this.$axios.get('api/bidder/supplierinvoicing/pending').then((res)=>{
-            commit('setData',res.data)
+            commit('setInvoice',res.data)
           })
     },
     async getSettings({commit}){

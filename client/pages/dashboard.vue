@@ -3,6 +3,11 @@
   <DashboardBalances :wallet="dashboard.wallet"/>
   <v-row>
     <v-col md="12">
+      <DashboardAwaiting :invoices="dashboard.awaiting"/>
+    </v-col>
+  </v-row>
+  <v-row>
+    <v-col md="12">
        <DashboardRegistrations :registrations="dashboard.registrations"/>
     </v-col>
   </v-row>

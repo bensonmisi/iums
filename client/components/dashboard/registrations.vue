@@ -49,6 +49,7 @@
                                     <template v-if="reg.status=='APPROVED'">
                                     <v-btn x-small rounded depressed color="success">Download</v-btn>
                                     </template>
+                                      <v-btn x-small v-if="reg.printed==0" rounded depressed color="primary">Change</v-btn>
                                 </template>
                                 <template v-else>
                                    <div class="red--text"> {{check_expiry(reg.expiry_date)}}</div>

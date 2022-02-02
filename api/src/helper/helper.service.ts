@@ -15,6 +15,7 @@ import { Suppliertype } from 'src/suppliertype/entities/suppliertype.entity';
 import { Suspense } from 'src/suspense/entities/suspense.entity';
 import { In } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import * as moment from 'moment'
 @Injectable()
 export class HelperService {
 
@@ -82,7 +83,7 @@ export class HelperService {
       }
 
       async generate_registration_invoice_number(accountId:number,regyear:number){
-      const invoice = await Supplierinvoice.findOne({where:{accountId:accountId,year:regyear,status:'PENDING0'}})
+      const invoice = await Supplierinvoice.findOne({where:{accountId:accountId,year:regyear,status:'PENDING'}})
       if(invoice){
         return invoice.invoicenumber
       }
@@ -190,6 +191,45 @@ export class HelperService {
         pusher.trigger("manualbanktranactions", event, {
           message: message
         });
+      }
+
+
+      async get_suspense_balance_by_account(id:number,accountId:number){
+        const suspense = await Suspense.findOne({where:{id:id,accountId:accountId},relations:['receipts','transfers']})
+        if(suspense){         
+        
+               let totalreceipts = 0   
+               let total_approved_transfers=0    
+               /**
+                * calculating total  suspense receipts */        
+                 suspense.receipts.forEach(receipt=>{
+                    totalreceipts = totalreceipts+Number(receipt.amount)
+                 })
+
+                 /**
+                  * calculating  total suspense  transfers
+                  */
+               
+                 suspense.transfers.forEach(transfer => {
+                   if(transfer.status =='APPROVED')
+                     {
+                       total_approved_transfers = total_approved_transfers+Number(transfer.amount)
+                     }     
+                 });
+
+                /**
+                 * return actual suspense balance
+                 */
+                 const balance = Number(suspense.amount)-totalreceipts-total_approved_transfers
+                 if(balance==0 && suspense.status=="PENDING"){
+                   suspense.status ="UTILIZED"
+                   await suspense.save()
+                 }
+                   
+            return balance
+        }else{
+          return 0
+        }
       }
   
     async   get_suspense_balance_by_id(id:number){
@@ -299,7 +339,7 @@ async check_registration_permission(suppliertypeId:number,registrations:Supplier
               }     
           });
           const balance = Number(suspense.amount)-totalreceipts-total_approved_transfers
-          const el = {id:suspense.id,accountnumber:suspense.accountnumber,currency:suspense.currency,amount:balance}
+          const el = {id:suspense.id,source:suspense.source,accountnumber:suspense.accountnumber,currency:suspense.currency,amount:balance}
              array.push(el)
             
              })
@@ -308,7 +348,43 @@ async check_registration_permission(suppliertypeId:number,registrations:Supplier
 
         return array
       }
+async get_suspense_balance_accounts(type:string,currency,accountId:number){
+const accounts = await Accountnumber.find({where:{type:type,currency:currency}})
+let accountnumber = []
+ accounts.forEach(acc=>{
+   accountnumber.push(acc.accountnumber)
+ })
+const suspenses = await Suspense.find({where:{accountnumber:In(accountnumber),status:'PENDING',accountId:accountId},relations:['receipts','transfers']})
 
+let array=[];
+if(suspenses.length>0){
+  suspenses.forEach(suspense=>{
+    let totalreceipts =0 
+    let total_approved_transfers  = 0
+      suspense.receipts.forEach(receipt=>{
+        totalreceipts = totalreceipts+Number(receipt.amount)
+     })
+     suspense.transfers.forEach(transfer => {
+      if(transfer.status =='APPROVED')
+        {
+          total_approved_transfers = total_approved_transfers+Number(transfer.amount)
+        }     
+    });
+    console.log()
+    const balance = Number(suspense.amount)-totalreceipts-total_approved_transfers
+    if(balance>0){
+    const el = {id:suspense.id,source:suspense.source,accountnumber:suspense.accountnumber,currency:suspense.currency,amount:balance}
+       array.push(el)
+    }
+      
+       })
+ 
+  }
+
+  return array
+
+
+}
       
       compute_suspenses_balance(suspenses:Suspense[]){
         if(suspenses.length>0){         
@@ -433,15 +509,38 @@ async check_registration_permission(suppliertypeId:number,registrations:Supplier
      }
 
   }
+  async getExpiryData(option:string,quarter:number){
+    let  year  = moment(moment().format('YYYY-MM-DD')).year()
+    let expire_date="";
+    if(option=='QUARTERLY'){
+     if(quarter==1){
+      expire_date = year+"-03-31"
+     }else if(quarter==2){
+        expire_date=year+"-06-30"
+     }else if(quarter==3){
+       expire_date=year+"-09-30"
+     }else{
+      expire_date=year+"-12-31"
+     }
+    }else{
+      expire_date=year+"-12-31"
+    }
+    return expire_date
+   }
 
   async capture_supplier(invoice:Supplierinvoice,status:string){
      const code =  await this.generate_supplier_code(invoice.accountId,Number(invoice.year))
+     const current_quarter = moment(moment(invoice.created_at).format('YYYY-MM-DD')).quarter()
+     const expire_date = await this.getExpiryData(invoice.settlement,current_quarter)
      const supplier:Supplier = new Supplier
      supplier.accountId = invoice.accountId
      supplier.categoryId = invoice.categoryId
      supplier.supplierinvoiceId = invoice.id
      supplier.code = code
      supplier.status=status
+     supplier.expiry_date = expire_date
+     supplier.issued_on = moment().format('YYYY-MM-DD')
+     supplier.option = invoice.settlement
      supplier.expire_year = Number(invoice.year)
       await Supplier.save(supplier)
   }

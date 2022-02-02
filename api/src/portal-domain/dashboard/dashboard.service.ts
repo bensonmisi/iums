@@ -4,8 +4,9 @@ import { Supplier } from 'src/supplier/entities/supplier.entity';
 import { User } from 'src/user/entities/user.entity';
 import * as moment from 'moment'
 import { Tenderapplication } from 'src/tenderapplication/entities/tenderapplication.entity';
-import { In } from 'typeorm';
+import { In, MoreThanOrEqual } from 'typeorm';
 import { Account } from 'src/accounts/entities/account.entity';
+import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.entity';
 
 @Injectable()
 export class DashboardService {
@@ -32,8 +33,9 @@ export class DashboardService {
          * get tender fees application
          */
         const applications = await this.tenderfees(user.accountId)
+        const awaiting = await this.awaitinginvoices(user.accountId)
 
-        return {account:account,wallet:wallet,registrations:registrations,bidbonds:bidbonds,applications:applications}
+        return {account:account,wallet:wallet,registrations:registrations,bidbonds:bidbonds,applications:applications,awaiting:awaiting}
     }
 
     async walletBalance(accountId:number){
@@ -51,5 +53,13 @@ export class DashboardService {
 
     async tenderfees(accountId:number){
         return  await Tenderapplication.find({where:{accountId:accountId,type:In(['ESTABLISHMENT FEE','SPOC','CONTRACT FEE'])},relations:['currency']})
+    }
+
+    async awaitinginvoices(accountId:number){
+        
+        const today = new Date()
+        const year = today.getFullYear()
+        const invoices = await Supplierinvoice.find({where:{accountId:accountId,year:MoreThanOrEqual(year),status:'AWAITING'},relations:['currency','category']})
+       return invoices
     }
 }
