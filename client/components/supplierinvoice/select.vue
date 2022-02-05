@@ -55,7 +55,7 @@ methods:{
          
        const expire_date = this.compute_expiry_date(this.form.option)
         if(this.form.option=='QUARTERLY'){
-             message='<p>You have selected <b>'+this.category.name+'</b> to be paid using   QUARTERLY installment option which expires on <b>'+expire_date+'</b>. By selecting this option you are agreeing to pay your annual registration in quarterly installments</p>'
+             message='<p>You have selected <b>'+this.category.name+'</b> to be paid using   QUARTERLY installment option which expires on <b>'+expire_date+'</b>. By selecting this option you are agreeing to pay your <b>annual registration in quarterly installments</b></p>'
           }else{
              message='<p>You have selected <b>'+this.category.name+'</b> to be paid using ONCE-OFF option which expires on <b>'+expire_date+'</b>. </p>'
      

@@ -1,7 +1,7 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Bidbondperiod {
+export class Bidbondperiod extends BaseEntity{
     @PrimaryGeneratedColumn()
     id:number
 

@@ -29,8 +29,8 @@ export class ProcuremententityService {
       }
   }
 
-  findAll() {
-    return `This action returns all procuremententity`;
+  async findAll() {
+    return  await this.procuremententityRepository.find()
   }
 
   findOne(id: number) {

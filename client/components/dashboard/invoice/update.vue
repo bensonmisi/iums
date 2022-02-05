@@ -43,7 +43,7 @@ data(){
     async submit(){
          if(this.$refs.form.validate()){
              this.valid = true
-        await this.$axios.patch('/api/bidder/bidder/bank-payment',this.form).then(res=>{
+        await this.$axios.patch('/api/bidder/bank-payment',this.form).then(res=>{
              this.$swal(res.data.status,res.data.message,res.data.status)
              this.$router.push('/supplier/receipting')
         }).catch(error=>{

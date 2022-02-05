@@ -49,7 +49,7 @@
                                     <template v-if="reg.status=='APPROVED'">
                                     <v-btn x-small rounded depressed color="success">Download</v-btn>
                                     </template>
-                                      <v-btn x-small v-if="reg.printed==0" rounded depressed color="primary">Change</v-btn>
+                                   <changeCategory :reg="reg"/>
                                 </template>
                                 <template v-else>
                                    <div class="red--text"> {{check_expiry(reg.expiry_date)}}</div>
@@ -76,9 +76,11 @@
 </template>
 
 <script>
+import changeCategory from './change.vue'
 import moment from 'moment'
 export default {
  props:['registrations'],
+ components:{changeCategory},
  methods:{
      check_expiry(date){
          return moment(date).isAfter(moment()) ? 'ACTIVE' :'EXPIRED'

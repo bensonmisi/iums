@@ -29,10 +29,10 @@ export class Tenderfeetype extends BaseEntity{
     @OneToMany(()=>Tenderapplication,tenderapplication=>tenderapplication.tenderfeetype)
     applications:Tenderapplication[]
 
-    @ManyToMany(()=>Noticetype,noticetype=>noticetype.tenderfeetype)  
+    @ManyToOne(()=>Noticetype,noticetype=>noticetype.tenderfeetype)  
     noticetype:Noticetype
 
-    @ManyToMany(()=>Noticefee,noticefee=>noticefee.tenderfeetype)
+    @ManyToOne(()=>Noticefee,noticefee=>noticefee.tenderfeetype)
     @JoinTable()
     noticefee:Noticefee
 

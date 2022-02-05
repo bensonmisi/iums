@@ -13,7 +13,7 @@
     <v-spacer/>
     <v-btn class="mr-2" text to="/">Home</v-btn>
     <v-btn class="mr-2" text>Verify Certificates</v-btn>
-    <v-btn class="mr-2" text>Tenders</v-btn>
+    <v-btn class="mr-2" text to="/tenders">Tenders</v-btn>
     <v-btn class="mr-2" text>Awards</v-btn>
     <v-btn class="mr-2" text>Registered Suppliers</v-btn>
     <v-btn class="mr-2" text>ENTITIES</v-btn>

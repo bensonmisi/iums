@@ -70,7 +70,7 @@
           </v-list-item-content>          
         </v-list-item>  
          <v-divider></v-divider>
-         <v-list-item router to="/invoices">
+         <v-list-item router to="/user/tenders">
           <v-list-item-action>
             <v-icon>mdi-view-list-outline</v-icon>
           </v-list-item-action>

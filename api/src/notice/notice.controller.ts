@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Request, UseGuards, UseInterceptors, UploadedFile, HttpException, HttpStatus } from '@nestjs/common';
 import { NoticeService } from './notice.service';
 import { CreateNoticeDto } from './dto/create-notice.dto';
 import { UpdateNoticeDto } from './dto/update-notice.dto';
@@ -7,17 +7,40 @@ import { AccessLevelGuard } from 'src/guards/accesslevel.guard';
 import { PermissionGuard } from 'src/guards/permission.guard';
 import { HasAccesslevel } from 'src/decorators/hasaccesslevel.decorator';
 import { HasPermission } from 'src/decorators/hasPermission.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { isFileSafe, removeFile, uploadNotice } from 'src/uploadhelpers/notice.storage';
+import { join } from 'path';
 
-@Controller('entity/notice')
+@Controller('admin/notice')
 @UseGuards(JwtAuthGuard,AccessLevelGuard,PermissionGuard)
 @HasAccesslevel('ADMIN')
 export class NoticeController {
   constructor(private readonly noticeService: NoticeService) {}
 
-  @Post()
+  @Post() 
+  @UseInterceptors(FileInterceptor('file',uploadNotice))
   @HasPermission('CREATE_NOTICE')
- async create(@Body() createNoticeDto: CreateNoticeDto) {
+ async create(@UploadedFile() file:Express.Multer.File,@Body() createNoticeDto: CreateNoticeDto,@Request() req) {
+  const filename = file?.filename 
+  if(filename){
+    const folderPath = join(process.cwd()+'/public','notices')
+    const fullfilepath = join(folderPath+"/"+filename);  
+    const isfilesafe = await isFileSafe(fullfilepath)
+    
+    if(isfilesafe)
+    { 
+      const path = "notices/"+filename
+    const user = req.user
+    createNoticeDto.creator = user.userId
+    createNoticeDto.filename = path    
+    createNoticeDto.level = 'ADMIN'
     return await this.noticeService.create(createNoticeDto);
+  }else{
+    await removeFile(fullfilepath)
+    throw new HttpException("Invalid file type",HttpStatus.BAD_REQUEST) 
+  }        
+}
+throw new HttpException("Filename not found",HttpStatus.BAD_REQUEST) 
   }
 
   @Get()
@@ -32,15 +55,38 @@ export class NoticeController {
     return this.noticeService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch(':uuid')
+  @UseInterceptors(FileInterceptor('file',uploadNotice))
   @HasPermission('UPDATE_NOTICE')
-  update(@Param('id') id: string, @Body() updateNoticeDto: UpdateNoticeDto) {
-    return this.noticeService.update(+id, updateNoticeDto);
+  async update(@Param('uuid') uuid: string,@UploadedFile() file:Express.Multer.File, @Body() updateNoticeDto: UpdateNoticeDto,@Request() req) {
+  
+    const filename = file?.filename 
+    if(filename){
+      const folderPath = join(process.cwd()+'/public','notices')
+      const fullfilepath = join(folderPath+"/"+filename);  
+      const isfilesafe = await isFileSafe(fullfilepath)
+      
+      if(isfilesafe)
+      { 
+        const path = "notices/"+filename
+      const user = req.user
+      
+    updateNoticeDto.filename = path   
+      return await this.noticeService.update(uuid, updateNoticeDto,user.userId);
+    }else{
+      await removeFile(fullfilepath)
+      throw new HttpException("Invalid file type",HttpStatus.BAD_REQUEST) 
+    }        
   }
+  throw new HttpException("Filename not found",HttpStatus.BAD_REQUEST) 
+    }
 
-  @Delete(':id')
+  
+
+  @Delete(':uuid')
   @HasPermission('DELETE_NOTICE')
-  remove(@Param('id') id: string) {
-    return this.noticeService.remove(+id);
+  remove(@Param('uuid') uuid: string,@Request() req) {
+    const user = req.user
+    return this.noticeService.remove(uuid,user.userId);
   }
 }

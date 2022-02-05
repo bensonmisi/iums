@@ -1,8 +1,8 @@
 import { Notice } from "src/notice/entities/notice.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Noticeproduct {
+export class Noticeproduct extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
 

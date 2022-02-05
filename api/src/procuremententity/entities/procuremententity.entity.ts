@@ -1,8 +1,8 @@
 import { Tenderapplication } from "src/tenderapplication/entities/tenderapplication.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
-export class Procuremententity {
+export class Procuremententity extends BaseEntity{
     @PrimaryGeneratedColumn()
     id:number
 

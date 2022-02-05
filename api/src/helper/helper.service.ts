@@ -464,14 +464,15 @@ if(suspenses.length>0){
 
   
 
-      calculate_establishment_fee(bidbondthreshold:Bidbondthreshold[],amount:string){
-        const record =  bidbondthreshold.forEach(value=>{
+     calculate_establishment_fee(bidbondthreshold:Bidbondthreshold[],amount:string){
+       let fee = '0'
+        bidbondthreshold.forEach(value=>{
            if(parseInt(value.lowerlimit) < parseInt(amount) &&  parseInt(amount)< parseInt(value.upperlimit)){
             console.log(value.amount)
-            return value.amount
+            fee = value.amount
            }
          })
-         return record
+      return fee
       }
 
   async check_supplier_invoice(invoice:Supplierinvoice[],receipts:Receipt[])

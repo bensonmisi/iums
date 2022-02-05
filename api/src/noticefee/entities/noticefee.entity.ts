@@ -1,8 +1,9 @@
+import { Bidbondperiod } from "src/bidbondperiod/entities/bidbondperiod.entity";
 import { Currency } from "src/currency/entities/currency.entity";
 import { Notice } from "src/notice/entities/notice.entity";
 import { Tenderapplication } from "src/tenderapplication/entities/tenderapplication.entity";
 import { Tenderfeetype } from "src/tenderfeetype/entities/tenderfeetype.entity";
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Noticefee extends BaseEntity {
@@ -16,26 +17,16 @@ export class Noticefee extends BaseEntity {
     tenderfeetypeId:number
 
     @Column()
-    name:string
-
-    @Column()
     currencyId:number
 
     @Column()
     amount:string
 
-    @Column()
-    closingDate:Date
-
-
-    @Column({nullable:true,default:0})
-    validityperiod:number
+    @Column({nullable:true})
+    bidbondperiodId:number
 
     @Column({default:0})
     extention:number
-
-    @Column({nullable:true})
-    maturityDate:Date
 
     @Column({default:'ACTIVE'})
     status:string
@@ -46,6 +37,12 @@ export class Noticefee extends BaseEntity {
     @Column({default:'N'})
     refunded:string
 
+    @Column({default:'user'})
+    level:string
+
+    @Column()
+    creator:number
+
     @CreateDateColumn()
     created_at:Date
 
@@ -53,15 +50,18 @@ export class Noticefee extends BaseEntity {
     updated_at:Date
 
 
-    @ManyToOne(()=>Currency)
+    @ManyToOne(()=>Currency,{eager:true})
     currency:Currency
 
     @ManyToOne(()=>Notice,notice=>notice.noticefee,{eager:true})
     notice:Notice
 
-    @OneToMany(()=>Tenderfeetype,tenderfeetype=>tenderfeetype.noticefee)
-    tenderfeetype:Tenderfeetype[]
+    @ManyToOne(()=>Tenderfeetype,{eager:true})
+    tenderfeetype:Tenderfeetype
 
     @OneToMany(()=>Tenderapplication,tenderapplication=>tenderapplication.noticefee)
     tenderapplication:Tenderapplication[]
+    
+    @ManyToOne(()=>Bidbondperiod)
+    bidbondperiod:Bidbondperiod
 }

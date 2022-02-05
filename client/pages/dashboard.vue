@@ -3,7 +3,9 @@
   <DashboardBalances :wallet="dashboard.wallet"/>
   <v-row>
     <v-col md="12">
+      <template v-if="dashboard.awaiting && dashboard.awaiting.length>0">
       <DashboardAwaiting :invoices="dashboard.awaiting"/>
+      </template>
     </v-col>
   </v-row>
   <v-row>

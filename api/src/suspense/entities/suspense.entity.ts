@@ -11,13 +11,13 @@ export class Suspense extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
 
-    @Column({nullable:true})
+    @Column({nullable:true,unique:true})
     banktransactionId:number
 
-    @Column({nullable:true})
+    @Column({nullable:true,unique:true})
      onlinepaymentId:number
 
-    @Column({nullable:true})
+    @Column({nullable:true,unique:true})
     suspensetransferId:number
     @Column()
     source:string

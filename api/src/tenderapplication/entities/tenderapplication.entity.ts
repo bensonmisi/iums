@@ -1,5 +1,6 @@
 import { Account } from "src/accounts/entities/account.entity";
 import { Currency } from "src/currency/entities/currency.entity";
+import { Notice } from "src/notice/entities/notice.entity";
 import { Noticefee } from "src/noticefee/entities/noticefee.entity";
 import { Procuremententity } from "src/procuremententity/entities/procuremententity.entity";
 import { Tenderfeetype } from "src/tenderfeetype/entities/tenderfeetype.entity";
@@ -16,7 +17,13 @@ export class Tenderapplication extends BaseEntity {
     accountId:number
 
     @Column()
+    noticeId:number
+
+    @Column()
     uuid:string
+
+    @Column({nullable:true})
+    tenderinvoiceId:number
 
     @Column()
     procuremententityId:number
@@ -73,10 +80,14 @@ export class Tenderapplication extends BaseEntity {
     @ManyToOne(()=>Account,account=>account.applications,{eager:true})
     account:Account
 
+    @ManyToOne(()=>Notice,notice=>notice.tenderapplications)
+    notice:Notice
+
     @ManyToOne(()=>Currency)
     currency:Currency
 
     @OneToOne(()=>Tenderinvoice,tenderinvoice=>tenderinvoice.tenderapplication)
+    @JoinColumn()
     tenderinvoice:Tenderinvoice
 
     @ManyToOne(()=>Tenderfeetype,tenderfeetype=>tenderfeetype.applications)

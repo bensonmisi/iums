@@ -81,6 +81,10 @@ import { MobilepaymentModule } from './portal-domain/mobilepayment/mobilepayment
 import { ReceiptingModule as BidderReceiptingModule } from './portal-domain/receipting/receipting.module';
 import { PaynowPaymentModule } from './portal-domain/paynow-payment/paynow-payment.module';
 import { BankPaymentModule } from './portal-domain/bank-payment/bank-payment.module';
+import { BidbondapplicationModule } from './portal-domain/bidbondapplication/bidbondapplication.module';
+import { TendersModule } from './portal-domain/tenders/tenders.module';
+import { NoticecategoryModule } from './noticecategory/noticecategory.module';
+import { NoticeapplicationModule } from './portal-domain/noticeapplication/noticeapplication.module';
 import * as connectionOptions from '../ormconfig'
 @Module({
   imports: [
@@ -177,7 +181,11 @@ import * as connectionOptions from '../ormconfig'
     MobilepaymentModule,
     BidderReceiptingModule,
     PaynowPaymentModule,
-    BankPaymentModule
+    BankPaymentModule,
+    BidbondapplicationModule,
+    TendersModule,
+    NoticecategoryModule,
+    NoticeapplicationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

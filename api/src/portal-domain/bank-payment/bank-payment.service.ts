@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Banktransaction } from 'src/banktransaction/entities/banktransaction.entity';
 import { Rtg } from 'src/rtgs/entities/rtg.entity';
 import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.entity';
@@ -63,38 +63,45 @@ export class BankPaymentService {
   }
 
   async checkReferene(formdata:any,userId:number){
-    const user = await User.findOne({where:{id:userId}})
-    const transaction = await Banktransaction.findOne({where:{sourcereference:formdata.referencenumber}})
-    let message =""
-    let status =""
-    if(transaction){
-
-       if(transaction.status =='PENDING'){
-           
+    try {
+      const user = await User.findOne({where:{id:userId},relations:['account']})
+      const transaction = await Banktransaction.findOne({where:{sourcereference:formdata.referencenumber}})
+      let message =""
+      let status =""
+      if(transaction){
+  
+         if(transaction.status =='PENDING'){
+             
+            
+             const suspense = await Suspense.create({accountId:user.accountId,banktransactionId:transaction.id,source:'banktransaction',accountnumber:transaction.accountnumber,currency:transaction.currency,amount:Number(transaction.amount).toString(),status:"PENDING"})
+              await suspense.save()
+             transaction.regnumber = user.account.regnumber
+             transaction.status ="CLAIMED"
+             await transaction.save()
+             status="success"
+              message="Wallet successfully topped up please  continue to settle invoice"
           
-           const suspense = await Suspense.create({accountId:user.accountId,banktransactionId:transaction.id,source:'banktransaction',accountnumber:transaction.accountnumber,currency:transaction.currency,amount:Number(transaction.amount).toString(),status:"PENDING"})
-            await suspense.save()
-           transaction.regnumber = user.account.regnumber
-           transaction.status ="CLAIMED"
-           await transaction.save()
-           status="success"
-            message="Wallet successfully topped up please  continue to settle invoice"
-        
+         }else{
+         status="error"
+         message ="Reference already utilized"
+         }
        }else{
        status="error"
-       message ="Reference already utilized"
-       }
-     }else{
-     status="error"
-     message ="Reference number not found "
+       message ="Reference number not found "
+      }
+  
+      if(status=='success'){
+        const service = new SupplierInvoicingService()
+         await service.reset_invoice(formdata.invoicenumber,userId)
+      }
+  
+      return {status:status,message:message}
+      
+    } catch (error) {
+      const message = error.sqlMessage ? error.sqlMessage : error.message
+      throw new HttpException(message,HttpStatus.BAD_REQUEST)
     }
-
-    if(status=='success'){
-      const service = new SupplierInvoicingService()
-       await service.reset_invoice(formdata.invoicenumber,userId)
-    }
-
-    return {status:status,message:message}
+   
   }
  
 }

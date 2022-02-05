@@ -20,6 +20,8 @@
     "paynow": "^1.0.9",
     "tls": "0.0.1",
     "uuid": "^8.3.2",
+    "pdfjs-dist": "^2.5.207",
+    "vue-pdf": "^4.0.12",
     "vue-sweetalert2": "^5.0.2",
     "vuetify": "^2.5.5"
   },

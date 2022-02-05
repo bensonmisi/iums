@@ -13,7 +13,7 @@ export class DocumentsController {
     async getDocs(@Request() req){ 
         const user = req.user
         return await this.documentsService.findAll(user.userId)
-    }
+    } 
     @Post()
     @UseInterceptors(FileInterceptor('file',uploadBidderDocuments))
     async uploadDoc(@UploadedFile() file:Express.Multer.File,@Body() formdata:any,@Request() req){
