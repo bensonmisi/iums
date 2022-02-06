@@ -80,6 +80,8 @@ export class NoticeService {
       const categories = JSON.parse(updateNoticeDto.categories)
       const oldrecord = await this.noticeRepository.findOne({where:{uuid:uuid}})
       const tendernumber = await this.helperService.sanitizename(updateNoticeDto.tendernumber)
+      const today = new Date()
+      const year = today.getFullYear();
        updateNoticeDto.tendernumber2 = tendernumber
        oldrecord.level = updateNoticeDto.level
        oldrecord.title = updateNoticeDto.title
@@ -89,6 +91,7 @@ export class NoticeService {
        oldrecord.closingDate = updateNoticeDto.closingDate
        oldrecord.closingTime = updateNoticeDto.closingTime
        oldrecord.reach = updateNoticeDto.reach
+       oldrecord.year = year
        await oldrecord.save()
       // await this.noticeRepository.update({uuid:uuid},updateNoticeDto)
        const newrecord =  await this.noticeRepository.findOne({where:{uuid:uuid}})

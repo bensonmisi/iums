@@ -35,8 +35,12 @@ export class Bankdetail extends BaseEntity {
     letter:string
 
 
-    @Column()
+    @Column({nullable:true})
+    userId:number
+    
+    @Column({nullable:true})
     requestedBy:number
+
     @Column({nullable:true})
     approvedBy:number
 

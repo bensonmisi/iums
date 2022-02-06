@@ -12,6 +12,9 @@
                             Entity
                         </th>
                         <th class="text-left">
+                           Reach
+                        </th>
+                        <th class="text-left">
                             Closing Date
                         </th>
                         <th class="text-left">
@@ -33,6 +36,7 @@
                             <div>{{ per.procuremententity.name}}</div>
                             <small>{{per.tendernumber}}</small>
                         </td>
+                         <td>{{per.reach}}</td>
                         <td>{{per.closingDate}} {{per.closingTime}}</td>
                         <td> <v-chip x-small :color="checkStatus(per.closingDate)=='CLOSED' ? 'red' :'green lighten-2'">{{checkStatus(per.closingDate)}}</v-chip></td>
                         <td class="text-right">

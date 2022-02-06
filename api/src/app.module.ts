@@ -86,6 +86,8 @@ import { TendersModule } from './portal-domain/tenders/tenders.module';
 import { NoticecategoryModule } from './noticecategory/noticecategory.module';
 import { NoticeapplicationModule } from './portal-domain/noticeapplication/noticeapplication.module';
 import * as connectionOptions from '../ormconfig'
+import { NoticeinvoicingModule } from './portal-domain/noticeinvoicing/noticeinvoicing.module';
+import { BankaccountModule } from './portal-domain/bankaccount/bankaccount.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -186,6 +188,8 @@ import * as connectionOptions from '../ormconfig'
     TendersModule,
     NoticecategoryModule,
     NoticeapplicationModule,
+    NoticeinvoicingModule,
+    BankaccountModule
   ],
   controllers: [AppController],
   providers: [AppService],

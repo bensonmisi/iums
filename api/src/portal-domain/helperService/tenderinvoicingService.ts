@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { Account } from "src/accounts/entities/account.entity";
+import { Bankdetail } from "src/bankdetails/entities/bankdetail.entity";
 import { Bidbondthreshold } from "src/bidbondthreshold/entities/bidbondthreshold.entity";
 import { HelperService } from "src/helper/helper.service";
 import { Notice } from "src/notice/entities/notice.entity";
@@ -13,11 +14,24 @@ import { In } from "typeorm";
 
 export class TenderInvoicingService{
 
+    async getPending(accountId:number){
+        return Tenderinvoice.find({where:{accountId:accountId}})
+    }
+
     async addFee(id:number,userId:number){
         const noticefee = await Noticefee.findOne({where:{id:id},relations:['notice','tenderfeetype','bidbondperiod']})
         const user = await User.findOne({where:{id:userId},relations:['account']})
         if(!user){
             throw new HttpException("UNAUTHORIZED TO ACCESS RESOURCE",HttpStatus.BAD_REQUEST)
+        }
+
+
+
+        if(user.account.locality.toUpperCase() !=='LOCAL')
+        {
+               if(noticefee.notice.reach.toUpperCase() ==='LOCAL'){
+                   throw new HttpException("Tender open to local bidders only",HttpStatus.BAD_REQUEST)
+               }
         }
         
 
@@ -25,6 +39,10 @@ export class TenderInvoicingService{
           throw new HttpException("Tender fee not found",HttpStatus.BAD_REQUEST)
          }
 
+         /**
+          * 
+          */
+        await this.checkbankaccount(user.accountId)
          /**
          * check if bidder is registered
          */
@@ -40,7 +58,7 @@ export class TenderInvoicingService{
             type ="REFUNDABLE"
         }
 
-        await this.addItem(user.accountId,noticefee.notice.tendernumber,noticefee.tenderfeetype.name,noticefee.tenderfeetypeId,type,noticefee.currencyId,noticefee.notice.year,noticefee.amount,noticefee.notice.procuremententityId)
+        await this.addItem(user.accountId,noticefee.notice.tendernumber,noticefee.tenderfeetype.name,noticefee.id,type,noticefee.currencyId,noticefee.notice.year,noticefee.amount,noticefee.notice.procuremententityId)
       
          
         await this.checkRequiredFee(noticefee,user.account)
@@ -50,6 +68,13 @@ export class TenderInvoicingService{
 
 
 
+    }
+
+    async checkbankaccount(accountId:number){
+      const record = await Bankdetail.findOne({where:{accountId:accountId}})
+      if(!record){
+        throw new HttpException('Please enter company banking details. Please note we will use these details to process any refunds back to you',HttpStatus.PRECONDITION_FAILED)
+      }
     }
 
     async remove(id:number,userId:number){
@@ -75,7 +100,7 @@ export class TenderInvoicingService{
                    throw new HttpException("Item already added to invoice",HttpStatus.BAD_REQUEST)
                }
 
-               await this.addItem(account.id,noticefee.notice.tendernumber,requiredfee.name,requiredfee.id,'NONREFUNDABLE',noticefee.currencyId,noticefee.notice.year,requirednoticefee.amount,noticefee.notice.procuremententityId)
+               await this.addItem(account.id,noticefee.notice.tendernumber,requiredfee.name,requirednoticefee.id,'NONREFUNDABLE',noticefee.currencyId,noticefee.notice.year,requirednoticefee.amount,noticefee.notice.procuremententityId)
             }
 
             return 0
@@ -128,7 +153,7 @@ export class TenderInvoicingService{
         return true
     }
 
-    async addItem(accountId:number,tendernumber:string,description:string,tenderfeetypeId:number,type:string,currencyId:number,year:number,amount:string,procuremententityId:number){
+    async addItem(accountId:number,tendernumber:string,description:string,noticefeeId:number,type:string,currencyId:number,year:number,amount:string,procuremententityId:number){
         const tenderinvoice = new Tenderinvoice()
         const helperService = new HelperService()
         const invoicenumber = await helperService.generate_tender_invoice_number(accountId)
@@ -137,7 +162,7 @@ export class TenderInvoicingService{
         tenderinvoice.accountId = accountId
         tenderinvoice.tendernumber = tendernumber
         tenderinvoice.description = description
-        tenderinvoice.tenderfeetypeId = tenderfeetypeId
+        tenderinvoice.noticefeeId = noticefeeId
         tenderinvoice.type = type
         tenderinvoice.currencyId = currencyId
         tenderinvoice.year = year

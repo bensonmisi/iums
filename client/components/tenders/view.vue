@@ -88,8 +88,10 @@
                              <td>{{fee.currency.name}}{{fee.amount}}</td>
                              <td>
                                <template v-if="isAuthenticated">
-                               <v-btn  v-if="fee.tenderfeetype.name !='ESTABLISHMENT FEE'" depressed color="success">Pay fee</v-btn>
-                               </template>
+                                 <template v-if="fee.tenderfeetype.name !='ESTABLISHMENT FEE' ">
+                                 <NewTenderInvoice :id="fee.id"/>
+                                 </template>
+                              </template>
                                <div v-else class="red--text">Login to make payment</div>
                              </td>
                           </tr>
@@ -148,9 +150,10 @@
 <script>
 import pdf from 'vue-pdf'
 import { mapGetters } from 'vuex' 
+import NewTenderInvoice from './invoice/add.vue'
 export default {
  name:'TenderView',
- components:{pdf},
+ components:{pdf,NewTenderInvoice},
  props:['uuid'],
  data(){
      return{

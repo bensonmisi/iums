@@ -7,6 +7,12 @@ import { NoticeinvoicingService } from './noticeinvoicing.service';
 export class NoticeinvoicingController {
   constructor(private readonly noticeinvoicingService: NoticeinvoicingService) {}
 
+  @Get()
+  async getList(@Request() req){ 
+    const user = req.user
+    return await this.noticeinvoicingService.getPending(user.userId)
+  }
+
   @Get(':id')
   async addItem(@Param('id') id:string,@Request() req){
    const user = req.user

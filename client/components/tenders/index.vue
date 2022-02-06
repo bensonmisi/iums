@@ -27,7 +27,23 @@
               </v-form>
           </v-col>
       </v-row>
-
+      <v-row class="mt-2" v-if="invoices.length>0">
+          <v-col>
+               <v-alert
+      prominent
+      type="error"
+    >
+      <v-row align="center">
+        <v-col class="grow">
+          You have {{invoices.length}} Tender invoices awaiting settlement
+        </v-col>
+        <v-col class="shrink">
+          <v-btn to="/tenderinvoicing">Settle Invoice</v-btn>
+        </v-col>
+      </v-row>
+    </v-alert>
+          </v-col>
+      </v-row>
       <v-row>
           <v-col md="3">
 
@@ -132,6 +148,7 @@ export default {
 async fetch(){
     
     await this.$store.dispatch('tenders/getData')
+    await this.$store.dispatch('tenderinvoicing/getData')
 },
 data(){
     return{
@@ -221,6 +238,9 @@ data(){
     },
     options(){
         return ['ACTIVE','CLOSED','CANCELLED']
+    },
+    invoices(){
+        return this.$store.state.tenderinvoicing.data
     }
 }
 
