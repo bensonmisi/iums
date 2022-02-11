@@ -32,6 +32,15 @@ export class SupplierReceiptingService{
      
     }
 
+    async getAll(userId:number){
+     const user = await User.findOne({where:{id:userId}})
+     return await Receipt.find({where:{accountId:user.accountId}})
+    }
+
+    async getByInvoice(userId:number,invoicenumber:string){
+        const user = await User.findOne({where:{id:userId}})
+     return await Receipt.find({where:{accountId:user.accountId,invoicenumber:invoicenumber}})  
+    }
    
 
     async settle(userId:number,suspenseId:number){

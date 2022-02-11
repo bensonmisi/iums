@@ -62,7 +62,7 @@ export class ReceiptingService {
                             if(invoicebalance>0){
                                 const uuid = this.helperService.generateUUId()
                                 const receiptnumber = await this.helperService.generate_receipt_number(invoice.id)
-                                console.log(invoice)
+                               // console.log(invoice)
                                 const code = await this.helperService.generate_tender_code(invoice.tenderfeetype.name,invoice.accountId)
                                 let paymentstatus=invoicebalance<=balance ? "PAID" :"PENDING"
                                 let amount =invoicebalance>=balance ? balance : invoicebalance                  

@@ -3,6 +3,7 @@ import { Banktransaction } from 'src/banktransaction/entities/banktransaction.en
 import { Rtg } from 'src/rtgs/entities/rtg.entity';
 import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.entity';
 import { Suspense } from 'src/suspense/entities/suspense.entity';
+import { Tenderinvoice } from 'src/tenderinvoice/entities/tenderinvoice.entity';
 import { User } from 'src/user/entities/user.entity';
 import { SupplierInvoicingService } from '../helperService/SupplierInvoicingService';
 import { SupplierReceiptingService } from '../helperService/SupplierReceiptingService';
@@ -10,6 +11,11 @@ import { CreateBankPaymentDto } from './dto/create-bank-payment.dto';
 
 @Injectable()
 export class BankPaymentService {
+
+async findAll(userId:number){
+  const user = await User.findOne({where:{id:userId},relations:['account']})
+  return await Banktransaction.find({where:{regnumber:user.account.regnumber}})
+}
   
  async create(createBankPaymentDto: CreateBankPaymentDto,userId:number) {
     const user = await User.findOne({where:{id:userId},relations:['account']})
@@ -45,9 +51,16 @@ export class BankPaymentService {
       status="error"
       message ="Transaction not found , your invoice has been put on AWAITING. Our finance Team will look at your Proof of payment and  process your invoice. If there are any issues you will be contacted"
      }
+
+     let invoicenumber =""
+     if(createBankPaymentDto.invoicenumber)
+     {
+       invoicenumber = createBankPaymentDto.invoicenumber
+     }else{
      const service = new SupplierReceiptingService()
      const invoices = await service.get_invoice_data(userId)
-     const invoicenumber = invoices[0].invoicenumber
+     invoicenumber = invoices[0].invoicenumber
+    }
 
      const rtgs = await Rtg.findOne({where:{invoicenumber:invoicenumber}})
      if(!rtgs){
@@ -56,7 +69,11 @@ export class BankPaymentService {
     }
 
     if(status=='error'){
+      if(createBankPaymentDto.invoicenumber){
+       await Tenderinvoice.update({invoicenumber:invoicenumber},{status:'AWAITING'})
+      }else{
       await Supplierinvoice.update({invoicenumber:invoicenumber},{status:'AWAITING'})
+    }
     }
 
     return {status:status,message:message}

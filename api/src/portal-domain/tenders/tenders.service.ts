@@ -20,6 +20,8 @@ export class TendersService {
         return {sections:sections,entities:entity,types:types,notices:notices}
     }
 
+    
+
     async findOne(uuid:string){
         return await this.noticeRepository.findOne({where:{uuid:uuid},relations:['procuremententity','noticecategory','section','noticeproduct','noticetype','tenderapplications','noticefee'],order:{id:'DESC'}})
     }

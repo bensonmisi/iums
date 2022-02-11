@@ -78,7 +78,7 @@ export class Notice extends BaseEntity {
     updated_at:Date
 
     
-    @ManyToOne(()=>Procuremententity)
+    @ManyToOne(()=>Procuremententity,{eager:true})
     procuremententity:Procuremententity
 
     @OneToMany(()=>Tenderapplication,tenderapplication=>tenderapplication.notice)

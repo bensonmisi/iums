@@ -88,6 +88,12 @@ import { NoticeapplicationModule } from './portal-domain/noticeapplication/notic
 import * as connectionOptions from '../ormconfig'
 import { NoticeinvoicingModule } from './portal-domain/noticeinvoicing/noticeinvoicing.module';
 import { BankaccountModule } from './portal-domain/bankaccount/bankaccount.module';
+import { TenderreceiptingModule } from './portal-domain/tenderreceipting/tenderreceipting.module';
+import { ApplicationModule } from './portal-domain/application/application.module';
+import { UsersModule as BidderUsers } from './portal-domain/users/users.module';
+import { ContactsModule as BidderContactsModule } from './portal-domain/contacts/contacts.module';
+import { DirectorsModule } from './portal-domain/directors/directors.module';
+import { MailistModule } from './portal-domain/mailist/mailist.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -189,7 +195,13 @@ import { BankaccountModule } from './portal-domain/bankaccount/bankaccount.modul
     NoticecategoryModule,
     NoticeapplicationModule,
     NoticeinvoicingModule,
-    BankaccountModule
+    BankaccountModule,
+    TenderreceiptingModule,
+    ApplicationModule,
+    BidderUsers,
+    BidderContactsModule,
+    DirectorsModule,
+    MailistModule
   ],
   controllers: [AppController],
   providers: [AppService],

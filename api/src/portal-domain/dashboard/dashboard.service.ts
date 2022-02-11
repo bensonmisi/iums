@@ -7,6 +7,9 @@ import { Tenderapplication } from 'src/tenderapplication/entities/tenderapplicat
 import { In, MoreThanOrEqual } from 'typeorm';
 import { Account } from 'src/accounts/entities/account.entity';
 import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.entity';
+import { Contact } from 'src/contacts/entities/contact.entity';
+import { Directorate } from 'src/directorate/entities/directorate.entity';
+import { Mailinglist } from 'src/mailinglist/entities/mailinglist.entity';
 
 @Injectable()
 export class DashboardService {
@@ -35,7 +38,13 @@ export class DashboardService {
         const applications = await this.tenderfees(user.accountId)
         const awaiting = await this.awaitinginvoices(user.accountId)
 
-        return {account:account,wallet:wallet,registrations:registrations,bidbonds:bidbonds,applications:applications,awaiting:awaiting}
+        const contacts = await this.contacts(user.accountId)
+
+        const directors = await this.directors(user.accountId)
+
+        const maillist = await this.maillist(user.accountId)
+
+        return {account:account,wallet:wallet,maillist:maillist,registrations:registrations,bidbonds:bidbonds,applications:applications,awaiting:awaiting,contacts:contacts,directors:directors}
     }
 
     async walletBalance(accountId:number){
@@ -55,11 +64,23 @@ export class DashboardService {
         return  await Tenderapplication.find({where:{accountId:accountId,type:In(['ESTABLISHMENT FEE','SPOC','CONTRACT FEE'])},relations:['currency']})
     }
 
+    async contacts(accountId:number){
+        return await Contact.findOne({where:{accountId:accountId}})
+    }
+
+    async directors(accountId:number){
+        return await Directorate.find({where:{accountId:accountId}})
+    }
+
     async awaitinginvoices(accountId:number){
         
         const today = new Date()
         const year = today.getFullYear()
         const invoices = await Supplierinvoice.find({where:{accountId:accountId,year:MoreThanOrEqual(year),status:'AWAITING'},relations:['currency','category']})
        return invoices
+    }
+
+    async maillist(accountId:number){
+        return await Mailinglist.findOne({where:{accountId:accountId}})
     }
 }

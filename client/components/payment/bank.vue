@@ -78,7 +78,7 @@
 
 <script>
 export default {
- props:['mode'],
+ props:['mode','invoicenumber'],
  data(){
      return{
          mobileDialog:false,
@@ -116,8 +116,9 @@ export default {
           formData.append('referencenumber',this.form.referencenumber)
           formData.append('amount',this.form.amount)
           formData.append('paymentdate',this.date)
+          formData.append('invoicenumber',this.invoicenumber)
          
-          let config = { headers: {'content-type': 'multipart/form-data'}}
+          let config = { headers: {'content-type': 'multipart/form-data'}} 
  
         try {
             await this.$axios({
@@ -126,7 +127,12 @@ export default {
                 data:formData,
                 config:config
             }).then(async(res)=>{
-            await this.$store.dispatch('receipting/getData')
+                      if(this.invoicenumber){
+                           await this.$store.dispatch('tenderreceipting/getData',this.invoicenumber)  
+                         }else{
+                        await this.$store.dispatch('receipting/getData')
+                         }
+           
             this.$swal(res.data.status,res.data.message,res.data.status)
             this.mobileDialog =false
           })  

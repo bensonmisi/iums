@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/jwtsettings/jwt-auth.guard';
 import { ReceiptingService } from './receipting.service';
 
@@ -12,6 +12,12 @@ export class ReceiptingController {
     {
        const user = req.user
        return await this.receiptingService.getData(user.userId)
+    }
+
+    @Get('/:invoicenumber')
+    async findAll(@Param('invoicenumber') invoicenumber:string, @Request() req):Promise<any>{
+        const user = req.user
+        return await this.receiptingService.findByInvoice(user.userId,invoicenumber)
     }
 
     @Post('/settle')

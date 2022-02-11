@@ -11,6 +11,12 @@ export class NoticeinvoicingService {
         const tenderinvoicingService = new TenderInvoicingService()
         return await tenderinvoicingService.getPending(user.accountId)
     }
+
+    async getAll(userId:number){
+        const user = await User.findOne({where:{id:userId}})
+        const tenderinvoicingService = new TenderInvoicingService() 
+        return await tenderinvoicingService.getAll(user.accountId)
+    }
     async addItem(id:number,userId:number){
         const tenderinvoicingService = new TenderInvoicingService()
         return await tenderinvoicingService.addFee(id,userId)

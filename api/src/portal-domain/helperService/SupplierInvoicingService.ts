@@ -92,6 +92,22 @@ export class SupplierInvoicingService{
         
     }
 
+    async checkInvoice(invoicenumber:string,userId:number){
+        const user = await User.findOne({where:{id:userId}})
+         const invoice  = await Supplierinvoice.findOne({where:{invoicenumber:invoicenumber,accountId:user.accountId}})
+         if(!invoice){
+             throw new HttpException("Invoice not found",HttpStatus.BAD_REQUEST)
+         }
+
+         const check = await this.check_if_invoice_is_settled(invoicenumber)
+         if(check){
+             await this.settle_invoice(invoicenumber,user.accountId)
+             return {status:"success",message:"Invoice successfully Settled"}
+         }else{
+            throw new HttpException("Invoice not Settled",HttpStatus.BAD_REQUEST) 
+         }
+    }
+
     async settle_invoice(invoicenumber:string,accountId:number){
     
      const invoices = await Supplierinvoice.find({where:{invoicenumber:invoicenumber,status:'PAID'}})

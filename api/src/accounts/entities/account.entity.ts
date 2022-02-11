@@ -56,7 +56,7 @@ export class Account extends BaseEntity {
     @UpdateDateColumn()
     updated_at:Date
 
-    @ManyToOne(()=>Suppliertype,suppliertype=>suppliertype.accounts)
+    @ManyToOne(()=>Suppliertype,suppliertype=>suppliertype.accounts,{eager:true})
      @JoinColumn()
      suppliertype:Suppliertype
 

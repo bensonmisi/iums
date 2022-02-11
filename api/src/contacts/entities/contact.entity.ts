@@ -6,7 +6,7 @@ export class Contact extends BaseEntity {
     @PrimaryGeneratedColumn()
     id:number
 
-    @Column()
+    @Column({unique:true})
     accountId:number
 
     @Column()

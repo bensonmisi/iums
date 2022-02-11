@@ -21,6 +21,9 @@ idnumber:string
 @Column()
 filename:string
 
+@Column({default:'PENDING'})
+status:string
+
 @CreateDateColumn()
 created_at:Date
 

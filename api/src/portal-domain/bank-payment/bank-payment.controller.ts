@@ -42,5 +42,11 @@ export class BankPaymentController {
     return await this.bankPaymentService.checkReferene(formdata,user.userId)
   }
 
+  @Get()
+  async findAll(@Request() req){
+    const user = req.user
+    return await this.bankPaymentService.findAll(user.userId)
+  }
+
  
 }

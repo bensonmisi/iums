@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row v-if="wallet && wallet.length>0">
       <v-col md="3" v-for="(wal,index) in wallet" :key="index">
           <v-card class="rounded-lg">
               <v-card-subtitle>{{wal.type}}</v-card-subtitle>

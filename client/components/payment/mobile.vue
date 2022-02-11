@@ -39,7 +39,7 @@
 
 <script>
 export default {
- props:['mode'],
+ props:['mode','invoicenumber'],
  data(){
      return{
          mobileDialog:false,
@@ -102,7 +102,11 @@ export default {
          }else{
               await this.$axios.get('/api/bidder/mobilepayment/'+this.id).then(async(res)=>{
                  if(res.data.status=='success'){
+                         if(this.invoicenumber){
+                           await this.$store.dispatch('tenderreceipting/getData',this.invoicenumber)  
+                         }else{
                         await this.$store.dispatch('receipting/getData')
+                         }
                         this.$swal(res.data.status,res.data.message,res.data.status)
                         this.confirmDialog = false
                  }

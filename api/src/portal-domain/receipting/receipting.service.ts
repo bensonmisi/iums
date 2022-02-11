@@ -9,9 +9,14 @@ export class ReceiptingService {
 
     } 
 
+    async findByInvoice(userId:number,invoicenumber:string):Promise<any>{
+      const  suppliereceiptingService = new SupplierReceiptingService()
+      return await suppliereceiptingService.getByInvoice(userId,invoicenumber)
+    }
+
     async settle(formdata:any,userId:number){
       const  suppliereceiptingService = new SupplierReceiptingService()
-    return await suppliereceiptingService.settle(userId,formdata.suspenseId)
+       return await suppliereceiptingService.settle(userId,formdata.suspenseId)
     }
 
  

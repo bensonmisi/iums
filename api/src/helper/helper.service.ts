@@ -533,6 +533,8 @@ if(suspenses.length>0){
      const code =  await this.generate_supplier_code(invoice.accountId,Number(invoice.year))
      const current_quarter = moment(moment(invoice.created_at).format('YYYY-MM-DD')).quarter()
      const expire_date = await this.getExpiryData(invoice.settlement,current_quarter)
+     const record = await Supplier.findOne({where:{accountId:invoice.accountId,categoryId:invoice.categoryId,expire_date:expire_date}})
+     if(!record){     
      const supplier:Supplier = new Supplier
      supplier.accountId = invoice.accountId
      supplier.categoryId = invoice.categoryId
@@ -544,6 +546,7 @@ if(suspenses.length>0){
      supplier.option = invoice.settlement
      supplier.expire_year = Number(invoice.year)
       await Supplier.save(supplier)
+    }
   }
 
   async check_account_documents(accountId:number){

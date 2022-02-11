@@ -16,6 +16,14 @@ export const actions={
             commit('setData',[])
           })
     },
+
+    async getAll({commit}){
+        await this.$axios.get('api/bidder/noticeinvoicing/all').then((res)=>{
+            commit('setData',res.data)
+          }).catch(error=>{
+            commit('setData',[])
+          })
+    },
     async addData({commit},payload){
         await this.$axios.get('api/bidder/noticeinvoicing/'+payload).then((res)=>{
             this.$swal(res.data.status,res.data.message,res.data.status)

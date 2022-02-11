@@ -13,6 +13,13 @@ export class NoticeinvoicingController {
     return await this.noticeinvoicingService.getPending(user.userId)
   }
 
+  @Get('/all')
+  async findAll(@Request() req)
+  {
+     const user = req.user
+     return await this.noticeinvoicingService.getAll(user.userId)
+  }
+
   @Get(':id')
   async addItem(@Param('id') id:string,@Request() req){
    const user = req.user

@@ -34,7 +34,24 @@ async fetch(){
  await this.$store.dispatch('dashboard/getDashboard')
 },computed:{
   dashboard(){
-    return this.$store.state.dashboard.data
+    const data =  this.$store.state.dashboard.data
+     const checkcontacts = data.contacts ? false : true
+     let directors = []
+    const checkmailist = data.maillist ? false : true
+    directors = data.directors
+
+     console.log(checkcontacts)
+    if(checkcontacts){
+     this.$router.push('/companyprofile')
+    }
+     if(directors.length==0){
+     this.$router.push('/companyprofile')
+    }
+
+     if(checkmailist){
+     this.$router.push('/companyprofile')
+    }
+    return data
   }
 }
 

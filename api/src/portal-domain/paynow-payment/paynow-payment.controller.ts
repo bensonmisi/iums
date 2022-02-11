@@ -14,6 +14,12 @@ export class PaynowPaymentController {
     return this.paynowPaymentService.initiate(initiateDto,user.userId)
   }
 
+  @Get()
+  async findAll(@Request() req){
+    const  user = req.user
+    return await this.paynowPaymentService.getAll(user.userId)
+  }
+
   @Get(':uuid')
     async checkPayment(@Param('uuid') uuid:string){
         return await this.paynowPaymentService.checkPayment(uuid)

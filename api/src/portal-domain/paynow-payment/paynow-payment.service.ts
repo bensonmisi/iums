@@ -46,9 +46,16 @@ export class PaynowPaymentService {
       await record.save()
       return {status:'success',message:"Wallet successfully topped up please  continue to settle invoice"}
     }else{
+      record.status = status
+      await record.save()
       throw new HttpException("Transaction was not successfully completed. with STATUS CODE:"+status,HttpStatus.BAD_REQUEST)
     }
 
+}
+
+async getAll(userId:number){
+  const user = await User.findOne({where:{id:userId}})
+  return await this.onlinepaymentRepository.find({where:{accountId:user.accountId}})
 }
 
 }

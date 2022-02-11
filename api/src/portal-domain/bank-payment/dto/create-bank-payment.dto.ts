@@ -15,6 +15,7 @@ export class CreateBankPaymentDto {
     amount:string
 
     filename:string
+    invoicenumber?:string
 
     
 }

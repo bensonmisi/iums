@@ -15,7 +15,11 @@ import { In } from "typeorm";
 export class TenderInvoicingService{
 
     async getPending(accountId:number){
-        return Tenderinvoice.find({where:{accountId:accountId}})
+        return Tenderinvoice.find({where:{accountId:accountId,status:'PENDING'},relations:['currency','noticefee']})
+    }
+
+    async getAll(accountId:number){
+        return Tenderinvoice.find({where:{accountId:accountId},relations:['currency','noticefee']})  
     }
 
     async addFee(id:number,userId:number){
@@ -57,11 +61,12 @@ export class TenderInvoicingService{
         if(noticefee.tenderfeetype.name =='BIDBOND'){
             type ="REFUNDABLE"
         }
+        await this.checkRequiredFee(noticefee,user.account)
 
         await this.addItem(user.accountId,noticefee.notice.tendernumber,noticefee.tenderfeetype.name,noticefee.id,type,noticefee.currencyId,noticefee.notice.year,noticefee.amount,noticefee.notice.procuremententityId)
       
          
-        await this.checkRequiredFee(noticefee,user.account)
+        
 
         return {status:"success",message:"Invoice successfully generated"}
 
@@ -95,6 +100,9 @@ export class TenderInvoicingService{
              
                 const requiredfee = await Tenderfeetype.findOne({where:{name:'ESTABLISHMENT FEE'}})
                const requirednoticefee =  await Noticefee.findOne({where:{noticeId:noticefee.noticeId,tenderfeetypeId:requiredfee.id}})
+              if(!requirednoticefee){
+                  throw new HttpException("ESTABLISHMENT FEE not set please contact System Administrator for assistance ,ERRO:TR003",HttpStatus.BAD_REQUEST)
+              }
                const checkfee = await this.checkItem(requirednoticefee.id,account.id)
                if(!checkfee){
                    throw new HttpException("Item already added to invoice",HttpStatus.BAD_REQUEST)

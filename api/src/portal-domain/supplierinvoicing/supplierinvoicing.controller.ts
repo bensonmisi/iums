@@ -44,5 +44,11 @@ export class SupplierinvoicingController {
         return await this.supplierinvoiceService.resetInvoice(invoicenumber,user.userId)
     }
 
+    @Get('/checksettlement/:invoicenumber')
+    async checksettlement(@Param('invoicenumber') invoicenumber:string,@Request() req){
+        const user = req.user
+        return await this.supplierinvoiceService.checkSettlement(invoicenumber,user.userId)
+    }
+
     
 }

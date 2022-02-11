@@ -77,7 +77,7 @@ export class Tenderinvoice extends BaseEntity {
     account:Account
 
     @ManyToOne(()=>Currency)
-    currency:Currency
+    currency:Currency 
     
     @ManyToOne(()=>Tenderfeetype)
     tenderfeetype:Tenderfeetype

@@ -17,7 +17,7 @@ export class SupplierinvoicingService {
 
     async findAll(userId:number){
         const user = await User.findOne({where:{id:userId}})
-        return await this.supplierinvoiceRepository.find({where:{accountId:user.accountId},relations:['category'],order:{id:'DESC'}})
+        return await this.supplierinvoiceRepository.find({where:{accountId:user.accountId},relations:['category','currency'],order:{id:'DESC'}})
     
     }
 
@@ -38,7 +38,14 @@ export class SupplierinvoicingService {
 
     async getSettings(userId:number){
         const user = await User.findOne({where:{id:userId},relations:['account']})
-        const categories = await Category.find({where:{status:'CREATED'}})
+        const types = user.account.suppliertype
+        let  categories =[]
+        if(types.allowed_categories==='ALL')
+        {
+        categories = await Category.find({where:{status:'CREATED'}})
+        }else{
+            categories = await Category.find({where:{status:'CREATED',code:In([types.allowed_categories])}})
+        }
         let options = await Registrationoption.find()
         let currency = await Currency.find()
         if(user.account.locality.toUpperCase()!=='LOCAL'){
@@ -67,6 +74,11 @@ export class SupplierinvoicingService {
 async resetInvoice(invoicenumber:string,userId:number){
     const service = new  SupplierInvoicingService()  
     return await service.reset_invoice(invoicenumber,userId) 
+}
+
+async checkSettlement(invoicenumber:string,userId:number){
+    const service = new  SupplierInvoicingService() 
+    return await service.checkInvoice(invoicenumber,userId) 
 }
 
 
