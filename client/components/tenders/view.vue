@@ -201,7 +201,7 @@ export default {
     {
      const filterd = data.filter(dt=>{dt.status=='PAID'})
 
-     const grouped = transaction.reduce((acc,obj)=>{
+     const grouped = filterd.reduce((acc,obj)=>{
          const key = obj['accountId']
          if(!acc[key]){
              acc[key]=[]

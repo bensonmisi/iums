@@ -31,12 +31,13 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
      
       <v-toolbar-title>
-        <div>
+        <div v-if="loggedInUser">
         {{loggedInUser.account.name}}
         </div>
         <div class="subtitle-bar">{{loggedInUser.account.regnumber}}</div>
         </v-toolbar-title>
       <v-spacer />
+      <Notification/>
        <v-menu offset-y>
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -46,7 +47,7 @@
           v-on="on"
           
         >
-        <div class="d-sm-none d-md-flex d-none d-sm-flex">
+        <div class="d-sm-none d-md-flex d-none d-sm-flex" v-if="loggedInUser">
          Welcome: {{loggedInUser.name}} {{loggedInUser.surname}}
         </div>
           <div class="d-none d-sm-flex d-md-none d-flex d-sm-none primary"><v-icon>mdi-account-circle-outline</v-icon></div>

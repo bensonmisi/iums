@@ -1,4 +1,5 @@
 import { Section } from "src/sections/entities/section.entity";
+import { Supplier } from "src/supplier/entities/supplier.entity";
 import { Supplierinvoice } from "src/supplierinvoice/entities/supplierinvoice.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -28,5 +29,8 @@ export class Category  extends BaseEntity{
 
     @OneToMany(()=>Supplierinvoice,supplierinvoice=>supplierinvoice.category)
     supplierinvoice:Supplierinvoice[]
+
+    @OneToMany(()=>Supplier,supplier=>supplier.category)
+    suppliers:Supplier[]
 
 }

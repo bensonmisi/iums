@@ -94,6 +94,8 @@ import { UsersModule as BidderUsers } from './portal-domain/users/users.module';
 import { ContactsModule as BidderContactsModule } from './portal-domain/contacts/contacts.module';
 import { DirectorsModule } from './portal-domain/directors/directors.module';
 import { MailistModule } from './portal-domain/mailist/mailist.module';
+import { RegisteredsuppliersModule } from './portal-domain/registeredsuppliers/registeredsuppliers.module';
+import { VerificationModule } from './portal-domain/verification/verification.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -201,7 +203,9 @@ import { MailistModule } from './portal-domain/mailist/mailist.module';
     BidderUsers,
     BidderContactsModule,
     DirectorsModule,
-    MailistModule
+    MailistModule,
+    RegisteredsuppliersModule,
+    VerificationModule
   ],
   controllers: [AppController],
   providers: [AppService],

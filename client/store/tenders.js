@@ -1,6 +1,7 @@
 export const state =()=>({
     data:[],
-    notice:{}
+    notice:{},
+    Latest:[]
 })
 
 export const mutations={
@@ -9,6 +10,9 @@ export const mutations={
     },
     setNotice(state,payload){
       state.notice = payload
+    },
+    setLatest(state,payload){
+        state.Latest = payload
     }
 }
 
@@ -16,6 +20,11 @@ export const actions={
     async getData({commit}){
         await this.$axios.get('api/bidder/tenders').then((res)=>{
             commit('setData',res.data)
+          })
+    },
+    async getLatest({commit}){
+        await this.$axios.get('api/bidder/tenders/latest').then((res)=>{
+            commit('setLatest',res.data)
           })
     },
     async getNotice({commit},payload){

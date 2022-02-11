@@ -53,7 +53,7 @@ export class DirectorsController {
       const user = req.user
       const path = "identification/"+filename
       updateDirectorDto.filename = path    
-      return await this.directorsService.update(+id, updateDirectorDto,user.userId);
+      return await this.directorsService.update(+id,updateDirectorDto,user.userId);
       }else{
         await removeFile(fullfilepath)
         throw new HttpException("Please convert your document to pdf",HttpStatus.BAD_REQUEST) 

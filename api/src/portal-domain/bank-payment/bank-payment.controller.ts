@@ -12,7 +12,7 @@ export class BankPaymentController {
   constructor(private readonly bankPaymentService: BankPaymentService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('file',importPOP))
+  @UseInterceptors(FileInterceptor('file',importPOP)) 
   async create(@UploadedFile() file:Express.Multer.File,@Body() createBankPaymentDto: CreateBankPaymentDto,@Request() req) {
     const filename = file?.filename       
       

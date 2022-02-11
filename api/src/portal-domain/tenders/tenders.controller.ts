@@ -12,7 +12,10 @@ export class TendersController {
   async getAll(){
     return await this.tendersService.getAll()
   }
-
+ @Get('/latest')
+ async getLatest(){
+   return  await this.tendersService.getLatest()
+ }
   @Get(':uuid')
   async findOne(@Param('uuid') uuid:string){
     return await this.tendersService.findOne(uuid)

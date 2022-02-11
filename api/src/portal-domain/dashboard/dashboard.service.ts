@@ -10,6 +10,7 @@ import { Supplierinvoice } from 'src/supplierinvoice/entities/supplierinvoice.en
 import { Contact } from 'src/contacts/entities/contact.entity';
 import { Directorate } from 'src/directorate/entities/directorate.entity';
 import { Mailinglist } from 'src/mailinglist/entities/mailinglist.entity';
+import { Documentcomment } from 'src/documentcomments/entities/documentcomment.entity';
 
 @Injectable()
 export class DashboardService {
@@ -43,8 +44,12 @@ export class DashboardService {
         const directors = await this.directors(user.accountId)
 
         const maillist = await this.maillist(user.accountId)
-
-        return {account:account,wallet:wallet,maillist:maillist,registrations:registrations,bidbonds:bidbonds,applications:applications,awaiting:awaiting,contacts:contacts,directors:directors}
+        const comments = await this.comments(user.accountId)
+         let redirect = false
+         if(directors.length == 0 || contacts ==null || maillist==null){
+           redirect = true
+         }
+        return {account:account,wallet:wallet,comments:comments,maillist:maillist,registrations:registrations,bidbonds:bidbonds,applications:applications,awaiting:awaiting,contacts:contacts,directors:directors,redirect:redirect}
     }
 
     async walletBalance(accountId:number){
@@ -79,7 +84,10 @@ export class DashboardService {
         const invoices = await Supplierinvoice.find({where:{accountId:accountId,year:MoreThanOrEqual(year),status:'AWAITING'},relations:['currency','category']})
        return invoices
     }
-
+   
+    async comments (accountId:number){
+        return await Documentcomment.find({where:{accountId:accountId},order:{id:'DESC'}})
+    }
     async maillist(accountId:number){
         return await Mailinglist.findOne({where:{accountId:accountId}})
     }

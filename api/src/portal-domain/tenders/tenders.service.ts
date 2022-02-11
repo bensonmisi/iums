@@ -20,6 +20,11 @@ export class TendersService {
         return {sections:sections,entities:entity,types:types,notices:notices}
     }
 
+async getLatest(){
+   return await this.noticeRepository.find({relations:['procuremententity','noticecategory','section','noticeproduct','noticetype'],order:{id:'DESC'},take:10})
+    
+}
+
     
 
     async findOne(uuid:string){

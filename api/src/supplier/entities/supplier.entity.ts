@@ -46,7 +46,7 @@ export class Supplier  extends BaseEntity {
     @UpdateDateColumn()
     updated_at:Date
 
-    @ManyToOne(()=>Category)
+    @ManyToOne(()=>Category,category=>category.suppliers)
     category:Category
 
     @ManyToOne(()=>Account)

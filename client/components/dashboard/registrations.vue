@@ -77,7 +77,7 @@
 
 <script>
 import changeCategory from './change.vue'
-import moment from 'moment'
+import moment from 'moment' 
 export default {
  props:['registrations'],
  components:{changeCategory},

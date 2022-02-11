@@ -14,6 +14,7 @@
           <v-col>
          <v-alert
       text
+      v-if="redirect"
       color="error"
     >
       <h3 class="text-h5">
@@ -68,6 +69,9 @@ async fetch(){
    },
    maillist(){
        return this.$store.state.dashboard.data.maillist
+   },
+   redirect(){
+     return this.$store.state.dashboard.data.redirect
    }
 
    }
