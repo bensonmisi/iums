@@ -13,7 +13,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto):Promise<any> {
    try {
      const random = await this.getRandomPassword(999999999)
-     const password = "temp"+random
+     const password = "temp"+random 
      createUserDto.password = password
      createUserDto.roleId=13
      createUserDto.username= createUserDto.email
@@ -42,7 +42,7 @@ export class UserService {
      try {
       const random = await this.getRandomPassword(999999999)
       const password = "temp"+random
-      const {resetpassword, ...rest} = updateUserDto
+      const {resetpassword, ...rest} = updateUserDto 
         if(resetpassword){ 
           updateUserDto.password = password
         }

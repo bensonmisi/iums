@@ -96,6 +96,35 @@ import { DirectorsModule } from './portal-domain/directors/directors.module';
 import { MailistModule } from './portal-domain/mailist/mailist.module';
 import { RegisteredsuppliersModule } from './portal-domain/registeredsuppliers/registeredsuppliers.module';
 import { VerificationModule } from './portal-domain/verification/verification.module';
+import { EntityUserModule } from './entity-domain/entity-user/entity-user.module';
+import { ProcuremententityUserModule } from './procuremententity-user/procuremententity-user.module';
+import { LoginModule } from './entity-domain/login/login.module';
+import { ProfileModule as EntityProfileModule } from './entity-domain/profile/profile.module';
+import { ProcurementclassModule } from './procurementclass/procurementclass.module';
+import { ProcurementclassificationModule } from './procurementclassification/procurementclassification.module';
+
+import { EntitydashboardModule } from './entity-domain/entitydashboard/entitydashboard.module';
+import { AnnualplanModule } from './entity-domain/annualplan/annualplan.module';
+import { SettingsModule } from './entity-domain/settings/settings.module';
+import { UomModule } from './uom/uom.module';
+import { ProcurementcategoryModule } from './procurementcategory/procurementcategory.module';
+import { IndividualplanModule } from './entity-domain/individualplan/individualplan.module';
+import { UploadplanModule } from './entity-domain/uploadplan/uploadplan.module';
+import { AuthorityapplicationModule } from './entity-domain/authorityapplication/authorityapplication.module';
+import { ProcurementmanagementunitModule } from './entity-domain/procurementmanagementunit/procurementmanagementunit.module';
+import { UploadSignatureModule } from './entity-domain/upload-signature/upload-signature.module';
+import { UploadCvModule } from './entity-domain/upload-cv/upload-cv.module';
+import { EvaluationcommitteModule } from './entity-domain/evaluationcommitte/evaluationcommitte.module';
+import { OrganogramModule } from './entity-domain/organogram/organogram.module';
+import { ProcurementapplicationModule } from './procurementapplication/procurementapplication.module';
+import { AuthorityapplicationcommentsModule } from './authorityapplicationcomments/authorityapplicationcomments.module';
+import { ProcurementClassValidtyModule } from './procurement-class-validty/procurement-class-validty.module';
+import { ProcurementClassFeeModule } from './procurement-class-fee/procurement-class-fee.module';
+import { AuthorityinvoiceModule } from './authorityinvoice/authorityinvoice.module';
+import { AuthorityinvoiceuploadModule } from './entity-domain/authorityinvoiceupload/authorityinvoiceupload.module';
+import { EntitynoticeModule } from './entity-domain/entitynotice/entitynotice.module';
+import { ProcurementthresholdModule } from './procurementthreshold/procurementthreshold.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -205,7 +234,35 @@ import { VerificationModule } from './portal-domain/verification/verification.mo
     DirectorsModule,
     MailistModule,
     RegisteredsuppliersModule,
-    VerificationModule
+    VerificationModule,
+    EntityUserModule,
+    ProcuremententityUserModule,
+    LoginModule,
+    EntityProfileModule,
+    ProcurementclassModule,
+    ProcurementclassificationModule,
+    EntitydashboardModule,
+    AnnualplanModule,
+    SettingsModule,
+    UomModule,
+    ProcurementcategoryModule,
+    IndividualplanModule,
+    UploadplanModule,
+    AuthorityapplicationModule,
+    ProcurementmanagementunitModule,
+    UploadSignatureModule,
+    UploadCvModule,
+    EvaluationcommitteModule,
+    OrganogramModule,
+    ProcurementapplicationModule,
+    AuthorityapplicationcommentsModule,
+    ProcurementClassValidtyModule,
+    ProcurementClassFeeModule,
+    AuthorityinvoiceModule,
+    AuthorityinvoiceuploadModule,
+    EntitynoticeModule,
+    ProcurementthresholdModule,
+  
   ],
   controllers: [AppController],
   providers: [AppService],

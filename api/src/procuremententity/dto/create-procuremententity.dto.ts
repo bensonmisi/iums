@@ -19,5 +19,7 @@ export class CreateProcuremententityDto {
     @IsNotEmpty()
     sector:string
 
+    creator?:number
+
 
 }

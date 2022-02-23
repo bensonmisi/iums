@@ -53,6 +53,7 @@
     "paynow": "^1.0.9",
     "pdf-page-counter": "^1.0.3",
     "pdfkit": "^0.13.0",
+    "pdfvuer": "^2.0.1",
     "pusher": "^5.0.0",
     "read-excel-file": "^5.2.25",
     "redis": "^3.1.2",

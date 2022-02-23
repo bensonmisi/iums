@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { RoleService } from './role.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
@@ -20,7 +20,9 @@ export class RoleController {
 
   @Post()
    @HasPermission('CREATE_ROLE')
-  async create(@Body() createRoleDto: CreateRoleDto):Promise<any> {
+  async create(@Body() createRoleDto: CreateRoleDto,@Request() req):Promise<any> {
+    const user = req.user
+    createRoleDto.creator = user.userId
     return await this.roleService.create(createRoleDto);
   }
 
@@ -38,14 +40,16 @@ export class RoleController {
 
   @Patch(':id')
   @HasPermission('UPDATE_ROLE')
- async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto):Promise<any> {
-    return await this.roleService.update(+id, updateRoleDto);
+ async update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto,@Request() req):Promise<any> {
+   const user = req.user
+    return await this.roleService.update(+id, updateRoleDto,user.userId);
   }
 
   @Delete(':id')
   @HasPermission('DELETE_ROLE')
-  async remove(@Param('id') id: string):Promise<any> {
-    return await this.roleService.remove(+id);
+  async remove(@Param('id') id: string,@Request() req):Promise<any> {
+    const user = req.user
+    return await this.roleService.remove(+id,user.userId);
   }
 
   @Post('assignsystemmodule')

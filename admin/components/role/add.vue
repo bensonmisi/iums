@@ -17,6 +17,13 @@
                             v-model="form.name"
                             :rules="nameRule"
                         />
+                    <v-select 
+                         label="level"
+                         outlined
+                         v-model="form.level"
+                         :rules="levelRule"
+                         :items="levellist"
+                         />
                       
                           
            </v-card-text>
@@ -46,9 +53,12 @@ export default {
          addPermModel:false,
          valid:false,
          form:{
-              name:''
+              name:'',
+              level:''
          },
          nameRule:[v=>!!v || 'Role name is required'],
+         levelRule:[v=>!!v || 'level is required'],
+         levellist:['ADMIN','ENTITY','BIDDER'],
          snackbar:false,
          color:'',
          text:'',
@@ -60,20 +70,8 @@ export default {
        {
           this.valid = true
           this.loading=true
-             try {
-                 await this.$axios.post('api/admin/role',this.form).then((res)=>{
-                        this.loading = false
-                        this.$swal("success",res.data.message,"success")
-                         this.$store.dispatch('roles/getRoles')
-                        this.$refs.form.reset()
-                        this.addPermModel= false
-
-                 })
-             }catch (err) {
-                 this.loading = false
-                this.$swal("error",err.response.data.message,"error")
-                
-            }
+          await this.$store.dispatch('roles/addRole',this.form)
+          this.loading=false
        }
      }
  }

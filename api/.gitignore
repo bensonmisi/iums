@@ -5,6 +5,7 @@
 # folders
 
 /api/transfers
+/api/public
 
 # Logs
 logs

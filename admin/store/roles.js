@@ -26,6 +26,30 @@ export const actions={
             commit('setRoles',res.data)
           })
     },
+    async addRole({commit},payload){
+          await this.$axios.post('api/admin/role',payload).then(async(res)=>{
+              this.$swal("success",res.data.message,"success")
+              await this.dispatch('roles/getRoles')              
+          }).catch(error=>{
+            this.$swal("error",error.response.data.message,"error")
+          })
+    },
+    async editRole({commit},payload){
+        await this.$axios.patch('api/admin/role/'+payload.id,payload.data).then(async(res)=>{
+            this.$swal("success",res.data.message,"success")
+            await this.dispatch('roles/getRoles')              
+        }).catch(error=>{
+            this.$swal("error",error.response.data.message,"error")
+        })
+  },
+  async deleteRole({commit},payload){
+    await this.$axios.delete('api/admin/role/'+payload).then(async(res)=>{
+        this.$swal("success",res.data.message,"success")
+        await this.dispatch('roles/getRoles')              
+    }).catch(error=>{
+        this.$swal("error",error.response.data.message)
+    })
+},
     async getAssignedModules({commit},payload){
         await this.$axios.get('api/admin/system-modules/assignByRole/'+payload).then((res)=>{
             commit('setModules',res.data)

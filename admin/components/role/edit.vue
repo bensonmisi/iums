@@ -17,6 +17,13 @@
                             v-model="form.name"
                             :rules="nameRule"
                         />
+                           <v-select 
+                         label="level"
+                         outlined
+                         v-model="form.level"
+                         :rules="levelRule"
+                         :items="levellist"
+                         />
                         
                           
            </v-card-text>
@@ -47,8 +54,11 @@ export default {
          valid:false,
          form:{
              name:this.role.name,
+             level:this.role.level
          },
          nameRule:[v=>!!v || 'Role name is required'],
+         levelRule:[v=>!!v || 'level is required'],
+          levellist:['ADMIN','ENTITY','BIDDER'],
          snackbar:false,
          color:'',
          text:'',

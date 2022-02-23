@@ -22,8 +22,11 @@ export class Suspense extends BaseEntity {
     @Column()
     source:string
 
-    @Column()
+    @Column({nullable:true})
     accountId:number
+
+    @Column({nullable:true})
+    procuremententityId:number
  
     @Column()
     accountnumber:string

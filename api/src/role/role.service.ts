@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuditService } from 'src/audit/audit.service';
+import { LogDataDto } from 'src/audit/dto/logdata.dto';
 import { Permission } from 'src/permission/entities/permission.entity';
 import { Submodule } from 'src/submodule/entities/submodule.entity';
 import { SystemModule } from 'src/system-modules/entities/system-module.entity';
@@ -13,14 +15,17 @@ import { Role } from './entities/role.entity';
 
 @Injectable()
 export class RoleService {
-  constructor(@InjectRepository(Role) private roleRepository:Repository<Role>){}
+  constructor(@InjectRepository(Role) private roleRepository:Repository<Role>, private readonly auditService:AuditService){}
   async create(createRoleDto: CreateRoleDto):Promise<any> {
      try {
-         const role = await this.roleRepository.create(createRoleDto)
+         const role = await this.roleRepository.create(createRoleDto) 
           await this.roleRepository.save(role)
+          const logdata:LogDataDto ={administratorId:createRoleDto.creator,action:"CREATE",entity:"Role",newvalue:role,oldvalue:{}}
+          await  this.auditService.create(logdata)
           return {"status":"success","message":"Role Successfully Created"}
      } catch (error) {
-        throw new HttpException(error.sqlMessage,HttpStatus.FORBIDDEN);
+       const message = error.sqlMessage  ? error.sqlMessage : error.message
+        throw new HttpException(message,HttpStatus.BAD_REQUEST);
         
      }
   }
@@ -33,19 +38,34 @@ export class RoleService {
     return await this.roleRepository.findOne(id,{relations:['systemmodules','submodules']})
   }
 
-  async update(id: number, updateRoleDto: UpdateRoleDto):Promise<any> {
+  async update(id: number, updateRoleDto: UpdateRoleDto,userId:number):Promise<any> {
      try {
+       const oldrecord = await this.roleRepository.findOne(id)
        await this.roleRepository.update(id,updateRoleDto) 
+       const newrecord = await this.roleRepository.findOne(id)
+       const logdata:LogDataDto ={administratorId:userId,action:"CREATE",entity:"Role",newvalue:newrecord,oldvalue:oldrecord}
+       await  this.auditService.create(logdata)
        return {"status":"success","message":"Role Successfully Update"}
      } catch ( error) {
-      throw new Error(error.sqlMessage);
+      const message = error.sqlMessage  ? error.sqlMessage : error.message
+        throw new HttpException(message,HttpStatus.BAD_REQUEST);
         
      }
   }
 
- async remove(id: number):Promise<any> {
-     await this.roleRepository.delete(id);
-    return {"status":"success","message":"Role Successfully Deleted"}
+ async remove(id: number,userId:number):Promise<any> {
+
+    try {
+      const oldrecord = await this.roleRepository.findOne(id)
+      await this.roleRepository.delete(id) 
+      const logdata:LogDataDto ={administratorId:userId,action:"DELETE",entity:"Role",newvalue:{},oldvalue:oldrecord}
+      await  this.auditService.create(logdata)
+      return {"status":"success","message":"Role Successfully Deleted"}
+    } catch ( error) {
+     const message = error.sqlMessage  ? error.sqlMessage : error.message
+       throw new HttpException(message,HttpStatus.BAD_REQUEST);
+       
+    }
   }
 
   

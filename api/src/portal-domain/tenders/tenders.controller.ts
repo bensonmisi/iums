@@ -27,5 +27,5 @@ export class TendersController {
      const file = createReadStream(join(process.cwd(),'public/'+record.filename))
      return new StreamableFile(file)
 
-  }
+  } 
 }

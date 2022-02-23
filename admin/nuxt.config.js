@@ -52,7 +52,8 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     'vue-sweetalert2/nuxt',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    "vue2-editor/nuxt"
   ],
   router: {
     base: '/admin/',

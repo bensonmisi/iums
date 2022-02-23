@@ -25,6 +25,7 @@
             <v-list-item-title v-text="item.name"/>
           </v-list-item-content>          
         </v-list-item>
+        <v-divider></v-divider>
            </template>
             <v-list>
             <v-list-item

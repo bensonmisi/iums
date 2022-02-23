@@ -1,4 +1,5 @@
 import { Category } from "src/categories/entities/category.entity";
+import { Annualplan } from "src/entity-domain/annualplan/entities/annualplan.entity";
 import { Noticecategory } from "src/noticecategory/entities/noticecategory.entity";
 import { Noticefee } from "src/noticefee/entities/noticefee.entity";
 import { Noticeproduct } from "src/noticeproduct/entities/noticeproduct.entity";
@@ -19,8 +20,11 @@ export class Notice extends BaseEntity {
     @Column()
     procuremententityId:number
 
+    @Column({nullable:true})
+    annualplanId:number
+
     @Column()
-    sectionId:number
+    sectionId:number 
 
     @Column({unique:true})
     tendernumber:string
@@ -98,6 +102,9 @@ export class Notice extends BaseEntity {
 
      @ManyToOne(()=>Section)
      section:Section
+
+     @ManyToOne(()=>Annualplan)
+     annualplan:Annualplan
 
 
 } 

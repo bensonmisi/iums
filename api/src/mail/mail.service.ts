@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { config } from 'process';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
+import { EntityUser } from 'src/entity-domain/entity-user/entities/entity-user.entity';
 import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
@@ -56,6 +57,36 @@ export class MailService {
       return false
     }
    
+}
+
+async SendApplicationUpdate(user:EntityUser[],message:string){
+  const url = process.env.CLIENT_API;
+  try {
+     await this.mailQueue.add('UserApplicationUpdate',{
+       user,
+       message
+     })
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+ 
+}
+
+async SendEntityUserPassword(user:EntityUser,password:string,username:string){
+  const url = process.env.ENTITY_API;
+  try {
+     await this.mailQueue.add('UserEntityAccountCreation',{
+       user,
+       url,
+       username,
+       password
+     })
+  } catch (error) {
+    console.log(error)
+    return false
+  }
+ 
 }
 
   async tenderinvoiceSettled(email:string,tendernumber:string,type:string){

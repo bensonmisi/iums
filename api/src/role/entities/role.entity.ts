@@ -11,6 +11,13 @@ export class Role extends BaseEntity {
     id:number
     @Column({unique:true})
     name:string
+
+    @Column()
+    level:string
+
+    @Column()
+    creator:number
+
     @CreateDateColumn()
     created_at:Date
     @UpdateDateColumn()

@@ -20,8 +20,11 @@ export class Receipt extends BaseEntity{
     @Column()
     description:string
  
-    @Column()
+    @Column({nullable:true})
     accountId:number
+
+    @Column({nullable:true})
+    procuremententityId:number
 
     @Column()
     method:string

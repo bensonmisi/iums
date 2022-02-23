@@ -12,13 +12,7 @@
                </div>
                
      <SideBar :menus="getMenus"/>
-       <template v-slot:append>
-        <div class="pa-2">
-          <v-btn block color="error" @click="logout">
-            Logout
-          </v-btn>
-        </div>
-      </template>
+    
     </v-navigation-drawer>
     <v-app-bar
     dark

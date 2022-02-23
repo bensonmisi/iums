@@ -82,7 +82,9 @@ export class AdministratorService {
   }
   async showUserById(id:number):Promise<Administrator>{
       const user = await this.administratorRepository.findOne({id:id})
+  
       delete user.password
+ 
       return user
   }
 

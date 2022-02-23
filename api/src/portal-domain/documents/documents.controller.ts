@@ -15,7 +15,7 @@ export class DocumentsController {
         return await this.documentsService.findAll(user.userId)
     } 
     @Post()
-    @UseInterceptors(FileInterceptor('file',uploadBidderDocuments))
+    @UseInterceptors(FileInterceptor('file',uploadBidderDocuments))  
     async uploadDoc(@UploadedFile() file:Express.Multer.File,@Body() formdata:any,@Request() req){
         const filename = file?.filename       
       

@@ -3,6 +3,7 @@ import { OnQueueActive, OnQueueCompleted, OnQueueFailed, Process, Processor } fr
 import { Logger } from "@nestjs/common";
 import { Job } from "bull";
 import { Administrator } from "src/administrator/entities/administrator.entity";
+import { EntityUser } from "src/entity-domain/entity-user/entities/entity-user.entity";
 
 @Processor('emailnotification')
 export class MailProcessor{  
@@ -76,6 +77,56 @@ export class MailProcessor{
 
       @Process('UserAccountCreation')
       async userAccountCreation(job: Job<{ user: Administrator, url: string ,username:string,password:string}>): Promise<any> {
+        this.logger.log(`Sending Account Creation email to '${job.data.user.email}'`)
+
+        try {
+           const result =  await this.mailerService.sendMail({
+                to: job.data.user.email,
+                subject: 'New Account Creation',
+                template: './UserAccount', 
+                context: { 
+                  name: job.data.user.name,
+                  url:job.data.url,
+                  username:job.data.username,
+                  password:job.data.password
+                },
+              }); 
+
+             
+
+            return result
+        } catch (error) {
+            this.logger.error(`Failed to send confirmation email to '${job.data.user.email}'`, error.stack)
+            throw error
+        }
+      }
+
+      
+      @Process('SendApplicationUpdate')
+      async SendApplicationUpdate(job: Job<{ user: EntityUser, message: string }>): Promise<any> {
+        this.logger.log(`Sending Account Creation email to '${job.data.user.email}'`)
+
+        try {
+           const result =  await this.mailerService.sendMail({
+                to: job.data.user.email,
+                subject: 'Application To Conduct Procurement',
+                template: './authority', 
+                context: { 
+                  message: job.data.message
+                },
+              }); 
+
+             
+
+            return result
+        } catch (error) {
+            this.logger.error(`Failed to send confirmation email to '${job.data.user.email}'`, error.stack)
+            throw error
+        }
+      }
+
+      @Process('UserEntityAccountCreation')
+      async userEntityAccountCreation(job: Job<{ user: EntityUser, url: string ,username:string,password:string}>): Promise<any> {
         this.logger.log(`Sending Account Creation email to '${job.data.user.email}'`)
 
         try {

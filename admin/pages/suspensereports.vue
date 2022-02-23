@@ -41,7 +41,7 @@
                     <v-spacer/>
                     <downloadexcel :data="suspenselist"><v-btn  depressed class="primary mr-2">Export</v-btn></downloadexcel>
                
-                </v-card-title>
+                </v-card-title> 
                 <v-card-text>
                       <v-simple-table>
                     <template v-slot:default>

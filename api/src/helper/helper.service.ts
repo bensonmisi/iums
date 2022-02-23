@@ -16,6 +16,7 @@ import { Suspense } from 'src/suspense/entities/suspense.entity';
 import { In } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import * as moment from 'moment'
+import { Notice } from 'src/notice/entities/notice.entity';
 @Injectable()
 export class HelperService {
 
@@ -34,6 +35,18 @@ export class HelperService {
 
        generateUUId(){
         return  uuidv4()
+      }
+
+      async get_tender_number(id:number,reach:string){
+        const recoord = await Procuremententity.findOne({where:{id:id}})
+          let vl = reach=='INTERNATIONAL' ? 'INT' :'DOM'
+         const  notice = await Notice.findOne({where:{procuremententityId:id},order:{id:'DESC'}})
+         const counter = notice ? notice.id+1 :1
+         const today = new Date()
+         const currentyear = today.getFullYear()
+          return recoord.slug+"-"+vl+"-"+counter+"-"+currentyear
+          
+
       }
   
       async accountdocuments(account:Account){
@@ -80,6 +93,13 @@ export class HelperService {
         const year = date.getFullYear()
         const random= await Math.floor(Math.random() * Math.floor(10000)); 
         return "invT"+year+""+random+""+accountId
+      }
+
+      async generate_authority_invoice_number(accountId){
+        const date = new  Date()
+        const year = date.getFullYear()
+        const random= await Math.floor(Math.random() * Math.floor(10000)); 
+        return "invA"+year+""+random+""+accountId
       }
 
       async generate_registration_invoice_number(accountId:number,regyear:number){
@@ -623,5 +643,11 @@ if(suspenses.length>0){
       }
     }
     throw new HttpException("Price not found please contact System Administrator",HttpStatus.BAD_REQUEST)
+  }
+
+
+  async get_entity_suspense_balance(id:number){
+     return await Suspense.find({where:{procuremententityId:id,status:'PENDING'},relations:['receipts']})
+   
   }
 }
