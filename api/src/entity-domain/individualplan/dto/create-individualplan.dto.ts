@@ -9,4 +9,8 @@ date_of_purchase:string
 
 annualplanId:number
 
+procuremententityId:number
+
+year:number
+
 }

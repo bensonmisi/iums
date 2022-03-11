@@ -67,12 +67,14 @@ export class HelperService {
         name: document.name,
         filename: '',
         docstatus: 'NOTFOUND',
-        status: 'NOTFOUND'
+        status: 'NOTFOUND',
+        uploadId:''
 
       }
           uploaded.forEach(upload=>{
          
             if(upload.documentId==document.id){
+              element.uploadId = upload.id.toString()
              element.filename = upload ? upload.path : ''
              element.docstatus = upload ? 'UPLOADED' : 'NOTFOUND'
              element.status = upload ? upload.status : 'NULL' 
@@ -390,7 +392,7 @@ if(suspenses.length>0){
           total_approved_transfers = total_approved_transfers+Number(transfer.amount)
         }     
     });
-    console.log()
+
     const balance = Number(suspense.amount)-totalreceipts-total_approved_transfers
     if(balance>0){
     const el = {id:suspense.id,source:suspense.source,accountnumber:suspense.accountnumber,currency:suspense.currency,amount:balance}
@@ -550,10 +552,12 @@ if(suspenses.length>0){
    }
 
   async capture_supplier(invoice:Supplierinvoice,status:string){
+    console.log("were are here")
      const code =  await this.generate_supplier_code(invoice.accountId,Number(invoice.year))
      const current_quarter = moment(moment(invoice.created_at).format('YYYY-MM-DD')).quarter()
      const expire_date = await this.getExpiryData(invoice.settlement,current_quarter)
-     const record = await Supplier.findOne({where:{accountId:invoice.accountId,categoryId:invoice.categoryId,expire_date:expire_date}})
+      const record = await Supplier.findOne({where:{accountId:invoice.accountId,categoryId:invoice.categoryId,expiry_date:expire_date}})
+ 
      if(!record){     
      const supplier:Supplier = new Supplier
      supplier.accountId = invoice.accountId

@@ -4,6 +4,8 @@ export class CreateEntityNoticeDto {
     @IsNotEmpty()
     procuremententityId:number
 
+    @IsNotEmpty()
+    currencyId:number
 
     @IsNotEmpty()
     closingDate:string
@@ -36,6 +38,8 @@ export class CreateEntityNoticeDto {
 
     reach:string
 
+    tendernumber?:string
+
     tendernumber2?:string
     year?:number
 
@@ -43,7 +47,9 @@ export class CreateEntityNoticeDto {
 
     bidbond?:string
 
-    spoc?:string
+    bidvalue?:number
+    bidbondperiodId?:number
+    procurementcategoryId:number
 
 
 }

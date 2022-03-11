@@ -82,7 +82,8 @@ export default {
                                         }
                                     })
                                     }catch(error){
-                                        console.log(error.message)
+                                        this.$swal("error",error.response.data.message,"error")
+                                    
                                 }
                             
                             }

@@ -16,19 +16,19 @@ export class TendersService {
         const sections = await Section.find()
         const entity = await Procuremententity.find()
         const types = await  Noticetype.find()
-        const notices =  await this.noticeRepository.find({relations:['procuremententity','noticecategory','section','noticeproduct','noticetype'],order:{id:'DESC'}})
+        const notices =  await this.noticeRepository.find({where:{status:'PUBLISHED'},relations:['procuremententity','noticecategory','section','noticeproduct','noticetype'],order:{id:'DESC'}})
         return {sections:sections,entities:entity,types:types,notices:notices}
     }
 
 async getLatest(){
-   return await this.noticeRepository.find({relations:['procuremententity','noticecategory','section','noticeproduct','noticetype'],order:{id:'DESC'},take:10})
+   return await this.noticeRepository.find({where:{status:'PUBLISHED'},relations:['procuremententity','noticecategory','section','noticeproduct','noticetype'],order:{id:'DESC'},take:10})
     
 }
 
     
 
     async findOne(uuid:string){
-        return await this.noticeRepository.findOne({where:{uuid:uuid},relations:['procuremententity','noticecategory','section','noticeproduct','noticetype','tenderapplications','noticefee'],order:{id:'DESC'}})
+        return await this.noticeRepository.findOne({where:{uuid:uuid,status:'PUBLISHED'},relations:['procuremententity','noticecategory','section','noticeproduct','noticetype','tenderapplications','noticefee'],order:{id:'DESC'}})
     }
 
     async download(uuid:string){

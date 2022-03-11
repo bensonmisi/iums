@@ -124,6 +124,20 @@ import { AuthorityinvoiceModule } from './authorityinvoice/authorityinvoice.modu
 import { AuthorityinvoiceuploadModule } from './entity-domain/authorityinvoiceupload/authorityinvoiceupload.module';
 import { EntitynoticeModule } from './entity-domain/entitynotice/entitynotice.module';
 import { ProcurementthresholdModule } from './procurementthreshold/procurementthreshold.module';
+import { EntitynoticeproductModule } from './entity-domain/entitynoticeproduct/entitynoticeproduct.module';
+import { EntitynoticecategoryModule } from './entity-domain/entitynoticecategory/entitynoticecategory.module';
+import { NoticeawardsModule } from './entity-domain/noticeawards/noticeawards.module';
+import { EntitynoticefeeModule } from './entity-domain/entitynoticefee/entitynoticefee.module';
+import { BidbonrefundlistModule } from './entity-domain/bidbonrefundlist/bidbonrefundlist.module';
+import { EntitybidbondModule } from './entity-domain/entitybidbond/entitybidbond.module';
+import { MonthlyreturnModule } from './entity-domain/monthlyreturn/monthlyreturn.module';
+import { MonthlyreturndataModule } from './entity-domain/monthlyreturndata/monthlyreturndata.module';
+import { MonthlyreturnchecklistModule } from './entity-domain/monthlyreturnchecklist/monthlyreturnchecklist.module';
+import { ChecklistModule } from './checklist/checklist.module';
+import { ChecklistquestionsModule } from './checklistquestions/checklistquestions.module';
+import { ReturnchecklistModule } from './entity-domain/returnchecklist/returnchecklist.module';
+import { MonitoringreportModule } from './monitoringreport/monitoringreport.module';
+import { WelcomeModule } from './portal-domain/welcome/welcome.module';
 
 @Module({
   imports: [
@@ -134,8 +148,8 @@ import { ProcurementthresholdModule } from './procurementthreshold/procurementth
     TypeOrmModule.forRoot(connectionOptions),
     BullModule.forRoot({
       redis: {
-        host: 'localhost',
-        port: 5003,
+        host: '127.0.0.1',
+        port: 6379,
       },
     }),
     BullModule.registerQueue({
@@ -262,6 +276,20 @@ import { ProcurementthresholdModule } from './procurementthreshold/procurementth
     AuthorityinvoiceuploadModule,
     EntitynoticeModule,
     ProcurementthresholdModule,
+    EntitynoticeproductModule,
+    EntitynoticecategoryModule,
+    NoticeawardsModule,
+    EntitynoticefeeModule,
+    BidbonrefundlistModule,
+    EntitybidbondModule,
+    MonthlyreturnModule,
+    MonthlyreturndataModule,
+    MonthlyreturnchecklistModule,
+    ChecklistModule,
+    ChecklistquestionsModule,
+    ReturnchecklistModule,
+    MonitoringreportModule,
+    WelcomeModule,
   
   ],
   controllers: [AppController],

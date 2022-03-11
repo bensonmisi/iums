@@ -37,8 +37,8 @@ import { MailProcessor } from './mail.processor';
     BullModule.registerQueue({
       name:'emailnotification',    
         redis: {        
-          host: 'localhost',
-          port: 5003,
+          host: '127.0.0.1',
+          port: 6379,
         },
  
     })

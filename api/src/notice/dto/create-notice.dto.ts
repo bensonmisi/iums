@@ -41,6 +41,7 @@ export class CreateNoticeDto {
     tendernumber2?:string
     year?:number
     annualplanId?:number
+    procurementcategoryId:number
 
 
 }

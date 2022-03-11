@@ -2,6 +2,7 @@ import { Annualplan } from "src/entity-domain/annualplan/entities/annualplan.ent
 import { Authorityapplication } from "src/entity-domain/authorityapplication/entities/authorityapplication.entity";
 import { EntityUser } from "src/entity-domain/entity-user/entities/entity-user.entity";
 import { Evaluationcommitte } from "src/entity-domain/evaluationcommitte/entities/evaluationcommitte.entity";
+import { Monthlyreturn } from "src/entity-domain/monthlyreturn/entities/monthlyreturn.entity";
 import { Procurementmanagementunit } from "src/entity-domain/procurementmanagementunit/entities/procurementmanagementunit.entity";
 import { Tenderapplication } from "src/tenderapplication/entities/tenderapplication.entity";
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
@@ -65,5 +66,8 @@ export class Procuremententity extends BaseEntity{
 
     @OneToMany(()=>Authorityapplication,authorityapplication=>authorityapplication.procuremententity)
     authorityapplications:Authorityapplication[]
+
+    @OneToMany(()=>Monthlyreturn,monthlytreturn=>monthlytreturn.procuremententity)
+    monthlyreturns:Monthlyreturn[]
 
 }

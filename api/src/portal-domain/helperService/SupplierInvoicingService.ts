@@ -100,6 +100,7 @@ export class SupplierInvoicingService{
          }
 
          const check = await this.check_if_invoice_is_settled(invoicenumber)
+         console.log(check)
          if(check){
              await this.settle_invoice(invoicenumber,user.accountId)
              return {status:"success",message:"Invoice successfully Settled"}
@@ -111,6 +112,7 @@ export class SupplierInvoicingService{
     async settle_invoice(invoicenumber:string,accountId:number){
     
      const invoices = await Supplierinvoice.find({where:{invoicenumber:invoicenumber,status:'PAID'}})
+
      const helperService = new HelperService()
      if(invoices.length>0){
      

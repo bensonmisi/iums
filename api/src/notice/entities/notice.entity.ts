@@ -20,8 +20,8 @@ export class Notice extends BaseEntity {
     @Column()
     procuremententityId:number
 
-    @Column({nullable:true})
-    annualplanId:number
+    @Column({default:0})
+     bidvalue:number
 
     @Column()
     sectionId:number 
@@ -34,6 +34,9 @@ export class Notice extends BaseEntity {
 
     @Column()
     title:string
+
+    @Column({nullable:true})
+    procurementcategoryId:number
 
 
     @Column()
@@ -103,8 +106,6 @@ export class Notice extends BaseEntity {
      @ManyToOne(()=>Section)
      section:Section
 
-     @ManyToOne(()=>Annualplan)
-     annualplan:Annualplan
 
 
 } 

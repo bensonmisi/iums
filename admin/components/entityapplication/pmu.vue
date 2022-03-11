@@ -56,12 +56,12 @@ methods:{
     async downloadCv(id){
        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
 width=800,height=800,left=100,top=100`;
-open('http://localhost:4000/api/admin/procurementapplication/cv/'+id,'test',params)
+open(this.$store.state.addressurl.link+'/procurementapplication/cv/'+id,'test',params)
    
   },
    async downloadSignature(id){
              let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=800,height=800,left=100,top=100`;
-open('http://localhost:4000/api/admin/procurementapplication/signature/'+id,'test',params)
+open(this.$store.state.addressurl.link+'procurementapplication/signature/'+id,'test',params)
       
   },
 }

@@ -1,6 +1,9 @@
 <template>
   <div>
-      <DashboardHeader :procurementclass="dashboard.procurementclass" :invoice="dashboard.invoice"/>
+      <DashboardHeader :procurementclass="dashboard.procurementclass" :invoice="dashboard.invoice"/> 
+      <DashboardReturn/>     
+      <DashboardNotices :notices="dashboard.notices"/>
+      <DashboardBidbondlist :bidbonds="dashboard.bidbonds"/>
   </div>
 </template>
 

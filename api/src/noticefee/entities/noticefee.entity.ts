@@ -62,6 +62,6 @@ export class Noticefee extends BaseEntity {
     @OneToMany(()=>Tenderapplication,tenderapplication=>tenderapplication.noticefee)
     tenderapplication:Tenderapplication[]
     
-    @ManyToOne(()=>Bidbondperiod)
+    @ManyToOne(()=>Bidbondperiod,{eager:true})
     bidbondperiod:Bidbondperiod
 }

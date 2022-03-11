@@ -29,7 +29,7 @@ export class ProcurementthresholdService {
   }
 
   async findAll(id:number) {
-    return await this.procurementthresholdRepository.find({where:{procurementclassId:id},relations:['currency','procurementclass','procurementclassification']})
+    return await this.procurementthresholdRepository.find({where:{procurementclassId:id},relations:['currency','procurementclass','section']})
   }
 
  

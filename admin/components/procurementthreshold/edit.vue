@@ -12,25 +12,24 @@
            </v-card-title>
            <v-card-text>
                 
+                                         
                     <v-select 
-                         label="Procurement Class"
+                         label="Section"
                          outlined
-                         v-model="form.procurementclassId"
-                         :rules="procurementclassRule"
-                         :items="procurementclass"
+                         v-model="form.sectionId"
+                         :rules="sectionRule"
+                         :items="sections"
                          item-text="name"
                          item-value="id"
                          />
-                         
-                    <v-select 
-                         label="Procurement Classification"
+                     <v-select 
+                         label="Reach"
                          outlined
-                         v-model="form.procurementclassificationId"
-                         :rules="procurementclassificationRule"
-                         :items="procurementclassification"
-                         item-text="name"
-                         item-value="id"
+                         v-model="form.reach"
+                         :rules="reachRule"
+                         :items="reachlist"
                          />
+
 
                            <v-select 
                          label="Currency"
@@ -78,8 +77,7 @@
 export default {
     props:['item'],
     async fetch(){
-       await this.$store.dispatch('procurementclassification/getData')
-       await this.$store.dispatch('procurementclass/getData')
+       await this.$store.dispatch('sections/getSections')
        await this.$store.dispatch('currency/getCurrency')
 
     },
@@ -88,17 +86,18 @@ export default {
          addPermModel:false,
          valid:false,
          form:{
-              procurementclassificationId:this.item.procurementclassificationId,
+              sectionId:this.item.sectionId,
+              reach:this.item.reach,
               procurementclassId:this.item.procurementclassId,
               currencyId:this.item.currencyId,
               value:this.item.value,
               fee:this.item.fee
          },
-         procurementclassificationRule:[v=>!!v || 'Procurement classification is required'],
-         procurementclassRule:[v=>!!v || 'Procurement class is required'],
+         sectionRule:[v=>!!v || 'Section is required'],
          currencyRule:[v=>!!v || 'Currency is required'],
          valueRule:[v=>!!v || 'Value is required'],
          feeRule:[v=>!!v || 'fee is required'],
+         reachlist:['LOCAL','INTERNATIONAL'],
          snackbar:false,
          color:'',
          text:'',
@@ -116,8 +115,8 @@ export default {
        }
      }
  },computed:{
-     procurementclassification(){
-         return this.$store.state.procurementclassification.data
+  sections(){
+         return this.$store.state.sections.sections
      },
      procurementclass(){
          return this.$store.state.procurementclass.data

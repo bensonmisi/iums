@@ -23,13 +23,13 @@ export class TenderInvoicingService{
     }
 
     async addFee(id:number,userId:number){
-        const noticefee = await Noticefee.findOne({where:{id:id},relations:['notice','tenderfeetype','bidbondperiod']})
+        const noticefee = await Noticefee.findOne({where:{id:id},relations:['tenderfeetype','bidbondperiod']})
         const user = await User.findOne({where:{id:userId},relations:['account']})
         if(!user){
             throw new HttpException("UNAUTHORIZED TO ACCESS RESOURCE",HttpStatus.BAD_REQUEST)
         }
 
-
+ 
 
         if(user.account.locality.toUpperCase() !=='LOCAL')
         {
@@ -58,12 +58,12 @@ export class TenderInvoicingService{
         await this.checkItem(noticefee.id,user.accountId)
         let type ='NONREFUNDABLE'
 
-        if(noticefee.tenderfeetype.name =='BIDBOND'){
+        if(noticefee.tenderfeetype.name =='BIDBOND'){ 
             type ="REFUNDABLE"
         }
         await this.checkRequiredFee(noticefee,user.account)
-
-        await this.addItem(user.accountId,noticefee.notice.tendernumber,noticefee.tenderfeetype.name,noticefee.id,type,noticefee.currencyId,noticefee.notice.year,noticefee.amount,noticefee.notice.procuremententityId)
+          console.log(noticefee)
+         await this.addItem(user.accountId,noticefee.notice.tendernumber,noticefee.tenderfeetype.name,noticefee.id,type,noticefee.currencyId,noticefee.notice.year,noticefee.amount,noticefee.notice.procuremententityId)
       
          
         

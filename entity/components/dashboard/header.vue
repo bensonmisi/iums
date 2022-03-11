@@ -68,26 +68,32 @@
         Your invoice is awaiting  funds verification. Once our finance team identifies your transaction your application will be finalized        </v-col>
       </v-row>
     </v-alert>
-
-    <div v-if="procurementclass && procurementclass.status=='APPROVED'">
-      <v-col md="3">
-      <v-card>
+<v-row>
+   
+      <v-col>
+        
+      <v-card flat>
         <v-card-text class="text-center">
-
+             <div v-if="procurementclass && procurementclass.status=='APPROVED'">
           <v-row>
             <v-col md="8" class="text-left">
-             <div class="text-h4"> Class</div>
-             <div>{{procurementclass.year}}</div>
+             <div class="text-h4"> Class({{procurementclass.procurementclass.name}})</div>
+             <div>Expiry Year: {{procurementclass.year}}</div>
             </v-col>
-            <v-col md="4">
-                <div class="text-h4">{{procurementclass.procurementclass.name}}</div>
+            <v-col md="4" class="text-right">
+              <v-btn color="primary" large  to="/notice/add"><v-icon>mdi-plus</v-icon> Add Notice</v-btn>
             </v-col>
           </v-row>
+            </div>
+            <div v-else>
+              
+            </div>
            
         </v-card-text>
       </v-card>
       </v-col>
-    </div>
+    </v-row>
+  
 
     
    </div>

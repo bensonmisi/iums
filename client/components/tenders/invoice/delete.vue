@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-btn depressed rounded class="error" @click="removeItem">Delete Invoice</v-btn>
+  <v-btn x-small depressed rounded class="error" @click="removeItem">delete</v-btn>
 </div>
 </template>
 

@@ -12,7 +12,6 @@ export const actions={
     async getData({commit},payload){
         await this.$axios.get('api/bidder/tenderreceipting/'+payload).then(res=>{
 
-         this.$swal(res.data.status,res.data.message,res.data.status)
          if(res.data.status=="error"){
             this.$router.push('/tenderinvoicing')
          }

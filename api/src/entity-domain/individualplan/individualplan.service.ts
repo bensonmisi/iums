@@ -23,7 +23,8 @@ export class IndividualplanService {
      }
 
     await this.checkdate(plan.date_of_purchase,createIndividualplanDto.date_of_purchase)
-
+    createIndividualplanDto.procuremententityId = plan.procuremententityId
+    createIndividualplanDto.year = plan.year
     await this.individualplanRepository.save(createIndividualplanDto)
     return {status:'success',message:'Individual item successfully save'}
    

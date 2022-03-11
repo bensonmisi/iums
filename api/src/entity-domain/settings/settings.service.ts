@@ -45,4 +45,6 @@ export class SettingsService {
 
          return {categories:categories,currency:currency,periods:periods,noticetypes:noticetypes,sections:sections,procurementcategories:procurementcategories}
     }
+
+    
 }

@@ -82,7 +82,9 @@ export class AdministratorService {
   }
   async showUserById(id:number):Promise<Administrator>{
       const user = await this.administratorRepository.findOne({id:id})
-  
+   if(!user){
+     throw new HttpException("User not found",HttpStatus.BAD_REQUEST)
+   }
       delete user.password
  
       return user

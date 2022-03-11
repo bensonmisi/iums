@@ -92,6 +92,7 @@ export class SupplierReceiptingService{
          */
         const invoicingservice = new SupplierInvoicingService()
         const check = await invoicingservice.check_if_invoice_is_settled(invoices[0].invoicenumber)
+    
         if(check){
             await invoicingservice.settle_invoice(invoices[0].invoicenumber,invoices[0].accountId)
             return {"status":"success","message":"Invoice Successfully Settled"}

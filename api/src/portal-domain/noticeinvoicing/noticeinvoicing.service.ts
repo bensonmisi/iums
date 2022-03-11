@@ -19,7 +19,7 @@ export class NoticeinvoicingService {
     }
     async addItem(id:number,userId:number){
         const tenderinvoicingService = new TenderInvoicingService()
-        return await tenderinvoicingService.addFee(id,userId)
+       return await tenderinvoicingService.addFee(id,userId)
     }
 
     async removeItem(id:number,userId:number){

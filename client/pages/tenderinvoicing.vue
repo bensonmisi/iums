@@ -40,10 +40,10 @@
                  <td>{{inv.tendernumber}}</td>
                  <td>{{inv.type}}</td>
                  <td class="text-right">{{inv.currency.name}}{{inv.amount}}</td>
-                 <td>
+                 <td class="d-flex pt-2">
                    <template v-if="inv.status=='PENDING'">
                      <TenderInvoiceDelete :id="inv.id"/>
-                   <v-btn small depressed rounded color="primary" :to="`/tenderreceipting/`+inv.invoicenumber">make payment</v-btn>
+                   <v-btn x-small depressed rounded color="primary" :to="`/tenderreceipting/`+inv.invoicenumber">make payment</v-btn>
                    </template>
                    <template v-else>
                      {{inv.status}}
@@ -56,14 +56,22 @@
           </v-simple-table>
            </template>
            <template v-else>
-             
+             <v-alert
+              prominent
+              text
+              type="error"
+            >
+              <v-row align="center">
+                <v-col class="grow">
+                  Not Pending Invoices awaiting settlement
+                </v-col>
+                <v-col class="shrink">
+                  <v-btn to="/user/tenders">Browse Tenders</v-btn>
+                </v-col>
+              </v-row>
+            </v-alert>
            </template>
          </v-card-text>
-         <v-card-actions>
-           <v-btn rounded depressed  class="success">Print Invoice</v-btn>
-           <v-spacer/>
-         
-         </v-card-actions>
        </v-card>
      </v-col>
   </v-row>

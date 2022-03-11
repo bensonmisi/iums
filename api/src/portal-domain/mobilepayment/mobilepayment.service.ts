@@ -18,10 +18,11 @@ export class MobilepaymentService {
 
             let paynow = new Paynow('1836','ec3cb4c0-345d-401d-8066-0123a9320090','https://portal.praz.org.zw/payment/Update','https://portal.praz.org.zw/payment/Update')
             const uuid = await this.helperService.generateUUId()
-            let payment = paynow.createPayment(uuid,user.email)
-            payment.add('regfee',Number(initiatePaymentDto.amount))       
-          return await  paynow.sendMobile(payment,initiatePaymentDto.phone,initiatePaymentDto.mode).then(async(response)=>{
-                if(response.success){
+            let payment = paynow.createPayment(uuid,'benson.misi@gmail.com')
+            payment.add('regfee',Number(initiatePaymentDto.amount))      
+          return await  paynow.sendMobile(payment,initiatePaymentDto.phone,initiatePaymentDto.mode.toLowerCase()).then(async(response)=>{
+           
+                if(response && response.success){
                 let pollUrl = response.pollUrl; 
                 const el ={invoicenumber:uuid,accountId:user.accountId,pollurl:pollUrl,amount:initiatePaymentDto.amount,mode:initiatePaymentDto.mode,status:'PENDING',type:'SUPPLIER'}
                 const record = await this.onlinepaymentRepository.save(el)

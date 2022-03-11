@@ -63,7 +63,7 @@ export class TenderReceiptingHelperService{
              throw new HttpException("Insufficient wallet balance",HttpStatus.BAD_REQUEST)
          }
 
-         let suspensestatus = balance>walletbalance  ? 'UTILIZED':"PENDING"
+         let suspensestatus = balance>=walletbalance  ? 'UTILIZED':"PENDING"
          let amount = balance>walletbalance ? walletbalance : balance      
   
          /**
@@ -74,6 +74,8 @@ export class TenderReceiptingHelperService{
          * generate receipt number
          */
         const receiptnumber = await this.getReceiptNumber(user.accountId)
+
+        
 
         /**
          * capture receipt
@@ -95,7 +97,8 @@ export class TenderReceiptingHelperService{
          * check if  invoice has been settled 
          */
 
-        const check = await this.checkSettlement(invoicenumber,user.accountId)
+       const check = await this.checkSettlement(invoicenumber,user.accountId)
+  
         if(check){
             await Tenderinvoice.update({invoicenumber:invoicenumber},{status:"PAID"})
             await this.captureApplication(invoicenumber)
@@ -231,27 +234,62 @@ export class TenderReceiptingHelperService{
         const code = await helperService.generate_tender_code(invoice.noticefee.tenderfeetype.name,invoice.accountId)
         const uuid = await helperService.generateUUId()
         let maturitydate = null
-        console.log(invoice.noticefee.tenderfeetype.name)
+  
         if(invoice.noticefee.tenderfeetype.name ==='BIDBOND'){
-          maturitydate = await moment(invoice.noticefee.notice.closingDate).add(invoice.noticefee.bidbondperiod.days,'days')
+                  //maturitydate = //await moment(moment().format(invoice.noticefee.notice.closingDate)).add(invoice.noticefee.bidbondperiod.days,'days')
+          maturitydate = moment(moment(invoice.noticefee.notice.closingDate).format('YYYY-MM-DD')).add(invoice.noticefee.bidbondperiod.days,'days')
+          maturitydate = moment(maturitydate).utc().format('YYYY-MM-DD')
+       
+              
         }
-        const tenderapplication = new Tenderapplication()
-         tenderapplication.accountId = invoice.accountId
-         tenderapplication.uuid  = uuid
-         tenderapplication.procuremententityId = invoice.noticefee.notice.procuremententityId
-         tenderapplication.noticefeeId = invoice.noticefeeId
-         tenderapplication.tendernumber = invoice.noticefee.notice.tendernumber
-         tenderapplication.closingDate = invoice.noticefee.notice.closingDate
-         tenderapplication.validityperiod = invoice.noticefee.bidbondperiod ? +invoice.noticefee.bidbondperiod.days : 0
-         tenderapplication.type = invoice.description
-         tenderapplication.tenderfeetypeId = invoice.noticefee.tenderfeetypeId
-         tenderapplication.code = code
-         tenderapplication.maturitydate = maturitydate
-         tenderapplication.currencyId = invoice.currencyId
-         tenderapplication.status ='PAID'
-         tenderapplication.tenderinvoiceId = invoice.id
-         tenderapplication.noticeId = invoice.noticefee.noticeId
-         await tenderapplication.save()
+        try {
+            const el ={
+                       "accountId":invoice.accountId,
+                        "uuid":uuid,
+                        "procuremententityId":invoice.noticefee.notice.procuremententityId,
+                        "noticefeeId":invoice.noticefeeId,
+                        "tendernumber":invoice.noticefee.notice.tendernumber,
+                        "closingDate":invoice.noticefee.notice.closingDate,
+                        "validityperiod":invoice.noticefee.bidbondperiod ? +invoice.noticefee.bidbondperiod.days : 0,
+                        "type":invoice.description,
+                        "tenderfeetypeId":invoice.noticefee.tenderfeetypeId,
+                        "code":code,
+                        "maturitydate":maturitydate,
+                        "currencyId":invoice.currencyId,
+                        "status":"PAID",
+                        "tenderinvoiceId":invoice.id,
+                        "noticeId":invoice.noticefee.noticeId,
+                        "amount":invoice.amount,
+                        "refund":"PENDING",
+                        "refunded":"N"
+
+                    }
+
+            
+             const record =  await Tenderapplication.create(el)
+             await record.save()
+            /* const tenderapplication = new Tenderapplication()
+            tenderapplication.accountId = invoice.accountId
+            tenderapplication.uuid  = uuid
+            tenderapplication.procuremententityId = invoice.noticefee.notice.procuremententityId
+            tenderapplication.noticefeeId = invoice.noticefeeId
+            tenderapplication.tendernumber = invoice.noticefee.notice.tendernumber
+            tenderapplication.closingDate = invoice.noticefee.notice.closingDate
+            tenderapplication.validityperiod = invoice.noticefee.bidbondperiod ? +invoice.noticefee.bidbondperiod.days : 0
+            tenderapplication.type = invoice.description
+            tenderapplication.tenderfeetypeId = invoice.noticefee.tenderfeetypeId
+            tenderapplication.code = code
+            tenderapplication.maturitydate = maturitydate
+            tenderapplication.currencyId = invoice.currencyId
+            tenderapplication.status ='PAID'
+            tenderapplication.tenderinvoiceId = invoice.id
+            tenderapplication.noticeId = invoice.noticefee.noticeId
+            await tenderapplication.save()  */ 
+        } catch (error) {
+             const message = error.sqlMessage ? error.sqlMessage : error.message
+             throw new HttpException(message,HttpStatus.BAD_REQUEST)
+        }
+       
 
     }
 }

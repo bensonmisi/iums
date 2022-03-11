@@ -92,7 +92,7 @@ export default {
   components: { Search ,Taskslist},
   data () {
     return {
-      drawer: true,
+      drawer: false,
       offset:true,
       fixed:true,
       items: [],
@@ -106,7 +106,7 @@ export default {
   async logout(){
     await this.$auth.logout()
   },
-  getNotitications(){
+  getNotitications(){ 
       /* 
        let pusher = new Pusher('4f2ecae30d5d8824089a', { cluster: 'ap2' })
       pusher.subscribe('manualbanktranactions')

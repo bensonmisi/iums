@@ -17,7 +17,10 @@
                          Class
                         </th>
                          <th class="text-left">
-                         Classfication
+                         Section
+                        </th>
+                        <th class="text-left">
+                        Reach
                         </th>
                          <th class="text-left">
                         Threshold
@@ -37,7 +40,8 @@
                         :key="per.id"
                         >
                         <td>{{ per.procurementclass.name }}</td>
-                        <td>{{ per.procurementclassification.name }}</td>
+                        <td>{{ per.section.name }}</td>
+                        <td>{{ per.reach }}</td>
                         <td>{{ per.currency.name }}{{per.value}}</td>
                          <td>{{ per.currency.name }}{{per.fee}}</td>
                         <td class="d-flex justify-end pt-2 pb-2">

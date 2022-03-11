@@ -20,7 +20,7 @@ export default {
  },methods:{
      async submit(){
              this.$swal({
-                            title: 'Tender Cancellation',
+                            title: 'Tender Deletion',
                             text: "You are about to cancel tender number "+this.notice.tendernumber,
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',

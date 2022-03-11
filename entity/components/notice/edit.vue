@@ -1,41 +1,53 @@
 <template>
   <div>
-      <v-btn icon depressed color="primary" @click="add()"><v-icon>mdi-pencil</v-icon></v-btn>
-   
-      <v-dialog v-model="addPermModel" width="900">
-           <v-form v-model="valid" ref="form" lazy-validation>
-       <v-card>
-           <v-card-title>
-               Update Notice
-               <v-spacer/>
-               <v-btn icon @click="addPermModel=false"><v-icon>mdi-close</v-icon></v-btn>
-           </v-card-title>
-           <v-card-text>
-               <v-row>
+      <v-btn icon color="primary" @click="edit"><v-icon>mdi-pencil</v-icon></v-btn>
+      <v-dialog v-model="editDialog" width="900">
+          <v-card>
+              <v-card-title>Edit Notice<v-spacer/> <v-btn icon @click="editDialog=false"><v-icon>mdi-close</v-icon></v-btn></v-card-title>
+              <v-card-text>
+                       <v-form v-model="valid" ref="form" lazy-validation>
+                <v-card>
+                <v-card-text>
+                    <v-row>
                    <v-col>
-                  <v-text-field
-                            label="Title"
-                            outlined
-                            v-model="form.title"
-                            :rules="titleRule"
-                        />
+                  <v-text-field label="Title" dense outlined v-model="form.title" :rules="titleRule"/>
                    </v-col>
-                   <v-col>
-                  <v-text-field
-                            label="Tender number"
-                            outlined
-                            v-model="form.tendernumber"
-                            :rules="tendernumberRule"
-                        />
-                   </v-col>
-               </v-row>
-               <v-row>
                 <v-col>
-                     </v-col>
-                <v-col>
-                    <v-select v-model="form.noticetypeId" :rules="noticetypeRule" outlined label="Notice Type" :items="types" item-text="name" item-value="id" />
+                    <v-select dense v-model="form.noticetypeId" :rules="noticetypeRule" outlined label="Notice Type" :items="types" item-text="name" item-value="id" />
                 </v-col>
-               </v-row>               
+               </v-row> 
+                  <template v-if="form.noticetypeId=='7'">
+                 
+                   <v-row>
+                       <v-col>
+                    <v-select dense outlined :items="currency" v-model="form.currencyId" :rules="currencyRule" item-text="name" item-value="id" label="Currency"/>
+                </v-col>
+                <v-col>
+                    <v-text-field dense  prefix="$" outlined v-model="form.bidvalue" :rules="bidvalueRule" label="ESTIMATE BID VALUE"/>
+                </v-col>
+
+                   </v-row>
+                     <v-row>
+                       <v-col>
+                             <v-checkbox
+                            v-model="requireBond"
+                            label="Tick if you require Bid bond"
+                            />
+                       </v-col>
+                       <v-col>
+                           
+                       </v-col>
+                   </v-row>
+               <v-row v-if="requireBond">
+                
+                <v-col>
+                    <v-text-field dense prefix="$" outlined v-model="form.bidbond" :rules="bidbondRule" label="Bid Bond"/>
+                </v-col>
+                 <v-col>
+                    <v-select dense outlined v-model="form.bidbondperiodId" :items="periods" item-value="id" item-text="days" :rules="bidbondperiodRule" label="Bid Bond Period(days)"/>
+                </v-col>
+              </v-row>
+               </template>              
                <v-row>
                       <v-col>
                        <v-menu
@@ -50,6 +62,7 @@
                             <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                                 v-model="date"
+                                dense
                                 label="Closing Date"
                                prepend-inner-icon="mdi-calendar"
                                 outlined
@@ -97,6 +110,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             v-model="time"
+            dense
             :rules="timeRule"
             label="Closing time"
             prepend-inner-icon="mdi-clock-time-four-outline"
@@ -117,257 +131,94 @@
                </v-row>
                 <v-row>
                 <v-col>
-                    <v-select v-model="form.sectionId" :rules="sectionRule" outlined label="Notice Section" :items="sections" item-text="name" item-value="id" />
+                    <v-select dense v-model="form.sectionId" :rules="sectionRule" outlined label="Notice Section" :items="sections" item-text="name" item-value="id" />
                 </v-col> 
                  <v-col>
-                    <v-select v-model="form.reach" :rules="reachRule" outlined label="Reach" :items="reachlist"/>
+                    <v-select dense v-model="form.reach" :rules="reachRule" outlined label="Reach" :items="reachlist"/>
                 </v-col>  
                 </v-row>
-                <v-row>
-                <v-col>
-                 <v-card>
-                     <v-card-title>Required Categories<v-spacer/> <v-btn icon @click="categoryDialog=true"><v-icon>mdi-plus</v-icon></v-btn></v-card-title>
-                     <v-card-text>
-                     <v-row v-if="form.categories.length>0">
-                         <v-col
-                            v-for="(category, i) in form.categories"
-                            :key="category.id"
-                            class="shrink"
-                            >
-                            <v-chip
-                                close
-                                @click:close="form.categories.splice(i, 1)"
-                            >
-                               
-                                {{ category}}
-                            </v-chip>
-                            </v-col>
-                     </v-row>
-                     <v-row v-else>
-                         <v-col class="text-center red--text">
-                              No Categories specified
-                         </v-col>
-                     </v-row>
-                     </v-card-text>               
-                 </v-card>
-                </v-col>  
+                  <v-row>
                 <v-col>
                   <v-file-input
+                  dense
                     accept=".pdf"
                     label="Attach Tender Document"
                     outlined
                     v-model="file"
                     :rules="fileRule"
                 ></v-file-input>
+                </v-col>
+                <v-col>
+                <v-select dense outlined label="Procurement Category" :items="procurementcategories" item-value="id" item-text="name" v-model="form.procurementcategoryId" :rules="procurementcategoryRule"/>
                 </v-col>            
                </v-row>
-
-               <v-card class="mt-3">
-                           <v-toolbar
-      color="indigo"
-      dark
-    >
-
-      <v-toolbar-title>Required Product/Service</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-btn icon @click="productDialog=true">
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
-    </v-toolbar>
-    <v-card-text>
-         <v-simple-table>
-                    <template v-slot:default>
-                        <thead>
-                            <tr>
-                                <th>Product/Service</th>
-                                <th>Quantity</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-       <template v-if="form.products.length>0">
-         <tr v-for="(prod,index) in form.products" :key="index">
-             <td>
-                 {{prod.name}}
-             </td>
-             <td>{{prod.quantity}}</td>
-             <td>
-                 <v-btn icon @click="form.products.splice(i, 1)"><v-icon>mdi-close</v-icon></v-btn>
-             </td>
-         </tr>
-       </template>
-       <template v-else>
-           <tr>
-               <td colspan="3" class="text-center red--text">No Product/Service added as yet</td>
-           </tr>
-       </template>
-                        </tbody>
-                    </template>
-         </v-simple-table>
-    </v-card-text>
-               </v-card>
-              
-
-                      
-                          
-           </v-card-text>
-           <v-card-actions>
-               <v-btn rounded class="error" @click="addPermModel=false">Cancel</v-btn>
-               <v-spacer/>
-               <v-btn rounded class="success" @click="submit" :loading="loading" :disabled="loading">Submit</v-btn>
-           </v-card-actions>
-       </v-card>
-           </v-form>
-      </v-dialog>
-
-      <v-dialog v-model="productDialog" width="300">
-          <v-form  ref="addProduct" lazy-validation>
-          <v-card>
-              <v-card-title>
-                  Add Product/Service
-                  <v-spacer/>
-                  <v-btn icon @click="productDialog=false"><v-icon>mdi-close</v-icon></v-btn>
-              </v-card-title>
-              <v-card-text>
-                  <v-text-field outlined label="Name" v-model="name" :rules="nameRule"/>
-                  <v-text-field outlined label="Quantity" v-model="quantity" :rules="quantityRule"/>
+                    
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn rounded depressed color="error">Cancel</v-btn>
+                    <v-spacer/>
+                    <v-btn rounded depressed color="success" @click="submit">Update</v-btn>
+                </v-card-actions>
+            </v-card>
+              </v-form>
               </v-card-text>
-              <v-card-actions>
-                  <v-btn color="error" rounded depressed @click="productDialog=false">Cancel</v-btn>
-                  <v-spacer/>
-                    <v-btn color="success" rounded depressed @click="addProduct()">Submit</v-btn>
-              </v-card-actions>
           </v-card>
-          </v-form>
-      </v-dialog>
-
-       <v-dialog v-model="categoryDialog" width="300">
-          <v-form  ref="addProduct" lazy-validation>
-          <v-card>
-              <v-card-title>
-                  Choose Category
-                  <v-spacer/>
-                  <v-btn icon @click="categoryDialog=false"><v-icon>mdi-close</v-icon></v-btn>
-              </v-card-title>
-              <v-card-text>
-                  <v-text-field outlined label="Filter" v-model="search"/>
-                   <v-simple-table>
-                    <template v-slot:default>                   
-                    <tbody>
-                        <template v-if="categories.length>0">
-                        <tr
-                        v-for="per in categories"
-                        :key="per.id"
-                        >
-                        <td>
-                         <div> {{ per.code }}</div>
-                         <small>{{ per.name }}</small>
-                          
-                          </td>
-                        <td class="text-right">
-                         <v-btn x-small rounded depressed color="primary" @click="addCategory(per.code)">add</v-btn>
-                        </td>
-                        </tr>
-                        </template>
-                        <template v-else>
-                            <tr>
-                                <td colspan="2" class="pa-3 text-center red--text">No Categoris Found</td>
-                            </tr>
-                        </template>
-                    </tbody>
-                    </template>
-                </v-simple-table>
-              </v-card-text>
-             
-          </v-card>
-          </v-form>
       </v-dialog>
   </div>
 </template>
 
 <script>
 export default {
-    props:['notice'],
- data(){
-     return{
-         addPermModel:false,
-         categoryDialog:false,
+props:['notice'],
+data(){
+    return{
+        
+         overlay:false,
+         editDialog:false,
+         valid:false,
+          requireBond:false,
+         planned:null,
          valid:false,
          date:this.notice.closingDate,
          menu:false,
-        time: this.notice.closingTime,
+         time: this.notice.closingTime,
          menu2: false,
-         productDialog:false,
-         name:'',
-         quantity:'',
          file:null,
+         annualplanId:'',
          form:{
               title:this.notice.title,
-              tendernumber:this.notice.tendernumber,
-              procuremententityId:this.notice.procuremententityId,
               noticetypeId:this.notice.noticetypeId,
-              closingDate:'',
-              closingTime:'',
-              sectionId:this.notice.sectionId,
-              categories:[],
-              products:[],
-              reach:this.notice.reach
+              closingDate:this.notice.closingDate,
+              closingTime:this.notice.closingTime,
+              currencyId:'',
+              bidbond:'',
+              bidvalue:'',
+              sectionId:'',
+              reach:'',
+              procurementcategoryId:'',
+              bidbondperiodId:''
          },
-         titleRule:[v=>!!v || 'Title is required'],
-         fileRule:[v=>!!v || 'Tender document is required'],
-         tendernumberRule:[v=>!!v || 'Tender number is required'],
-         entityRule:[v=>!!v || 'Procurement entity is required'],
-         noticetypeRule:[v=>!!v || 'Notice Type is required'],
-         dateRule:[v=>!!v || 'Date is required'],
-         timeRule:[v=>!!v || 'Time is required'],
-         sectionRule:[v=>!!v || 'Section is required'],
-         nameRule:[v=>!!v || 'Product / Service name required'],
-         quantityRule:[v=>!!v || 'Quantity is required'],
+         titleRule:[v=>!!v ||'Title is required'],
+         noticetypeRule:[v=>!!v ||'Notice Type is required'],
+         dateRule:[v=>!!v ||'Date is required'],
+         timeRule:[v=>!!v ||'Time is required'],
+         sectionRule:[v=>!!v ||'Section is required'],
+         fileRule:[v=>!!v ||'Tender Document required'],
          reachRule:[v=>!!v || 'Reach is required'],
-         search:"",
+         bidvalueRule:[v=>!!v || 'Estimate bid value is required'],
+         bidbondRule:[v=>!!v || 'Bid Bond is required'],
+         currencyRule:[v=>!!v || 'Currency is required'],
+         bidbondperiodRule:[v=>!!v  || 'Bid Bond Period is required'],
+         procurementcategoryRule:[v=>!!v || 'Procurement category required'],      
          loading:false,
          reachlist:['LOCAL','INTERNATIONAL']
-     }
- },methods:{
-
-    addProduct(){
-        if(this.$refs.addProduct.validate())
-       {
-           if(!this.form.products.includes(this.name)){
-               this.form.products.push({name:this.name,quantity:this.quantity})
-           }
-       }
+    }
+},methods:{
+    async edit(){
+       await this.$store.dispatch('settings/getNoticeSettings')
+       this.editDialog = true
     },
-    addCategory(code){
-      this.form.categories.push(code)
-    },
-    checkproduct(name){
-        let check = true
-
-         this.form.products.forEach(element => {
-             if(element.name==name){
-                 check = false
-             }
-         });
-
-         return check
-    },
-     async add(){
-
-         
-         await this.$store.dispatch('settings/getNoticeSettings')
-         this.notice.noticeproduct.forEach(product => {
-              this.form.products.push({name:product.description,quantity:product.quantity})
-         });
-
-         this.notice.noticecategory.forEach(category=>{
-             this.form.categories.push(category.category.code)
-         })
-         this.addPermModel = true
-     },
-     async submit(){
+       async submit(){
        if(this.$refs.form.validate())
        {
           this.valid = true
@@ -379,35 +230,36 @@ export default {
           formdata.append('closingTime',this.time)
           formdata.append('file',this.file)
           formdata.append('title',this.form.title)
-          formdata.append('tendernumber',this.form.tendernumber)
-          formdata.append('procuremententityId',this.form.procuremententityId)
+          formdata.append('bidbond',this.form.bidbond)
+          formdata.append('bidbondperiodId',this.form.bidbondperiodId)
           formdata.append('noticetypeId',this.form.noticetypeId)
+          formdata.append('annualplanId',this.annualplanId)
           formdata.append('sectionId',this.form.sectionId)
-          formdata.append('categories',JSON.stringify(this.form.categories))
-          formdata.append('products',JSON.stringify(this.form.products))
           formdata.append('reach',this.form.reach)
-          const payload = {id:this.notice.uuid,data:formdata}
-          await this.$store.dispatch('notice/updateData',payload)
+          formdata.append('currencyId',this.form.currencyId)
+          formdata.append('bidvalue',this.form.bidvalue)
+          const payload = {id:this.notice.id,data:formdata}
+          await this.$store.dispatch('notice/editData',payload)
           this.loading=false
-          this.addPermModel=false
-          this.$refs.form.reset()
        }
      }
- },computed:{
-    types(){
+},computed:{
+      currency(){
+         return this.$store.state.settings.settings.currency
+     },
+     types(){
          return this.$store.state.settings.settings.noticetypes
      },
      sections(){
          return this.$store.state.settings.settings.sections
      },
-     categories(){
-         let data =  this.$store.state.settings.settings.categories
-         if(this.search){
-          return data.filter(dt=>(!dt.name.toUpperCase().indexOf(this.search.toUpperCase()) || !dt.code.toUpperCase().indexOf(this.search.toUpperCase())))
-          }
-         return data
+     procurementcategories(){
+         return this.$store.state.settings.settings.procurementcategories
+     },
+     periods(){
+         return this.$store.state.settings.settings.periods
      }
- }
+}
 }
 </script>
 

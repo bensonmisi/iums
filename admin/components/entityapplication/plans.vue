@@ -62,24 +62,9 @@ export default {
 props:['items'],
 methods:{
      async downloadPlan(id){
-       try {
-          await this.$axios({
-                   url:'api/admin/procurementapplication/plan/'+id,
-                    method: 'GET',
-                    responseType: 'blob',
-              }).then(async(response)=>{
-           const url = window.URL.createObjectURL(new Blob([response.data]));
-           this.pdflink = url
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.setAttribute('download', id+'.pdf');
-                        
-                        document.body.appendChild(link);
-                        link.click();
-       })
-       } catch (error) {
-         console.log(error)
-       }
+              let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=800,height=800,left=100,top=100`;
+         open(this.$store.state.addressurl.link+'procurementapplication/plan/'+id,'test',params)
+   
   }
 }
 }

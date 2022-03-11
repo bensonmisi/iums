@@ -16,7 +16,7 @@
                 <v-card-title>
                   Procurement Notices
                     <v-spacer/>
-                    <NoticeAdd/>
+                     <v-btn depressed rounded  color="primary" to="/notice/add"><v-icon>mdi-plus</v-icon>New Notice</v-btn>
                 </v-card-title>
                 <v-card-text>
                  <v-simple-table>
@@ -24,13 +24,13 @@
                     <thead>
                         <tr>
                         <th class="text-left">
-                            Entity
-                        </th>
-                        <th class="text-left">
                             Tender number
                         </th>
                         <th class="text-left">
                             Closing Date
+                        </th>
+                          <th class="text-left">
+                            Notice Type
                         </th>
                         <th class="text-left">
                             Status
@@ -46,16 +46,16 @@
                         v-for="per in notices"
                         :key="per.id"
                         >
-                        <td>{{ per.procuremententity.name}}</td>
+                     
                         <td>
                             <div>{{per.tendernumber}}</div>
                             <small>{{per.title}}</small>
                         </td>
                         <td>{{per.closingDate}} {{per.closingTime}}</td>
+                          <td>{{per.noticetype.name}}</td>
                         <td>{{per.status}}</td>
-                        <td class="d-flex justify-end pt-2 pb-2">
-                            <NoticeEdit :notice="per"/>
-                            <NoticeDelete :notice="per"/>
+                        <td>
+                         <NoticeView :id="per.id"/>
                         </td>
                         </tr>
                         </template>

@@ -13,6 +13,9 @@ export class EntitydashboardService {
         const HelperServer = new GeneralHelperService()
         const procurementclass = await HelperServer.getProcurementClass(user.procuremententityId)
         const invoice = await HelperServer.getPendingInvoice(user.procuremententityId)
-        return{procurementclass:procurementclass,invoice:invoice}
+        const bidbonds = await HelperServer.getBidbondlist(user.procuremententityId)
+        const notices = await HelperServer.getNotices(user.procuremententityId)
+        const checkreturn = await HelperServer.checkReturn(user.procuremententityId)
+        return{procurementclass:procurementclass,invoice:invoice,bidbonds:bidbonds,notices:notices,monthlyreturn:checkreturn}
     }
 }

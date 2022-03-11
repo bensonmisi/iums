@@ -41,8 +41,8 @@ export class Bidbondthreshold extends BaseEntity {
     @ManyToOne(()=>Currency)
     currency:Currency
 
-    @ManyToOne(()=>Administrator)
-    administrator:Administrator
+    //@ManyToOne(()=>Administrator)
+   // administrator:Administrator
 
 
 

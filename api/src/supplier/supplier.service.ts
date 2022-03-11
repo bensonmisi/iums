@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Accountdocument } from 'src/accountdocuments/entities/accountdocument.entity';
 import { Account } from 'src/accounts/entities/account.entity';
 import { Documentcomment } from 'src/documentcomments/entities/documentcomment.entity';
 import { HelperService } from 'src/helper/helper.service';
@@ -92,6 +93,10 @@ export class SupplierService {
     const registrations = await Supplier.find({where:{accountId:id,status:'PENDING'},relations:['category']})
 
     return {account:account,documents:documents,comments:comments,registrations:registrations}
+  }
+
+  async viewDocument(id:number){
+    return await Accountdocument.findOne({where:{id:id}})
   }
 
   update(id: number, updateSupplierDto: UpdateSupplierDto) {

@@ -38,7 +38,7 @@
           <td :class="item.status">{{ item.docstatus }}</td>
           <td :class="item.status">{{ item.status }}</td>
            <td>
-              <v-btn v-if="item.filename" x-small depressed rounded color="primary" @click="viewFile(item.filename)">View</v-btn>
+              <v-btn v-if="item.filename" x-small depressed rounded color="primary" @click="viewFile(item.uploadId)">View</v-btn>
            </td>
         </tr>
       </tbody>
@@ -57,9 +57,9 @@ name:'detaildocuments',
 props:['documents','id'],
 components:{supplierapproval},
 methods:{
-      viewFile(filename){
-   const path = "http://localhost:4000/uploadeddocuments/"+filename
-   window.open(path)
+      viewFile(id){
+  let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,width=800,height=800,left=100,top=100`;
+         open(this.$store.state.addressurl.link+'suppliers/document/'+id,'test',params)
    }
 }
 }

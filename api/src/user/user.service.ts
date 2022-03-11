@@ -48,7 +48,7 @@ export class UserService {
         }
        await this.userRepository.update(id,rest)
        const user = await this.userRepository.findOne(id)
-        this.mailService.SendUserPassword(user,password,user.email)
+        this.mailService.SendUserPassword(user,password,user.email) 
         return {"status":"success","message":"User successfully Updated"}
      } catch (error) { 
        console.log(error);       

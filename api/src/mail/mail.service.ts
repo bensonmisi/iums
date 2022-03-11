@@ -1,6 +1,6 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { InjectQueue } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { config } from 'process';
 import { Administrator } from 'src/administrator/entities/administrator.entity';
@@ -121,6 +121,8 @@ async SendEntityUserPassword(user:EntityUser,password:string,username:string){
      return false
    }
   }
+
+ 
 
   async bankdetailNotification(email:string){
     const url = process.env.CLIENT_API;

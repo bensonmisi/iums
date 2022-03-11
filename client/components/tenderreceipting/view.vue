@@ -144,6 +144,8 @@ methods:{
     await this.$axios.post('api/bidder/tenderreceipting',formdata).then(async(res)=>{
       this.$swal(res.data.status,res.data.message,res.data.status)
       await this.$store.dispatch('tenderreceipting/getData',this.invoicenumber)
+    }).catch(error=>{
+      this.$swal("error",error.response.data.message,"error")
     })
   }
 },

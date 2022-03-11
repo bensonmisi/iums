@@ -67,7 +67,7 @@ export class Tenderapplication extends BaseEntity {
     @Column({default:'PENDING'})
     refunded:string
 
-    @CreateDateColumn()
+    @CreateDateColumn() 
     created_at:Date
 
     @UpdateDateColumn()
@@ -86,8 +86,7 @@ export class Tenderapplication extends BaseEntity {
     @ManyToOne(()=>Currency)
     currency:Currency
 
-    @OneToOne(()=>Tenderinvoice,tenderinvoice=>tenderinvoice.tenderapplication)
-    @JoinColumn()
+    @ManyToOne(()=>Tenderinvoice)
     tenderinvoice:Tenderinvoice
 
     @ManyToOne(()=>Tenderfeetype,tenderfeetype=>tenderfeetype.applications)

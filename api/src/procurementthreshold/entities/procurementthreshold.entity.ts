@@ -1,6 +1,7 @@
 import { Currency } from "src/currency/entities/currency.entity";
 import { Procurementclass } from "src/procurementclass/entities/procurementclass.entity";
 import { Procurementclassification } from "src/procurementclassification/entities/procurementclassification.entity";
+import { Section } from "src/sections/entities/section.entity";
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
@@ -12,10 +13,13 @@ export class Procurementthreshold extends BaseEntity{
     procurementclassId:number
 
     @Column()
-    procurementclassificationId:number
+    sectionId:number
 
     @Column()
     currencyId:number
+
+    @Column({nullable:true})
+    reach:string
 
     @Column()
     value:string
@@ -33,8 +37,8 @@ export class Procurementthreshold extends BaseEntity{
     @ManyToOne(()=>Procurementclass)
     procurementclass:Procurementclass
 
-    @ManyToOne(()=>Procurementclassification)
-    procurementclassification:Procurementclassification
+    @ManyToOne(()=>Section)
+    section:Section
 
     @ManyToOne(()=>Currency)
     currency:number

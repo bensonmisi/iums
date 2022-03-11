@@ -158,7 +158,7 @@ export class MailProcessor{
         try {
            const result =  await this.mailerService.sendMail({
                 to: job.data.email,
-                subject: 'PRAZ Notification:URGENT ATTENTION',
+                subject: 'PRAZ Notification',
                 template: './notification', 
                 context: { 
                   comment: job.data.comment,
